@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="config.js"></script>
 <style>
 :root{--bg:#0f1720;--card:#18222e;--card2:#243243;--txt:#e8eef5;--mut:#8ea0b4;--acc:#ffb020;--red:#ff4d5e;--green:#2fd27a;--blue:#4aa8ff;--line:#2a3746}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -108,6 +109,7 @@ code{background:#0b1219;padding:1px 5px;border-radius:5px}
     <p class="mut">Alles ausprobieren mit simulierten Teams, ohne Einrichtung. Oben kannst du zwischen Spielleitung und Teams wechseln.</p>
     <button onclick="startDemo()">▶️ Demo starten</button>
   </div>
+  <p class="mut" style="text-align:center" id="verline"></p>
 </div></div>
 
 <!-- ============ SPIELER ============ -->
@@ -160,6 +162,7 @@ code{background:#0b1219;padding:1px 5px;border-radius:5px}
    Lehrperson sie beim ersten Start in der App ein (wird im Link mitgegeben).
    ===================================================================== */
 const FIREBASE_CONFIG = null;
+const APP_VERSION = '2026-11-10 · v9';
 
 const LOGO='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJiZyIgY3g9IjUwJSIgY3k9IjQwJSIgcj0iNjUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMxZjJmNDIiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYjEyMTkiLz48L3JhZGlhbEdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZTI3YSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YyYTkwMCIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJyaW5nIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+PHN0b3Agb2Zmc2V0PSIuNSIgc3RvcC1jb2xvcj0iI2M5ZDRlMCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzdkOGVhMyIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJoYW5kbGUiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIwIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMzYTJhMWEiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjNmI0YTJiIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMmExZDEwIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImxlbnMiPjxjaXJjbGUgY3g9IjIzNiIgY3k9IjIyNiIgcj0iMTE4Ii8+PC9jbGlwUGF0aD48cGF0aCBpZD0iYXJjVG9wIiBkPSJNIDY2IDI1NiBBIDE5MCAxOTAgMCAwIDEgNDQ2IDI1NiIvPjxwYXRoIGlkPSJhcmNCb3QiIGQ9Ik0gODQgMjY4IEEgMTcyIDE3MiAwIDAgMCA0MjggMjY4Ii8+PC9kZWZzPjwhLS0gQmFkZ2UgLS0+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyNDQiIGZpbGw9InVybCgjYmcpIi8+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyMzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1YjkxNiIgc3Ryb2tlLXdpZHRoPSIxMCIvPjxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmNWI5MTYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iNCA4IiBvcGFjaXR5PSIuNiIvPjwhLS0gUGluZy1XZWxsZW4gLS0+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY0ZDVlIiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxwYXRoIGQ9Ik0gMzg0IDIwMCBBIDE1MCAxNTAgMCAwIDEgMzc3IDI3NyIgc3Ryb2tlLXdpZHRoPSI5IiBvcGFjaXR5PSIuOTUiLz48cGF0aCBkPSJNIDQxMCAxOTUgQSAxNzYgMTc2IDAgMCAxIDQwMSAyODYiIHN0cm9rZS13aWR0aD0iNyIgb3BhY2l0eT0iLjU1Ii8+PC9nPjwhLS0gR3JpZmYgZGVyIEx1cGUgLS0+PGcgdHJhbnNmb3JtPSJyb3RhdGUoLTQ1IDIzNiAyMjYpIj48cmVjdCB4PSIyMjEiIHk9IjM1MCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjM0IiByeD0iNiIgZmlsbD0idXJsKCNyaW5nKSIvPjxyZWN0IHg9IjIxNiIgeT0iMzgwIiB3aWR0aD0iNDAiIGhlaWdodD0iMTAwIiByeD0iMTgiIGZpbGw9InVybCgjaGFuZGxlKSIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjQiLz48cmVjdCB4PSIyMTYiIHk9IjQwNCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjciIGZpbGw9IiNmNWI5MTYiLz48cmVjdCB4PSIyMTYiIHk9IjQyMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjciIGZpbGw9IiNmNWI5MTYiLz48L2c+PCEtLSBMaW5zZSBtaXQgV2FwcGVuLU1vdGl2IC0tPjxnIGNsaXAtcGF0aD0idXJsKCNsZW5zKSI+PHJlY3QgeD0iMTAwIiB5PSIxMDAiIHdpZHRoPSIyODAiIGhlaWdodD0iMjYwIiBmaWxsPSJ1cmwoI2dvbGQpIi8+PCEtLSBTb25uZW5zdHJhaGxlbiBkZXplbnQgLS0+PGcgc3Ryb2tlPSIjZmZmM2MyIiBzdHJva2Utd2lkdGg9IjEwIiBvcGFjaXR5PSIuMzUiPjxsaW5lIHgxPSIyMzYiIHkxPSIxOTAiIHgyPSIxMjAiIHkyPSIxMTAiLz48bGluZSB4MT0iMjM2IiB5MT0iMTkwIiB4Mj0iMjM2IiB5Mj0iOTAiLz48bGluZSB4MT0iMjM2IiB5MT0iMTkwIiB4Mj0iMzUyIiB5Mj0iMTEwIi8+PC9nPjwhLS0gSMO8Z2VsIChEcmVpYmVyZykgLS0+PHBhdGggZD0iTSAxMDAgMzYwIEwgMTAwIDMwMCBRIDE0MCAyNjIgMTc4IDI4NiBRIDIzNiAyMzYgMjk0IDI4NiBRIDMzMiAyNjIgMzcyIDMwMCBMIDM3MiAzNjAgWiIgZmlsbD0iIzFmOGEzYSIvPjxwYXRoIGQ9Ik0gMTAwIDM2MCBMIDEwMCAzMTggUSAxNTAgMjk2IDIwMCAzMTIgUSAyNTAgMjkyIDMwMCAzMTIgUSAzNDAgMjk4IDM3MiAzMTggTCAzNzIgMzYwIFoiIGZpbGw9IiMxNzcwMmUiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzYgMjkyKSBzY2FsZSguODIpIHRyYW5zbGF0ZSgtMjM2IC0yOTIpIj48IS0tIFN0YW1tIC0tPjxwYXRoIGQ9Ik0gMjI2IDI5MiBMIDIzMCAyMjYgUSAyMzYgMjE0IDI0MiAyMjYgTCAyNDYgMjkyIFEgMjM2IDMwMCAyMjYgMjkyIFoiIGZpbGw9IiMxNDYyMmEiLz48cGF0aCBkPSJNIDIzMiAyNDYgUSAyMTQgMjMyIDIwNCAyMTQgTSAyNDAgMjQwIFEgMjU4IDIyNiAyNjggMjEwIiBzdHJva2U9IiMxNDYyMmEiIHN0cm9rZS13aWR0aD0iNyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PCEtLSBLcm9uZSBkZXIgTGluZGUgLS0+PGcgZmlsbD0iIzFmOGEzYSI+PGNpcmNsZSBjeD0iMjM2IiBjeT0iMTc4IiByPSI1NiIvPjxjaXJjbGUgY3g9IjE5MCIgY3k9IjE5NiIgcj0iMzgiLz48Y2lyY2xlIGN4PSIyODIiIGN5PSIxOTYiIHI9IjM4Ii8+PGNpcmNsZSBjeD0iMjA2IiBjeT0iMTUwIiByPSIzNiIvPjxjaXJjbGUgY3g9IjI2NiIgY3k9IjE1MCIgcj0iMzYiLz48Y2lyY2xlIGN4PSIyMzYiIGN5PSIxMjgiIHI9IjM0Ii8+PC9nPjxnIGZpbGw9IiMyZmFlNGQiPjxjaXJjbGUgY3g9IjIyMCIgY3k9IjE0MCIgcj0iMjIiLz48Y2lyY2xlIGN4PSIxODIiIGN5PSIxODYiIHI9IjE2Ii8+PGNpcmNsZSBjeD0iMjUyIiBjeT0iMTIyIiByPSIxNCIvPjwvZz48IS0tIExpbmRlbmJsw6R0dGVyIChIZXJ6Zm9ybSkgLS0+PC9nPjwhLS0gUGluZy1QdW5rdCAtLT48Y2lyY2xlIGN4PSIzMTIiIGN5PSIyNTAiIHI9IjE2IiBmaWxsPSIjZmY0ZDVlIiBvcGFjaXR5PSIuMyIvPjxjaXJjbGUgY3g9IjMxMiIgY3k9IjI1MCIgcj0iOSIgZmlsbD0iI2ZmNGQ1ZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMiLz48IS0tIEdsYW56IC0tPjxwYXRoIGQ9Ik0gMTUwIDE3MCBBIDk2IDk2IDAgMCAxIDIyMCAxMjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxMiIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIuNTUiLz48L2c+PGNpcmNsZSBjeD0iMjM2IiBjeT0iMjI2IiByPSIxMTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNyaW5nKSIgc3Ryb2tlLXdpZHRoPSIyMCIvPjxjaXJjbGUgY3g9IjIzNiIgY3k9IjIyNiIgcj0iMTI5IiBmaWxsPSJub25lIiBzdHJva2U9IiMwYjEyMTkiIHN0cm9rZS13aWR0aD0iMyIgb3BhY2l0eT0iLjciLz48IS0tIFNjaHJpZnQgLS0+PHRleHQgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsJ0hlbHZldGljYSBOZXVlJyxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjU0IiBsZXR0ZXItc3BhY2luZz0iNiIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjIiIHBhaW50LW9yZGVyPSJzdHJva2UiPjx0ZXh0UGF0aCBocmVmPSIjYXJjVG9wIiBzdGFydE9mZnNldD0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NQU5IVU5UPC90ZXh0UGF0aD48L3RleHQ+PGc+PHBhdGggZD0iTSAxMjAgNDIwIEwgMzkyIDQyMCBMIDM4MCA0NDggTCAzOTIgNDc2IEwgMTIwIDQ3NiBMIDEzMiA0NDggWiIgZmlsbD0iI2Y1YjkxNiIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjQiLz48dGV4dCB4PSIyNTYiIHk9IjQ2MSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsJ0hlbHZldGljYSBOZXVlJyxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjM0IiBsZXR0ZXItc3BhY2luZz0iOCIgZmlsbD0iIzBiMTIxOSI+TkVVSEVJTTwvdGV4dD48L2c+PC9zdmc+IA==';
 const CENTER = [47.2019, 8.5805]; // Neuheim ZG
@@ -170,7 +173,7 @@ const DEFAULT_SETTINGS = {
   ppm:1, surviveBonus:10, catchPts:15, firstCatchBonus:5,
   groupRadius:50, groupMin:1, groupPenaltyMin:1, dqGraceSec:20,
   hunterJokerEveryMin:10, fakeDist:200, answerSec:120, revealShowMin:2,
-  speedhuntMax:2, speedhuntPings:3, speedSurvivePts:10, speedFailPenalty:5,
+  speedhuntMax:2, speedhuntPings:3, speedhuntMin:3, speedSurvivePts:10, speedFailPenalty:5,
   hiderJokers:{reveal:1, invisible:1, fake:1},
   photoChallenges:['Fotografiert einen Teil der Kirche','Zeigt uns eine Grünfläche','Fotografiert ein Stoppschild','Fotografiert einen Brunnen','Fotografiert ein Strassenschild mit Namen']
 };
@@ -181,7 +184,7 @@ const SETTINGS_FIELDS = [
   ['ppm','Punkte pro überlebte Minute'],['surviveBonus','Bonus: Runde überlebt'],['catchPts','Punkte pro Fang'],['firstCatchBonus','Bonus: erster Fang der Runde'],
   ['dqGraceSec','Disqualifikation: Zeit zum Zurückkehren (Sek.)'],
   ['hunterJokerEveryMin','Jäger: neue Frage/Foto-Challenge alle (Min.)'],['answerSec','Antwortzeit Frage/Foto (Sek.)'],
-  ['speedhuntMax','Speedhunts pro Runde'],['speedhuntPings','Speedhunt: Anzahl Pings (1 pro Min.)'],['speedSurvivePts','Speedhunt überlebt: Pluspunkte Gejagte'],['speedFailPenalty','Speedhunt gescheitert: Abzug Jäger-Team'],
+  ['speedhuntMax','Speedhunts pro Runde'],['speedhuntPings','Speedhunt: Anzahl Pings'],['speedhuntMin','Speedhunt: Dauer (Min.)'],['speedSurvivePts','Speedhunt überlebt: Pluspunkte Gejagte'],['speedFailPenalty','Speedhunt gescheitert: Abzug Jäger-Team'],
   ['fakeDist','Fake-Ping-Abstand (m)'],['revealShowMin','Jäger erfragen: Standorte sichtbar (Min.)']
 ];
 const JH = {
@@ -194,6 +197,8 @@ const JF = {
   photo:{icon:'📸',name:'Foto-Challenge',desc:s=>'Team muss ein bestimmtes Foto schicken'}
 };
 const JS={speedhunt:{icon:'⚡',name:'Speedhunt',desc:s=>''}};
+const tnum=id=>{const o=teams()[id];return o&&o.code?'Nr. '+o.code:'Nr. ?';};
+const hiderListByCode=()=>activeHiders().sort((a,b)=>(a[1].code||99)-(b[1].code||99));
 const jinfo=k=>JH[k]||JF[k]||JS[k]||{icon:'🃏',name:k};
 const QUESTION_IDEAS = ['Seid ihr näher als 200 m bei der Kirche?','Seid ihr auf dem Schulareal?','Seid ihr nördlich vom Dorfplatz?','Seht ihr gerade eine Strasse?','Seid ihr in der Nähe von Wasser?','Seid ihr näher als 300 m bei uns?'];
 
@@ -257,6 +262,7 @@ class FBStore{ // Echtbetrieb: Firebase Realtime Database
 /* ---------------- Konfiguration ---------------- */
 function getCfg(){
   if(FIREBASE_CONFIG) return FIREBASE_CONFIG;
+  if(window.MH_CONFIG&&window.MH_CONFIG.databaseURL) return window.MH_CONFIG;
   const h=new URLSearchParams(location.hash.slice(1)).get('c');
   if(h){try{const c=JSON.parse(decodeURIComponent(escape(atob(h))));localStorage.setItem('mh_cfg',JSON.stringify(c));return c;}catch(e){}}
   try{return JSON.parse(localStorage.getItem('mh_cfg')||'null')}catch(e){return null}
@@ -292,7 +298,7 @@ async function connect(code){
   CODE=code;DEMO=code==='DEMO';G=null;const gen=++storeGen;
   if(DEMO){store=new LocalStore('mh_demo');}
   else{const cfg=getCfg();if(!cfg)throw new Error('nocfg');await ensureFirebase();store=new FBStore(cfg,code);}
-  store.onRoot(d=>{if(gen!==storeGen)return;G=d;scheduleRender();});
+  store.onRoot(d=>{if(gen!==storeGen)return;G=d;scheduleRender();if(!VIEW&&$('#teamPick')&&$('#teamPick').querySelector('button[onclick^="pickTeam"]')&&!document.activeElement.matches('input'))renderTeamPick();});
 }
 function initialGame(demo){
   const tm={};for(let i=1;i<=6;i++)tm['t'+i]={name:'Team '+i,color:COLORS[i-1],score:0,role:'hider',hunterStarts:0};
@@ -339,16 +345,17 @@ function drawZones(M){
     if(z.type==='green')all.push(...z.pts);}
   if(all.length&&!M.fitted){M.m.fitBounds(all,{padding:[16,16]});M.fitted=true;}
 }
-function drawPings(M,filter,showFake,perm=true){
+function drawPings(M,filter,showFake,perm=true,anon=false,label=null){
   const by={};for(const p of Object.values((G&&G.pings)||{})){if(p.round!==R_().n||p.lat==null||!filter(p.team))continue;(by[p.team]=by[p.team]||[]).push(p);}
   for(const [id,arr] of Object.entries(by)){const tm=teams()[id];if(!tm)continue;arr.sort((a,b)=>b.t-a.t);
+    if(anon){const p=arr[0],c='#ff2d55';L.circleMarker([p.lat,p.lng],{radius:13,color:c,weight:3,fillColor:c,fillOpacity:.35}).bindTooltip(`📍 ${label||tnum(id)}`,{permanent:true,direction:'top',offset:[0,-12],className:'pinglabel'}).addTo(M.d);continue;}
     arr.slice(0,4).forEach((p,i)=>{const L0=i===0;const mk=L.circleMarker([p.lat,p.lng],{radius:L0?13:6,color:tm.color,weight:L0?3:1,fillColor:tm.color,fillOpacity:L0?.35:.18,opacity:L0?1:.55,dashArray:L0?null:'3'});
-      if(L0)mk.bindTooltip(`📍 ${esc(tm.name)}${showFake&&p.fake?' (FAKE)':''}${p.kind==='zone'?' 🚨':''} · ${ago(p.t)}`,{permanent:perm,direction:'top',offset:[0,-12],className:'pinglabel'});
+      if(L0)mk.bindTooltip(`📍 ${esc(tm.name)} (${tnum(id)})${showFake&&p.fake?' (FAKE)':''}`,{permanent:perm,direction:'top',offset:[0,-12],className:'pinglabel'});
       mk.addTo(M.d);});}
 }
 function liveMarkers(M){for(const [id,o] of activeHiders())if(exposed(id)){const p=latestPos(id);if(!p)continue;
   L.circle([p.lat,p.lng],{radius:25,color:'#c00018',weight:2,fillColor:'#ff2340',fillOpacity:.25,interactive:false}).addTo(M.d);
-  teamDot(p,o,'🔴 LIVE '+esc(o.name),10).addTo(M.d);}}
+  L.circleMarker([p.lat,p.lng],{radius:10,color:'#fff',weight:2,fillColor:'#ff2d55',fillOpacity:1}).bindTooltip('🔴 LIVE '+tnum(id),{permanent:true,direction:'top',offset:[0,-10],className:'pinglabel'}).addTo(M.d);}}
 function teamDot(p,tm,label,r=8){return L.circleMarker([p.lat,p.lng],{radius:r,color:'#fff',weight:2,fillColor:tm.color,fillOpacity:1}).bindTooltip(label,{permanent:true,direction:'top',offset:[0,-r],className:'pinglabel'});}
 
 /* =====================================================================
@@ -388,23 +395,27 @@ function engineTick(){
 }
 let ENGINE_MINE=true;
 function disqualify(up,id,tm,v){
+  const why=v==='red'?'Sperrzone betreten':v==='out'?'Spielfeld verlassen':v;
   const T=`teams/${id}/`,lost=(tm.score||0)-(tm.scoreStart??(tm.score||0));
   up[T+'dqPrevRole']=tm.role;up[T+'role']='out';up[T+'dq']=true;up[T+'dqLost']=lost;up[T+'score']=tm.scoreStart??(tm.score||0);up[T+'outSince']=null;
   const sp=R_().speed;if(sp&&sp.target===id){up['round/speed']=null;}
-  ev(up,`❌ ${tm.name} ist disqualifiziert (${v==='red'?'Sperrzone betreten':'Spielfeld verlassen'}) – 0 Punkte in dieser Runde.`,'all');
-  note(up,id,`❌ Ihr seid disqualifiziert (${v==='red'?'Sperrzone betreten':'Spielfeld verlassen'}). 0 Punkte in dieser Runde. Kommt zum Treffpunkt.`);
+  ev(up,`❌ ${tm.name} ist disqualifiziert (${why}) – 0 Punkte in dieser Runde.`,'all');
+  note(up,id,`❌ Ihr seid disqualifiziert (${why}). 0 Punkte in dieser Runde. Kommt zum Treffpunkt.`);
 }
+let dqTarget=null;
+function askDQ(id){dqTarget=id;const o=teams()[id];if(!o)return;
+  showUI(`<h3>❌ ${esc(o.name)} disqualifizieren?</h3><p class="mut">Das Team erhält 0 Punkte für diese Runde und scheidet aus. Grund:</p>
+  <div class="chips"><button onclick="doDQ('Freeze-Regel missachtet')">Freeze-Regel missachtet</button><button onclick="doDQ('Gruppenbildung')">Gruppenbildung</button><button onclick="doDQ('Unfaires Verhalten')">Unfaires Verhalten</button><button onclick="doDQ('Regelverstoss')">Anderer Regelverstoss</button></div>
+  <button class="wide" onclick="closeUI()">Abbrechen</button>`);}
+function doDQ(why){closeUI();const o=teams()[dqTarget];if(!o||!running()||!(o.role==='hider'||o.role==='hunter')){toast('Nicht möglich');return;}const up={};disqualify(up,dqTarget,o,why);store.update(up);toast('Team disqualifiziert');}
 function undoDQ(id){const o=teams()[id];if(!o||!o.dq)return;const T=`teams/${id}/`;store.update({[T+'role']:o.dqPrevRole||'hider',[T+'dq']:null,[T+'score']:(o.score||0)+(o.dqLost||0),[T+'dqLost']:null,[T+'outSince']:null,[T+'nextPingAt']:o.dqPrevRole==='hider'?now()+S().pingEveryMin*60000:null});toast('Disqualifikation aufgehoben');}
 function speedTick(up,t,s){
   const sp=R_().speed;if(!sp)return;const tg=teams()[sp.target];
   if(!tg||tg.role!=='hider'||tg.caught){up['round/speed']=null;return;}
-  if(t>=sp.nextAt){const p=latestPos(sp.target);pushPing(up,sp.target,p&&t-p.t<120000?p:null,p&&t-p.t<120000?'speed':'nosignal');
-    const left=(sp.left||1)-1;
-    if(left<=0){up['round/speed']=null;const by=teams()[sp.by];
+  if(t>=(sp.endAt||0)){{up['round/speed']=null;const by=teams()[sp.by];
       up[`teams/${sp.target}/score`]=(tg.score||0)+s.speedSurvivePts;if(by&&sp.by!==sp.target)up[`teams/${sp.by}/score`]=(by.score||0)-s.speedFailPenalty;
       ev(up,`⚡ ${tg.name} hat den Speedhunt überlebt! (+${s.speedSurvivePts}${by?`, ${by.name} −${s.speedFailPenalty}`:''})`,'all');
-      note(up,sp.target,`🎉 Speedhunt überlebt! +${s.speedSurvivePts} Punkte.`);noteRole(up,'hunter',`⚡ ${tg.name} hat den Speedhunt überlebt.${by?` ${by.name}: −${s.speedFailPenalty} Punkte.`:''}`);}
-    else{up['round/speed/left']=left;up['round/speed/nextAt']=sp.nextAt+60000;}}
+      note(up,sp.target,`🎉 Speedhunt überlebt! +${s.speedSurvivePts} Punkte.`);noteRole(up,'hunter',`⚡ ${tnum(sp.target)} hat den Speedhunt überlebt.${by?` ${by.name}: −${s.speedFailPenalty} Punkte.`:''}`);}}
 }
 function exposed(id){const o=teams()[id];return !!o&&o.role==='hider'&&!o.caught&&(o.exposedUntil||0)>now();}
 function groupCheck(up,t,s){
@@ -504,11 +515,11 @@ function renderPlayer(){
   // Karte
   if(PM){drawZones(PM);PM.d.clearLayers();const me=myPos();
     if(me){if(me.acc>8)L.circle([me.lat,me.lng],{radius:me.acc,color:'#4aa8ff',weight:1,fillOpacity:.07,interactive:false}).addTo(PM.d);teamDot(me,tm,'Ihr',10).addTo(PM.d);if(!PM.centered){PM.m.setView([me.lat,me.lng],17);PM.centered=true;}}
-    if(hunter){drawPings(PM,id=>{const o=teams()[id];return o&&o.role==='hider'&&!o.caught;},false);
+    if(hunter){drawPings(PM,id=>{const o=teams()[id];return o&&o.role==='hider'&&!o.caught;},false,true,true);
       for(const [id,o] of Object.entries(teams()))if(id!==MY_TEAM&&o.role==='hunter'){const p=latestPos(id);if(p&&t-p.t<120000)teamDot(p,o,'🎯 '+esc(o.name),6).addTo(PM.d);}
       liveMarkers(PM);}
-    if(hider){drawPings(PM,id=>id===MY_TEAM,false);
-      const rv=tm.reveal;if(rv&&t-rv.t<s.revealShowMin*60000)for(const [id,q] of Object.entries(rv.pts||{})){const o=teams()[id];if(o)teamDot(q,o,`🎯 ${esc(o.name)} · ${ago(rv.t)}`,8).addTo(PM.d);}}
+    if(hider){drawPings(PM,id=>id===MY_TEAM,false,true,true,'Euer letzter Ping');
+      const rv=tm.reveal;if(rv&&t-rv.t<s.revealShowMin*60000)for(const [id,q] of Object.entries(rv.pts||{})){const o=teams()[id];if(o)teamDot(q,o,'🎯 Jäger',8).addTo(PM.d);}}
   }
   // Panel – nur das Wichtigste
   let h='';
@@ -522,20 +533,20 @@ function renderPlayer(){
   }else if(hider){
     if(t<R.huntStartAt)h+=`<div class="card" style="border-color:var(--green)"><div class="mut">Versteckt euch!</div><div class="big">🏃 Jagd beginnt in ${cd(R.huntStartAt)}</div></div>`;
     else h+=`<div class="card" style="border-color:var(--green)"><div class="mut">Nächster Ping in</div><div class="big">📍 ${cd(tm.nextPingAt||t)}</div>
-      ${R.speed&&R.speed.target===MY_TEAM?`<div style="color:var(--red);font-weight:800">⚡ SPEEDHUNT auf euch! Noch ${R.speed.left} Ping(s)</div>`:''}${tm.skipNext?'<div>👻 Nächster Ping ist unsichtbar</div>':''}${tm.fakeNext?'<div>🎭 Nächster Ping ist gefälscht</div>':''}${tm.reveal&&t-tm.reveal.t<s.revealShowMin*60000?`<div>🔭 Jäger-Standorte sichtbar: noch ${cd(tm.reveal.t+s.revealShowMin*60000)}</div>`:''}</div>`;
+      ${R.speed&&R.speed.target===MY_TEAM?`<div style="color:var(--red);font-weight:800">⚡ SPEEDHUNT auf euch! Endet in ${cd(R.speed.endAt)}</div>`:''}${tm.skipNext?'<div>👻 Nächster Ping ist unsichtbar</div>':''}${tm.fakeNext?'<div>🎭 Nächster Ping ist gefälscht</div>':''}${tm.reveal&&t-tm.reveal.t<s.revealShowMin*60000?`<div>🔭 Jäger-Standorte sichtbar: noch ${cd(tm.reveal.t+s.revealShowMin*60000)}</div>`:''}</div>`;
     h+=prHtml;
     h+=`<div class="card"><b>🃏 Eure Joker</b><div class="jokers" style="margin-top:8px">${Object.entries(JH).map(([k,j])=>{const n=(tm.jokers||{})[k]||0;return `<button class="joker" ${n>0&&!pr?'':'disabled'} onclick="askHiderJoker('${k}')"><b>${j.icon} ${j.name} ×${n}</b><span>${esc(j.desc(s))}</span></button>`;}).join('')}</div></div>`;
     h+=`<button class="wide sm" onclick="selfCaught()">🙋 Wir wurden gefangen</button>`;
   }else if(hunter){
     const hunt=t>=R.huntStartAt,act=activeHiders();
     if(!hunt)h+=`<div class="card" style="border-color:var(--red)"><div class="mut">Startphase – bleibt am Startpunkt!</div><div class="big">⏳ Jagd beginnt in ${cd(R.huntStartAt)}</div></div>`;
-    h+=`<div class="card" style="border-color:var(--red)"><b>🎯 Gesuchte Teams (${act.length})</b>${act.map(([id,o])=>{const lp=lastPing(id);const st=exposed(id)?'<b style="color:#ff4d5e">🔴 LIVE</b>':!lp?'<span class="mut">noch kein Ping</span>':lp.kind==='invisible'?'👻 unsichtbar':lp.kind==='nosignal'?'📵 kein Signal':`📍 ${ago(lp.t)}`;
-      return `<div class="trow"><span class="dot" style="background:${o.color}"></span><span class="nm">${esc(o.name)} ${R.speed&&R.speed.target===id?'⚡':''}</span><span>${st}</span></div>`;}).join('')||'<div class="mut">Alle gefangen!</div>'}
+    h+=`<div class="card" style="border-color:var(--red)"><b>🎯 Gesuchte Teams (${act.length})</b>${hiderListByCode().map(([id,o])=>{const lp=lastPing(id);const st=exposed(id)?'<b style="color:#ff4d5e">🔴 LIVE</b>':!lp?'<span class="mut">noch kein Ping</span>':lp.kind==='invisible'?'👻 unsichtbar':lp.kind==='nosignal'?'📵 kein Signal':'📍 auf der Karte';
+      return `<div class="trow"><span class="nm"><b>${tnum(id)}</b> ${R.speed&&R.speed.target===id?'⚡':''}</span><span>${st}</span></div>`;}).join('')||'<div class="mut">Alle gefangen!</div>'}
       <button class="pri wide" ${hunt?'':'disabled'} onclick="reportCatch()">🙌 Fang melden</button></div>`;
     h+=prHtml;
     const sl=R.speedLeft||0,sp=R.speed,cr=tm.credits||0,can=hunt&&act.length&&!pr;
     h+=`<div class="card"><b>🃏 Joker</b> <span class="mut">· Frage/Foto-Guthaben: ${cr}${tm.nextCreditAt&&hunt?` (+1 in ${cd(tm.nextCreditAt)})`:''}</span>
-      ${sp?`<p style="margin:8px 0 0;color:var(--red)"><b>⚡ Speedhunt läuft auf ${esc(teams()[sp.target]?.name)}</b> – nächster Ping in ${cd(sp.nextAt)} (noch ${sp.left})</p>`:''}
+      ${sp?`<div style="margin:8px 0 0;padding:10px;border-radius:10px;background:rgba(255,77,94,.12)"><b style="color:var(--red)">⚡ Speedhunt auf ${tnum(sp.target)}</b> · endet in ${cd(sp.endAt)}<button class="red wide" ${sp.left>0?'':'disabled'} onclick="speedPing()">📍 Ping jetzt auslösen (noch ${sp.left})</button></div>`:''}
       <div class="jokers" style="margin-top:8px;grid-template-columns:repeat(3,minmax(0,1fr))">
         <button class="joker" ${can&&sl>0&&!sp?'':'disabled'} onclick="askSpeedhunt()"><b>⚡ Speedhunt</b><span>noch ${sl} von ${s.speedhuntMax}</span></button>
         ${Object.entries(JF).map(([k,j])=>`<button class="joker" ${can&&cr>0?'':'disabled'} onclick="askHunterJoker('${k}')"><b>${j.icon} ${j.name}</b><span>${esc(j.desc(s))}</span></button>`).join('')}
@@ -544,7 +555,7 @@ function renderPlayer(){
     const mine=Object.values(G.catches||{}).filter(c=>c.hunter===MY_TEAM&&c.round===R.n&&c.status==='pending');
     if(mine.length)h+=`<div class="card">⏳ Fang wartet auf Bestätigung: ${mine.map(c=>esc(teams()[c.target]?.name)).join(', ')}</div>`;
   }
-  h+=`<div class="mut" style="text-align:center;margin-top:12px">${DEMO?'':gpsErr?`<span style="color:var(--red)">⚠️ ${esc(gpsErr)}</span><br>`:!lastFix?'📶 Suche GPS… (Standort erlauben)<br>':''}Seite offen lassen · <a href="#" onclick="leave();return false" style="color:var(--mut)">Spiel verlassen</a></div>`;
+  h+=`<div class="mut" style="text-align:center;margin-top:12px">${DEMO?'':gpsErr?`<span style="color:var(--red)">⚠️ ${esc(gpsErr)}</span><br>`:!lastFix?'📶 Suche GPS… (Standort erlauben)<br>':''}Seite offen lassen · <a href="#" onclick="askLeave();return false" style="color:var(--mut)">Spiel verlassen</a></div>`;
   setHTML($('#ppanel'),h);
 }
 function hunterResults(){
@@ -552,7 +563,7 @@ function hunterResults(){
   const qs=Object.entries(G.questions||{}).filter(([k,q])=>q.round===R.n).map(([k,q])=>({k,...q,kind:'q'}));
   const ps=Object.entries(G.photos||{}).filter(([k,p])=>p.round===R.n).map(([k,p])=>({k,...p,kind:'p'}));
   const all=[...qs,...ps].sort((a,b)=>b.t-a.t);if(!all.length)return '';
-  return `<div class="card feed"><b>📨 Antworten</b>${all.map(x=>{const to=esc(teams()[x.to]?.name);const exp=t-x.t>s.answerSec*1000;
+  return `<div class="card feed"><b>📨 Antworten</b>${all.map(x=>{const to=tnum(x.to);const exp=t-x.t>s.answerSec*1000;
     if(x.kind==='q')return `<div>❓ ${to}: «${esc(x.text)}» → ${x.answer?(x.answer==='ja'?'<b style="color:var(--green)">✅ JA</b>':'<b style="color:var(--red)">❌ NEIN</b>'):exp?'⏰ keine Antwort':`⏳ ${cd(x.t+s.answerSec*1000)}`}</div>`;
     return `<div>📸 ${to}: «${esc(x.task||'Foto')}» → ${x.img?`<button class="sm" onclick="showPhoto('${x.k}')">Ansehen</button>`:exp?'⏰ kein Foto':`⏳ ${cd(x.t+s.answerSec*1000)}`}</div>`;}).join('')}</div>`;
 }
@@ -568,7 +579,7 @@ function playerOverlays(){
     const sped=R.speed&&R.speed.target===MY_TEAM;
     if(me&&!sped){let md=Infinity;for(const hp of hunterPositions())md=Math.min(md,dist(me,hp));
       if(!proxFrozen&&md<s.freezeRadius){proxFrozen=true;alertFx([400,150,400],4);}else if(proxFrozen&&md>s.unfreezeRadius)proxFrozen=false;}
-    if(sped){proxFrozen=false;if(!spedBuzz){spedBuzz=true;alertFx([500,100,500,100,500],6);}fz=`⚡ SPEEDHUNT auf euch!<br><span style="font-size:15px">Jede Minute ein Ping (noch ${R.speed.left}) – lauft!</span>`;}
+    if(sped){proxFrozen=false;if(!spedBuzz){spedBuzz=true;alertFx([500,100,500,100,500],6);}fz=`⚡ SPEEDHUNT auf euch!<br><span style="font-size:15px">Die Jäger können jederzeit Pings auslösen (noch ${R.speed.left}) – endet in ${fmt(R.speed.endAt-t)}</span>`;}
     if(!sped)spedBuzz=false;
     if(!sped&&proxFrozen)fz=`🧊 JÄGER IN DER NÄHE!<br><span style="font-size:15px">Versteckt euch sofort hier in der Nähe und bleibt dort.</span>`;
   }else proxFrozen=false;
@@ -584,7 +595,7 @@ function playerOverlays(){
       const gk=gs.map(x=>x.a+x.b+(t<dl?'w':'x')).join();if(gEl._k!==gk){gEl._k=gk;alertFx([500,150,500,150,500],5);}}
     else if(exposed(MY_TEAM))gb=`🔴 Live-Standort noch ${fmt(tm.exposedUntil-t)} für die Jäger sichtbar.`;
     else gEl._k='';
-  }else if(running()&&tm.role==='hunter'&&huntOn()){const ex=activeHiders().filter(([id])=>exposed(id));if(ex.length){gb=`🔴 LIVE sichtbar: ${ex.map(([id,o])=>esc(o.name)).join(', ')}`;const gk=ex.map(x=>x[0]).join();if(gEl._k!==gk){gEl._k=gk;alertFx([300,100,300],3);}}else gEl._k='';}
+  }else if(running()&&tm.role==='hunter'&&huntOn()){const ex=activeHiders().filter(([id])=>exposed(id));if(ex.length){gb=`🔴 LIVE sichtbar: ${ex.map(([id])=>tnum(id)).join(', ')}`;const gk=ex.map(x=>x[0]).join();if(gEl._k!==gk){gEl._k=gk;alertFx([300,100,300],3);}}else gEl._k='';}
   gEl.classList.toggle('live',gb.startsWith('🔴'));showBn('bnGroup',gb);
   const me=myPos();let zn='';
   if(me&&running()&&tm.role!=='out'){const v=zoneViolation(me);if(v){const left=tm.outSince?tm.outSince+s.dqGraceSec*1000-t:s.dqGraceSec*1000;zn=`${v==='red'?'🚫 Sperrzone! Sofort verlassen!':'🚫 Ausserhalb des Spielfelds! Sofort zurück!'}<br><span style="font-size:14px">Sonst Disqualifikation in ${Math.max(0,Math.ceil(left/1000))} Sek.</span>`;if(!zoneBuzzed){zoneBuzzed=true;alertFx([600,200,600],6);}}else zoneBuzzed=false;}
@@ -626,9 +637,9 @@ function applyJoker(up,r){
   if(tm.role!=='hunter'||!tg||tg.role!=='hider'||tg.caught)return false;
   if(r.kind==='speedhunt'){
     if((R.speedLeft||0)<1||R.speed)return false;
-    up['round/speed']={target:r.target,by:r.team,start:t,nextAt:t+60000,left:s.speedhuntPings};up['round/speedLeft']=R.speedLeft-1;
-    ev(up,`⚡ SPEEDHUNT! ${tm.name} jagt ${tg.name} – ${s.speedhuntPings} Minuten lang jede Minute ein Ping!`,'all');
-    noteRole(up,'hunter',`⚡ Speedhunt auf ${tg.name} läuft! ${s.speedhuntPings} Minuten lang jede Minute ein Ping.`,r.team);return true;}
+    up['round/speed']={target:r.target,by:r.team,start:t,endAt:t+s.speedhuntMin*60000,left:s.speedhuntPings};up['round/speedLeft']=R.speedLeft-1;
+    ev(up,`⚡ SPEEDHUNT! ${tm.name} jagt ${tg.name} – ${s.speedhuntMin} Min., bis zu ${s.speedhuntPings} Pings.`,'all');
+    noteRole(up,'hunter',`⚡ Speedhunt auf ${tnum(r.target)} läuft! Ihr könnt in den nächsten ${s.speedhuntMin} Min. bis zu ${s.speedhuntPings} Pings auslösen.`,r.team);return true;}
   if(r.kind==='question'||r.kind==='photo'){
     if((tm.credits||0)<1)return false;up[T+'credits']=tm.credits-1;
     if(r.kind==='question'){up['questions/'+store.pushKey()]={from:r.team,to:r.target,text:r.text||'',t,round:R.n};ev(up,`❓ ${tm.name} stellt ${tg.name} eine Frage`,'lead');}
@@ -639,16 +650,17 @@ function applyJoker(up,r){
 function decideReq(k,ok){
   const r=G.requests&&G.requests[k];if(!r||r.status!=='pending')return;const up={},j=jinfo(r.kind);
   const done=ok?applyJoker(up,r):false;up[`requests/${k}/status`]=done?'ok':'no';
-  const extra=done&&r.kind==='reveal'?' Die Jäger-Standorte sind jetzt auf eurer Karte.':done&&r.kind==='speedhunt'?' Jede Minute kommt ein Ping.':'';
+  const extra=done&&r.kind==='reveal'?' Die Jäger-Standorte sind jetzt auf eurer Karte.':done&&r.kind==='speedhunt'?` Ihr könnt in den nächsten ${S().speedhuntMin} Min. bis zu ${S().speedhuntPings} Pings selbst auslösen.`:'';
   note(up,r.team,done?`✅ Joker «${j.name}» freigegeben!${extra}`:ok?`⚠️ Joker «${j.name}» ist gerade nicht möglich.`:`❌ Joker «${j.name}» wurde von der Spielleitung abgelehnt.`);
   store.update(up);if(ok&&!done)toast('Joker nicht möglich (keiner mehr übrig oder Team nicht aktiv)');
 }
 function pickTeamUI(title,list,fn){showUI(`<h3>${title}</h3>${list.map(([id,o])=>`<button class="wide" style="text-align:left;border-left:8px solid ${o.color}" onclick="${fn}('${id}')">${esc(o.name)}</button>`).join('')||'<p class="mut">Keine Teams verfügbar.</p>'}<button class="wide" onclick="closeUI()">Abbrechen</button>`);}
 let pendingJoker=null;
-function askHunterJoker(k){pendingJoker=k;const j=JF[k];pickTeamUI(`${j.icon} ${j.name} – welches Team?`,activeHiders(),'hunterJokerTarget');}
+function pickCodeUI(title,fn){const l=hiderListByCode();showUI(`<h3>${title}</h3>${l.map(([id])=>`<button class="wide" style="text-align:left" onclick="${fn}('${id}')">📍 ${tnum(id)}</button>`).join('')||'<p class="mut">Keine Teams verfügbar.</p>'}<button class="wide" onclick="closeUI()">Abbrechen</button>`);}
+function askHunterJoker(k){pendingJoker=k;const j=JF[k];pickCodeUI(`${j.icon} ${j.name} – welche Nummer?`,'hunterJokerTarget');}
 function hunterJokerTarget(id){
-  if(pendingJoker==='photo'){qTarget=id;const pc=S().photoChallenges;showUI(`<h3>📸 Foto-Challenge an ${esc(teams()[id]?.name)}</h3><p class="mut">Wähle eine Challenge:</p>${pc.map((c,i)=>`<button class="wide" style="text-align:left" onclick="doHunterJoker('photo',qTarget,S().photoChallenges[${i}])">${esc(c)}</button>`).join('')}<button class="wide" onclick="closeUI()">Abbrechen</button>`);return;}
-  if(pendingJoker==='question'){qTarget=id;showUI(`<h3>❓ Frage an ${esc(teams()[id]?.name)}</h3><p class="mut">Nur Ja/Nein-Fragen.</p><textarea id="qtext" rows="2" placeholder="Seid ihr …?"></textarea><div class="chips">${QUESTION_IDEAS.map((q,i)=>`<button onclick="document.getElementById('qtext').value=QUESTION_IDEAS[${i}]">${esc(q)}</button>`).join('')}</div><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="pri" onclick="sendQuestion()">Senden</button></div>`);return;}
+  if(pendingJoker==='photo'){qTarget=id;const pc=S().photoChallenges;showUI(`<h3>📸 Foto-Challenge an ${tnum(id)}</h3><p class="mut">Wähle eine Challenge:</p>${pc.map((c,i)=>`<button class="wide" style="text-align:left" onclick="doHunterJoker('photo',qTarget,S().photoChallenges[${i}])">${esc(c)}</button>`).join('')}<button class="wide" onclick="closeUI()">Abbrechen</button>`);return;}
+  if(pendingJoker==='question'){qTarget=id;showUI(`<h3>❓ Frage an ${tnum(id)}</h3><p class="mut">Nur Ja/Nein-Fragen.</p><textarea id="qtext" rows="2" placeholder="Seid ihr …?"></textarea><div class="chips">${QUESTION_IDEAS.map((q,i)=>`<button onclick="document.getElementById('qtext').value=QUESTION_IDEAS[${i}]">${esc(q)}</button>`).join('')}</div><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="pri" onclick="sendQuestion()">Senden</button></div>`);return;}
   doHunterJoker(pendingJoker,id,null);
 }
 let qTarget=null;
@@ -663,7 +675,10 @@ function _oldDoHunterJoker(k,target,text){
   if(k==='photo'){up['photos/'+store.pushKey()]={from:MY_TEAM,to:target,t,round:R_().n,task:text||'Fotografiert eure Umgebung'};ev(up,`📸 ${tm.name} gibt ${tg.name} eine Foto-Challenge`,'all');}
   store.update(up);toast(JF[k].icon+' Joker eingesetzt');
 }
-function askSpeedhunt(){pickTeamUI('⚡ Speedhunt – welches Team?',activeHiders(),'startSpeedhunt');}
+function speedPing(){const R=R_(),sp=R.speed,t=now();if(!sp||!(sp.left>0)||t>=sp.endAt){toast('Kein Speedhunt-Ping verfügbar');return;}
+  const p=latestPos(sp.target),ok=p&&t-p.t<120000,up={};pushPing(up,sp.target,ok?p:null,ok?'speed':'nosignal');up['round/speed/left']=sp.left-1;
+  ev(up,`⚡ Speedhunt-Ping auf ${teams()[sp.target]?.name} (${myTeam()?.name})`,'lead');store.update(up);toast(ok?'📍 Ping gesetzt':'📵 Kein GPS-Signal vom Team');}
+function askSpeedhunt(){pickCodeUI('⚡ Speedhunt – welche Nummer?','startSpeedhunt');}
 function startSpeedhunt(id){const R=R_();if((R.speedLeft||0)<1||R.speed){closeUI();toast('Speedhunt nicht möglich');return;}requestJoker('speedhunt',id);}
 function _oldStartSpeedhunt(id){closeUI();const R=R_(),s=S(),t=now(),tg=teams()[id];
   if(!running()||(R.speedLeft||0)<1||R.speed||!tg){toast('Speedhunt nicht möglich');return;}
@@ -680,7 +695,8 @@ async function sendPhoto(k,input){const f=input.files&&input.files[0];if(!f)retu
 function compressImage(file){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,720/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(img.src);res(c.toDataURL('image/jpeg',.6));};img.onerror=()=>rej(new Error('Bild nicht lesbar'));img.src=URL.createObjectURL(file);});}
 function ackNote(t){localStorage.setItem('mh_nseen_'+CODE+'_'+MY_TEAM,String(t));modalKey=null;renderModal();}
 function ackMsg(id){localStorage.setItem('mh_seen_'+CODE,id);modalKey=null;renderModal();}
-function leave(){localStorage.removeItem('mh_me');location.href=location.pathname+location.search.replace(/[?&]g=[^&]*/,'')+location.hash;}
+function askLeave(){showUI(`<h3>Spiel verlassen?</h3><p>Euer Team wird für andere Handys wieder frei.</p><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="red" onclick="closeUI();leave()">Verlassen</button></div>`);}
+function leave(){if(store&&MY_TEAM&&!DEMO&&teams()[MY_TEAM]?.claimedBy===DEV)store.update({[`teams/${MY_TEAM}/claimedBy`]:null});localStorage.removeItem('mh_me');location.href=location.pathname+location.search.replace(/[?&]g=[^&]*/,'')+location.hash;}
 
 /* ---------------- Modal ---------------- */
 let UI=null,uiSeq=0,modalKey=null;
@@ -766,20 +782,21 @@ function leadReq(){
   if(!reqs.length&&!cat.length)return h+`<div class="card mut" style="margin-bottom:10px">🔔 Keine offenen Anfragen</div>`;
   return h+`<div class="card" style="border:2px solid var(--acc);margin-bottom:10px"><b>🔔 Anfragen (${reqs.length+cat.length})</b>`+
     reqs.map(([k,r])=>{const o=teams()[r.team]||{},j=jinfo(r.kind),tg=r.target?teams()[r.target]:null;
-      return `<div class="reqrow"><span class="nm"><span class="dot" style="background:${o.color}"></span><b>${esc(o.name)}</b> möchte <b>${j.icon} ${j.name}</b>${tg?` auf ${esc(tg.name)}`:''}${r.text?`: «${esc(r.text)}»`:''} <span class="mut">· ${ago(r.t)}</span></span><button class="sm grn" onclick="decideReq('${k}',true)">✅ Freigeben</button><button class="sm red" onclick="decideReq('${k}',false)">❌ Ablehnen</button></div>`;}).join('')+
+      return `<div class="reqrow"><span class="nm"><span class="dot" style="background:${o.color}"></span><b>${esc(o.name)}</b>${o.members?` <span class="mut">(${esc(o.members)})</span>`:''} möchte <b>${j.icon} ${j.name}</b>${tg?` auf ${esc(tg.name)} (${tnum(r.target)})`:''}${r.text?`: «${esc(r.text)}»`:''} <span class="mut">· ${ago(r.t)}</span></span><button class="sm grn" onclick="decideReq('${k}',true)">✅ Freigeben</button><button class="sm red" onclick="decideReq('${k}',false)">❌ Ablehnen</button></div>`;}).join('')+
     cat.map(([k,c])=>`<div class="reqrow"><span class="nm">🙌 <b>${esc(teams()[c.hunter]?.name)}</b> meldet Fang: ${esc(teams()[c.target]?.name)} ${c.status==='no'?'<span class="badge" style="background:var(--red)">bestritten</span>':'<span class="badge">wartet auf Bestätigung</span>'}</span><button class="sm grn" onclick="leadConfirm('${k}')">Gilt</button><button class="sm" onclick="leadDismiss('${k}')">Gilt nicht</button></div>`).join('')+`</div>`;
 }
 function leadTeamsLive(){
   const t=now(),R=R_();
   return `<div class="card"><b>👥 Teams live</b>${Object.entries(teams()).map(([id,o])=>{const p=latestPos(id);const on=p&&t-p.t<30000;
-    const st=running()?(o.role==='hunter'?(o.caught?'🎯 (gefangen)':'🎯 Jäger'):o.role==='out'?'':'🏃 gejagt'):'';
+    const st=running()?(o.role==='hunter'?(o.caught?'🎯 (gefangen)':'🎯 Jäger'):o.role==='out'?'':`🏃 gejagt · <b>${tnum(id)}</b>`):'';
     const extra=o.role==='out'?'<b style="color:var(--red)">❌ DQ</b>':o.outSince?' · <b style="color:var(--red)">🚫 ausserhalb!</b>':running()&&o.role==='hider'&&!o.caught?` · Ping ${cd(o.nextPingAt||t)}${R.speed&&R.speed.target===id?' ⚡':''}${o.skipNext?' 👻':''}${o.fakeNext?' 🎭':''}${exposed(id)?' 🔴LIVE':myGroups(id).length?' ⚠️Gruppe':''} · 🃏${Object.values(o.jokers||{}).reduce((a,b)=>a+b,0)}`:running()&&o.role==='hunter'?` · 🃏${o.credits||0}`:'';
-    return `<div class="trow"><span class="dot" style="background:${o.color}"></span><span class="nm"><b>${esc(o.name)}</b> <span class="mut">${st}${extra}</span></span><span class="mut" title="Verbindung">${on?'🟢':p?'🔴':'⚪'}</span></div>`;}).join('')}
+    const btn=running()&&(o.role==='hider'||o.role==='hunter')?`<button class="sm" title="Team disqualifizieren" aria-label="${esc(o.name)} disqualifizieren" onclick="askDQ('${id}')">❌ DQ</button>`:o.dq?`<button class="sm" onclick="undoDQ('${id}')">↩︎</button>`:'';
+    return `<div class="trow"><span class="dot" style="background:${o.color}"></span><span class="nm"><b>${esc(o.name)}</b> ${o.members?`<span style="font-size:13px">(${esc(o.members)})</span>`:o.claimedBy?'':'<span class="mut">· frei</span>'} <span class="mut">${st}${extra}</span></span><span class="mut" title="Verbindung">${on?'🟢':p?'🔴':'⚪'}</span>${btn}</div>`;}).join('')}
     <div class="mut" style="margin-top:6px">🟢 online · 🔴 Signal weg · ⚪ nie verbunden</div></div>`;
 }
 function leadRank(){
   const arr=Object.entries(teams()).sort((a,b)=>(b[1].score||0)-(a[1].score||0));
-  return `<div class="card"><b>🏆 Rangliste</b>${arr.map(([id,o],i)=>`<div class="trow"><span style="width:22px">${i+1}.</span><span class="dot" style="background:${o.color}"></span><span class="nm">${esc(o.name)}</span><b>${o.score||0}</b></div>`).join('')}</div>`;
+  return `<div class="card"><b>🏆 Rangliste</b>${arr.map(([id,o],i)=>`<div class="trow"><span style="width:22px">${i+1}.</span><span class="dot" style="background:${o.color}"></span><span class="nm">${esc(o.name)}${o.members?` <span class="mut">${esc(o.members)}</span>`:''}</span><b>${o.score||0}</b></div>`).join('')}</div>`;
 }
 function leadMsg(){return `<div class="card"><b>📢 Nachricht an alle</b><textarea id="bmsg" rows="2" placeholder="z.B. Noch 5 Minuten!" oninput="bmsgVal=this.value" style="margin-top:6px">${esc(bmsgVal)}</textarea><div class="row" style="margin-top:8px"><button onclick="sendMsg()">Senden</button><button class="red" onclick="sendSOS()">🚨 Alle zum Treffpunkt</button></div></div>`;}
 function feedItems(filter,limit){const list=Object.values(G.events||{}).filter(filter).sort((a,b)=>b.t-a.t).slice(0,limit);return list.length?list.map(e=>`<div><span class="mut">${clock(e.t)}</span> ${esc(e.text)}</div>`).join(''):'<div class="mut">Noch nichts passiert.</div>';}
@@ -792,7 +809,7 @@ function doSOS(){closeUI();const up={msg:{id:store.pushKey(),text:'🚨 SPIEL UN
 function leadRound(){
   const R=R_(),s=S(),t=now(),tms=Object.entries(teams());
   if(R.status==='running'){
-    return `<div class="card" style="border-color:var(--red)"><b>🚦 Runde ${R.n} läuft</b><div class="big" style="margin:6px 0">${cd(R.endAt)}</div><p class="mut" style="margin:0 0 6px">${t<R.huntStartAt?`Vorsprung: Jagd beginnt in ${cd(R.huntStartAt)}`:'Jagd läuft'} · ⚡ Speedhunts übrig: ${R.speedLeft||0}${R.speed?` · läuft auf ${esc(teams()[R.speed.target]?.name)}`:''}</p>
+    return `<div class="card" style="border-color:var(--red)"><b>🚦 Runde ${R.n} läuft</b><div class="big" style="margin:6px 0">${cd(R.endAt)}</div><p class="mut" style="margin:0 0 6px">${t<R.huntStartAt?`Vorsprung: Jagd beginnt in ${cd(R.huntStartAt)}`:'Jagd läuft'} · ⚡ Speedhunts übrig: ${R.speedLeft||0}${R.speed?` · läuft auf ${esc(teams()[R.speed.target]?.name)} (noch ${R.speed.left} Pings, endet in ${cd(R.speed.endAt)})`:''}</p>
       <p style="margin:0 0 8px">Noch gejagt: ${activeHiders().map(([id,o])=>`<span class="dot" style="background:${o.color}"></span>${esc(o.name)}`).join(', ')||'–'}</p>
       <button class="red wide" onclick="askStop()">⏹ Runde jetzt beenden</button></div>`;
   }
@@ -811,7 +828,9 @@ function startRound(){
   if(hs.length>=Object.keys(tms).length){toast('Mindestens ein Team muss gejagt werden');return;}
   const dur=Math.max(1,+rDur||s.roundMin),head=Math.max(0,+rHead||0),n=(R.n||0)+1,hs0=t+head*60000;
   const up={round:{n,status:'running',startAt:t,huntStartAt:hs0,endAt:t+dur*60000,catches:0,speedLeft:s.speedhuntMax},groups:null};
+  const hid=Object.keys(tms).filter(id=>!hs.includes(id)),codes=hid.map((_,i)=>i+1).sort(()=>Math.random()-.5);
   for(const [id,o] of Object.entries(tms)){const T=`teams/${id}/`,isH=hs.includes(id);
+    up[T+'code']=isH?null:codes[hid.indexOf(id)];
     up[T+'role']=isH?'hunter':'hider';up[T+'caught']=false;up[T+'caughtAt']=null;
     up[T+'credits']=isH?1:null;up[T+'nextCreditAt']=isH?hs0+s.hunterJokerEveryMin*60000:null;
     up[T+'jokers']=isH?null:{...s.hiderJokers};up[T+'nextPingAt']=isH?null:hs0;
@@ -827,7 +846,8 @@ function leadTeams(){
   const tms=Object.entries(teams()),run=running();
   return `<div class="card"><div class="row"><b style="flex:2">${tms.length} Teams</b><button class="sm" onclick="addTeam()" ${tms.length>=8?'disabled':''}>＋ Team</button><button class="sm" onclick="removeTeam()" ${tms.length<=2||run?'disabled':''}>－ Team</button></div>${DEMO?'':'<button class="wide" onclick="showJoin()">📲 Beitritts-Link &amp; QR-Code zeigen</button>'}</div>`+
   tms.map(([id,o])=>`<div class="card" style="border-left:6px solid ${o.color}">
-    <div class="row"><input value="${esc(o.name)}" onchange="renameTeam('${id}',this.value)"><b style="flex:none;font-size:20px">⭐ ${o.score||0}</b></div>
+    <div class="row"><input value="${esc(o.name)}" aria-label="Teamname" onchange="renameTeam('${id}',this.value)"><b style="flex:none;font-size:20px">⭐ ${o.score||0}</b></div>
+    <label>Mitglieder</label><div class="row"><input value="${esc(o.members||'')}" placeholder="noch niemand angemeldet" aria-label="Mitglieder" onchange="store.update({['teams/${id}/members']:this.value.trim()||null})">${o.claimedBy?`<button class="sm" style="flex:none" onclick="releaseTeam('${id}')">🔓 Handy freigeben</button>`:''}</div>
     <div class="row" style="margin-top:8px"><button class="sm" onclick="addScore('${id}',-5)">−5</button><button class="sm" onclick="addScore('${id}',-1)">−1</button><button class="sm" onclick="addScore('${id}',1)">+1</button><button class="sm" onclick="addScore('${id}',5)">+5</button></div>
     ${run&&o.role==='hider'&&!o.caught?`<button class="sm wide" onclick="leadCatchUI('${id}')">🎯 Als gefangen eintragen…</button>`:''}
     ${o.dq?`<button class="sm wide" onclick="undoDQ('${id}')">↩︎ Disqualifikation aufheben</button>`:''}
@@ -901,7 +921,8 @@ function leadSettings(){
     <button class="wide" onclick="confirmDo('Alle Standorte, Pings, Fotos und Ereignisse löschen?','wipeData')">Standorte &amp; Verlauf löschen</button>
     <button class="wide red" onclick="confirmDo('Ganzes Spiel endgültig löschen?','deleteGame')">Spiel löschen</button>
     <p class="mut">Nach dem Spieltag: «Spiel löschen» entfernt alle Daten.</p></div>
-    <div class="card mut">Spielcode: <b>${esc(CODE)}</b> · Gerät: ${DEV}<br>${DEMO?'Demo-Modus: Daten nur in diesem Browser.':'Verbunden mit Firebase.'}<br><button class="sm" style="margin-top:6px" onclick="leaveLead()">Spielleitung verlassen</button></div>`;
+    ${DEMO?'':`<div class="card"><h3>📦 config.js</h3><p class="mut">${window.MH_CONFIG?'✅ config.js ist auf dem Server.':'Noch keine config.js auf dem Server. Lade sie herunter und lege sie auf GitHub neben die index.html – dann reicht für die SuS überall der Spielcode.'}</p><button class="wide" onclick="downloadConfigJs()">⬇️ config.js herunterladen</button></div>`}
+    <div class="card mut">Version: <b>${APP_VERSION}</b><br>Spielcode: <b>${esc(CODE)}</b> · Gerät: ${DEV}<br>${DEMO?'Demo-Modus: Daten nur in diesem Browser.':'Verbunden mit Firebase.'}<br><button class="sm" style="margin-top:6px" onclick="leaveLead()">Spielleitung verlassen</button></div>`;
 }
 function saveSettings(){const o={};for(const [k] of SETTINGS_FIELDS){const v=+$('#set_'+k).value;o[k]=isFinite(v)?v:DEFAULT_SETTINGS[k];}o.hiderJokers={};for(const k of Object.keys(JH)){o.hiderJokers[k]=Math.max(0,+$('#hj_'+k).value||0);}
   if(o.unfreezeRadius<o.freezeRadius)o.unfreezeRadius=o.freezeRadius+10;o.photoChallenges=($('#set_pc').value||'').split('\n').map(x=>x.trim()).filter(Boolean);store.update({settings:o});rDur=null;rHead=null;toast('Gespeichert');}
@@ -954,15 +975,27 @@ setInterval(demoTick,2000);
 /* =====================================================================
    START
    ===================================================================== */
+function cfgBox(){
+  return (window.MH_CONFIG?'<p class="mut" style="margin:10px 0 0">✅ config.js ist auf dem Server – SuS können überall nur mit dem Spielcode beitreten.</p>'
+    :'<div class="card" style="margin:10px 0 0;background:var(--card2)"><b>📦 Konfiguration auf GitHub ablegen (einmalig)</b><p class="mut">Lädt eine kleine Datei <b>config.js</b> mit deinen Firebase-Daten herunter. Lade sie einmal zusätzlich zur index.html auf GitHub hoch. Danach können SuS auf jedem Gerät nur mit dem Spielcode beitreten – auch nach Updates der index.html.</p><button class="pri wide" onclick="downloadConfigJs()">⬇️ config.js herunterladen</button></div>')
+   +(window.MH_CONFIG?'':'<button class="sm" style="margin-top:8px" onclick="localStorage.removeItem(\'mh_cfg\');renderHome()">Firebase-Konfiguration ändern</button>');
+}
 function renderHome(){
+  const vl=$('#verline');if(vl)vl.textContent='Version '+APP_VERSION;
   const cfg=getCfg();const me=JSON.parse(localStorage.getItem('mh_me')||'null');const ld=localStorage.getItem('mh_lead');
   let r='';
   if(me&&me.code&&me.code!=='DEMO')r+=`<button class="pri wide" onclick="resumePlayer()">↩︎ Zurück ins Spiel ${esc(me.code)}</button>`;
   if(ld&&ld!=='DEMO'&&cfg)r+=`<button class="wide" onclick="openLeadCode('${esc(ld)}')">↩︎ Spielleitung ${esc(ld)} öffnen</button>`;
   $('#resume').innerHTML=r?`<div class="card">${r}</div>`:'';
   const g=new URLSearchParams(location.search).get('g');if(g)$('#jcode').value=g.toUpperCase();
-  $('#leadBox').innerHTML=cfg?`<button class="pri wide" onclick="createGame()">＋ Neues Spiel erstellen</button><div class="row" style="margin-top:8px"><input id="lcode" placeholder="Code" autocapitalize="characters"><button style="flex:none" onclick="openLeadCode($('#lcode').value)">Öffnen</button></div>${FIREBASE_CONFIG?'':'<div class="card" style="margin:10px 0 0;background:var(--card2)"><b>📦 Konfiguration fest einbauen</b><p class="mut">Lädt eine index.html herunter, in der deine Firebase-Daten schon drin sind. Diese auf GitHub hochladen (alte ersetzen) – dann können SuS auf jedem Gerät nur mit dem Spielcode beitreten.</p><button class="pri wide" onclick="bakeConfig()">⬇️ index.html herunterladen</button></div><button class="sm" style="margin-top:8px" onclick="localStorage.removeItem(\'mh_cfg\');renderHome()">Firebase-Konfiguration ändern</button>'}`
+  $('#leadBox').innerHTML=cfg?`<button class="pri wide" onclick="createGame()">＋ Neues Spiel erstellen</button><div class="row" style="margin-top:8px"><input id="lcode" placeholder="Code" autocapitalize="characters"><button style="flex:none" onclick="openLeadCode($('#lcode').value)">Öffnen</button></div>${FIREBASE_CONFIG?'':cfgBox()}`
    :`<p class="mut">Einmalig: Firebase-Konfiguration einfügen. Danach kannst du Spiele erstellen.</p><details style="margin-bottom:8px"><summary class="mut">So geht's (ca. 10 Min., gratis)</summary><ol class="mut" style="padding-left:18px"><li>console.firebase.google.com öffnen → <b>Projekt hinzufügen</b> (Analytics aus).</li><li>Links <b>Build → Realtime Database → Datenbank erstellen</b>, Standort <b>Belgien (europe-west1)</b>, <b>Testmodus</b>.</li><li>Zahnrad → <b>Projekteinstellungen → Meine Apps → Web (&lt;/&gt;)</b> registrieren.</li><li>Den Block <code>const firebaseConfig = {…}</code> kopieren und hier einfügen.</li></ol></details><textarea id="cfgtxt" rows="6" placeholder="const firebaseConfig = { apiKey: '…', databaseURL: '…', … };"></textarea><button class="pri wide" onclick="saveCfg()">Speichern</button>`;
+}
+function downloadConfigJs(){
+  const cfg=getCfg();if(!cfg){toast('Zuerst die Konfiguration speichern');return;}
+  const src='// Firebase-Konfiguration für Manhunt Neuheim\nwindow.MH_CONFIG = '+JSON.stringify(cfg,null,2)+';\n';
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([src],{type:'text/javascript'}));a.download='config.js';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},2000);
+  toast('config.js heruntergeladen – einmalig auf GitHub hochladen',6000);
 }
 async function bakeConfig(){
   const cfg=getCfg();if(!cfg){toast('Zuerst die Konfiguration speichern');return;}
@@ -983,9 +1016,34 @@ async function joinStep(){
   try{await connect(code);}catch(e){$('#teamPick').innerHTML=`<p style="color:var(--red)">Verbindung fehlgeschlagen: ${esc(e.message)}</p>`;return;}
   $('#teamPick').innerHTML='<p class="mut">Verbinde…</p>';
   const ok=await waitFor(()=>G&&G.teams,8000);if(!ok){$('#teamPick').innerHTML='<p style="color:var(--red)">Spiel nicht gefunden. Code prüfen.</p>';return;}
-  $('#teamPick').innerHTML=`<label>Wähle dein Team</label>${Object.entries(teams()).map(([id,o])=>`<button class="wide" style="text-align:left;border-left:8px solid ${o.color}" onclick="openPlayer('${id}')">${esc(o.name)}</button>`).join('')}<p class="mut">Danach den Standort-Zugriff erlauben.</p>`;
+  renderTeamPick();
 }
-async function resumePlayer(){const me=JSON.parse(localStorage.getItem('mh_me')||'null');if(!me)return;try{await connect(me.code);const ok=await waitFor(()=>G&&G.teams,8000);if(!ok){toast('Spiel nicht gefunden');return;}openPlayer(me.team);}catch(e){toast('Bitte den Link der Lehrperson erneut öffnen.',5000);}}
+function renderTeamPick(){
+  const el=$('#teamPick');if(!el||!G||!G.teams)return;
+  el.innerHTML=`<label>Wähle euer Team</label>${Object.entries(teams()).map(([id,o])=>{const taken=o.claimedBy&&o.claimedBy!==DEV;
+    return `<button class="wide" style="text-align:left;border-left:8px solid ${o.color}" ${taken?'disabled':''} onclick="pickTeam('${id}')">${esc(o.name)}${taken?' · 🔒 besetzt':o.claimedBy===DEV?' · ✓ euer Team':''}</button>`;}).join('')}<p class="mut">Pro Team meldet sich nur ein Handy an.</p>`;
+}
+let pickId=null;
+function pickTeam(id){
+  const o=teams()[id];if(!o)return;if(o.claimedBy&&o.claimedBy!==DEV){toast('Dieses Team ist schon besetzt');renderTeamPick();return;}
+  pickId=id;const m=(o.claimedBy===DEV&&o.members)?o.members.split(', '):['',''];
+  $('#teamPick').innerHTML=`<div class="card" style="margin-top:10px;border-left:8px solid ${o.color}"><h3>${esc(o.name)}</h3><p class="mut">Schreibt eure Namen hinein (sieht nur die Spielleitung).</p>
+    <label for="mem1">Name 1</label><input id="mem1" value="${esc(m[0]||'')}" autocomplete="off" maxlength="30">
+    <label for="mem2">Name 2</label><input id="mem2" value="${esc(m[1]||'')}" autocomplete="off" maxlength="30">
+    <label for="mem3">Name 3 (falls zu dritt)</label><input id="mem3" value="${esc(m[2]||'')}" autocomplete="off" maxlength="30">
+    <div class="row" style="margin-top:10px"><button onclick="renderTeamPick()">Zurück</button><button class="pri" onclick="claimTeam()">Los geht's</button></div></div>`;
+}
+async function claimTeam(){
+  const id=pickId,names=['#mem1','#mem2','#mem3'].map(s=>($(s)?.value||'').trim()).filter(Boolean);
+  if(names.length<1){toast('Bitte mindestens einen Namen eingeben');return;}
+  const o=teams()[id];if(!o||(o.claimedBy&&o.claimedBy!==DEV)){toast('Dieses Team ist inzwischen besetzt');renderTeamPick();return;}
+  await store.update({[`teams/${id}/claimedBy`]:DEV,[`teams/${id}/claimedAt`]:now(),[`teams/${id}/members`]:names.join(', ')});
+  await new Promise(r=>setTimeout(r,900));
+  if(teams()[id]?.claimedBy!==DEV){toast('Ein anderes Handy war schneller – bitte anderes Team wählen');renderTeamPick();return;}
+  openPlayer(id);
+}
+function releaseTeam(id){store.update({[`teams/${id}/claimedBy`]:null,[`teams/${id}/claimedAt`]:null});toast('Team freigegeben');}
+async function resumePlayer(){const me=JSON.parse(localStorage.getItem('mh_me')||'null');if(!me)return;try{await connect(me.code);const ok=await waitFor(()=>G&&G.teams,8000);if(!ok){toast('Spiel nicht gefunden');return;}const o=teams()[me.team];if(!o||(o.claimedBy&&o.claimedBy!==DEV)){toast('Euer Team ist nicht mehr für dieses Handy freigegeben');renderTeamPick();return;}if(!o.claimedBy){pickTeam(me.team);return;}openPlayer(me.team);}catch(e){toast('Bitte den Link der Lehrperson erneut öffnen.',5000);}}
 async function startDemo(){await connect('DEMO');await waitFor(()=>G!==null,2000);if(!G.teams)await store.update(initialGame(true));openLead();}
 renderHome();
 </script>
