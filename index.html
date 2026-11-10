@@ -132,7 +132,7 @@ code{background:#0b1219;padding:1px 5px;border-radius:5px}
    Optional: Firebase-Konfiguration hier fest eintragen. Sonst fügt die
    Lehrperson sie beim ersten Start in der App ein (wird im Link mitgegeben).
    ===================================================================== */
-const FIREBASE_CONFIG = {"apiKey":"AIzaSyAH_ZZ9YDra6VVnqXBisEn1oEk7ELiWZnY","authDomain":"hide-and-seek-3aab1.firebaseapp.com","databaseURL":"https://hide-and-seek-3aab1-default-rtdb.europe-west1.firebasedatabase.app","projectId":"hide-and-seek-3aab1","storageBucket":"hide-and-seek-3aab1.firebasestorage.app","messagingSenderId":"867305797522","appId":"1:867305797522:web:56f779cf5b5d60459d734b"};
+const FIREBASE_CONFIG = null;
 
 const LOGO='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJiZyIgY3g9IjUwJSIgY3k9IjQwJSIgcj0iNjUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMxZjJmNDIiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYjEyMTkiLz48L3JhZGlhbEdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZTI3YSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YyYTkwMCIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJyaW5nIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+PHN0b3Agb2Zmc2V0PSIuNSIgc3RvcC1jb2xvcj0iI2M5ZDRlMCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzdkOGVhMyIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJoYW5kbGUiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIwIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMzYTJhMWEiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjNmI0YTJiIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMmExZDEwIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImxlbnMiPjxjaXJjbGUgY3g9IjIzNiIgY3k9IjIyNiIgcj0iMTE4Ii8+PC9jbGlwUGF0aD48cGF0aCBpZD0iYXJjVG9wIiBkPSJNIDY2IDI1NiBBIDE5MCAxOTAgMCAwIDEgNDQ2IDI1NiIvPjxwYXRoIGlkPSJhcmNCb3QiIGQ9Ik0gODQgMjY4IEEgMTcyIDE3MiAwIDAgMCA0MjggMjY4Ii8+PC9kZWZzPjwhLS0gQmFkZ2UgLS0+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyNDQiIGZpbGw9InVybCgjYmcpIi8+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyMzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1YjkxNiIgc3Ryb2tlLXdpZHRoPSIxMCIvPjxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmNWI5MTYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iNCA4IiBvcGFjaXR5PSIuNiIvPjwhLS0gUGluZy1XZWxsZW4gLS0+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY0ZDVlIiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxwYXRoIGQ9Ik0gMzg0IDIwMCBBIDE1MCAxNTAgMCAwIDEgMzc3IDI3NyIgc3Ryb2tlLXdpZHRoPSI5IiBvcGFjaXR5PSIuOTUiLz48cGF0aCBkPSJNIDQxMCAxOTUgQSAxNzYgMTc2IDAgMCAxIDQwMSAyODYiIHN0cm9rZS13aWR0aD0iNyIgb3BhY2l0eT0iLjU1Ii8+PC9nPjwhLS0gR3JpZmYgZGVyIEx1cGUgLS0+PGcgdHJhbnNmb3JtPSJyb3RhdGUoLTQ1IDIzNiAyMjYpIj48cmVjdCB4PSIyMjEiIHk9IjM1MCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjM0IiByeD0iNiIgZmlsbD0idXJsKCNyaW5nKSIvPjxyZWN0IHg9IjIxNiIgeT0iMzgwIiB3aWR0aD0iNDAiIGhlaWdodD0iMTAwIiByeD0iMTgiIGZpbGw9InVybCgjaGFuZGxlKSIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjQiLz48cmVjdCB4PSIyMTYiIHk9IjQwNCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjciIGZpbGw9IiNmNWI5MTYiLz48cmVjdCB4PSIyMTYiIHk9IjQyMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjciIGZpbGw9IiNmNWI5MTYiLz48L2c+PCEtLSBMaW5zZSBtaXQgV2FwcGVuLU1vdGl2IC0tPjxnIGNsaXAtcGF0aD0idXJsKCNsZW5zKSI+PHJlY3QgeD0iMTAwIiB5PSIxMDAiIHdpZHRoPSIyODAiIGhlaWdodD0iMjYwIiBmaWxsPSJ1cmwoI2dvbGQpIi8+PCEtLSBTb25uZW5zdHJhaGxlbiBkZXplbnQgLS0+PGcgc3Ryb2tlPSIjZmZmM2MyIiBzdHJva2Utd2lkdGg9IjEwIiBvcGFjaXR5PSIuMzUiPjxsaW5lIHgxPSIyMzYiIHkxPSIxOTAiIHgyPSIxMjAiIHkyPSIxMTAiLz48bGluZSB4MT0iMjM2IiB5MT0iMTkwIiB4Mj0iMjM2IiB5Mj0iOTAiLz48bGluZSB4MT0iMjM2IiB5MT0iMTkwIiB4Mj0iMzUyIiB5Mj0iMTEwIi8+PC9nPjwhLS0gSMO8Z2VsIChEcmVpYmVyZykgLS0+PHBhdGggZD0iTSAxMDAgMzYwIEwgMTAwIDMwMCBRIDE0MCAyNjIgMTc4IDI4NiBRIDIzNiAyMzYgMjk0IDI4NiBRIDMzMiAyNjIgMzcyIDMwMCBMIDM3MiAzNjAgWiIgZmlsbD0iIzFmOGEzYSIvPjxwYXRoIGQ9Ik0gMTAwIDM2MCBMIDEwMCAzMTggUSAxNTAgMjk2IDIwMCAzMTIgUSAyNTAgMjkyIDMwMCAzMTIgUSAzNDAgMjk4IDM3MiAzMTggTCAzNzIgMzYwIFoiIGZpbGw9IiMxNzcwMmUiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzYgMjkyKSBzY2FsZSguODIpIHRyYW5zbGF0ZSgtMjM2IC0yOTIpIj48IS0tIFN0YW1tIC0tPjxwYXRoIGQ9Ik0gMjI2IDI5MiBMIDIzMCAyMjYgUSAyMzYgMjE0IDI0MiAyMjYgTCAyNDYgMjkyIFEgMjM2IDMwMCAyMjYgMjkyIFoiIGZpbGw9IiMxNDYyMmEiLz48cGF0aCBkPSJNIDIzMiAyNDYgUSAyMTQgMjMyIDIwNCAyMTQgTSAyNDAgMjQwIFEgMjU4IDIyNiAyNjggMjEwIiBzdHJva2U9IiMxNDYyMmEiIHN0cm9rZS13aWR0aD0iNyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PCEtLSBLcm9uZSBkZXIgTGluZGUgLS0+PGcgZmlsbD0iIzFmOGEzYSI+PGNpcmNsZSBjeD0iMjM2IiBjeT0iMTc4IiByPSI1NiIvPjxjaXJjbGUgY3g9IjE5MCIgY3k9IjE5NiIgcj0iMzgiLz48Y2lyY2xlIGN4PSIyODIiIGN5PSIxOTYiIHI9IjM4Ii8+PGNpcmNsZSBjeD0iMjA2IiBjeT0iMTUwIiByPSIzNiIvPjxjaXJjbGUgY3g9IjI2NiIgY3k9IjE1MCIgcj0iMzYiLz48Y2lyY2xlIGN4PSIyMzYiIGN5PSIxMjgiIHI9IjM0Ii8+PC9nPjxnIGZpbGw9IiMyZmFlNGQiPjxjaXJjbGUgY3g9IjIyMCIgY3k9IjE0MCIgcj0iMjIiLz48Y2lyY2xlIGN4PSIxODIiIGN5PSIxODYiIHI9IjE2Ii8+PGNpcmNsZSBjeD0iMjUyIiBjeT0iMTIyIiByPSIxNCIvPjwvZz48IS0tIExpbmRlbmJsw6R0dGVyIChIZXJ6Zm9ybSkgLS0+PC9nPjwhLS0gUGluZy1QdW5rdCAtLT48Y2lyY2xlIGN4PSIzMTIiIGN5PSIyNTAiIHI9IjE2IiBmaWxsPSIjZmY0ZDVlIiBvcGFjaXR5PSIuMyIvPjxjaXJjbGUgY3g9IjMxMiIgY3k9IjI1MCIgcj0iOSIgZmlsbD0iI2ZmNGQ1ZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMiLz48IS0tIEdsYW56IC0tPjxwYXRoIGQ9Ik0gMTUwIDE3MCBBIDk2IDk2IDAgMCAxIDIyMCAxMjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxMiIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIuNTUiLz48L2c+PGNpcmNsZSBjeD0iMjM2IiBjeT0iMjI2IiByPSIxMTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNyaW5nKSIgc3Ryb2tlLXdpZHRoPSIyMCIvPjxjaXJjbGUgY3g9IjIzNiIgY3k9IjIyNiIgcj0iMTI5IiBmaWxsPSJub25lIiBzdHJva2U9IiMwYjEyMTkiIHN0cm9rZS13aWR0aD0iMyIgb3BhY2l0eT0iLjciLz48IS0tIFNjaHJpZnQgLS0+PHRleHQgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsJ0hlbHZldGljYSBOZXVlJyxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjU0IiBsZXR0ZXItc3BhY2luZz0iNiIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjIiIHBhaW50LW9yZGVyPSJzdHJva2UiPjx0ZXh0UGF0aCBocmVmPSIjYXJjVG9wIiBzdGFydE9mZnNldD0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NQU5IVU5UPC90ZXh0UGF0aD48L3RleHQ+PGc+PHBhdGggZD0iTSAxMjAgNDIwIEwgMzkyIDQyMCBMIDM4MCA0NDggTCAzOTIgNDc2IEwgMTIwIDQ3NiBMIDEzMiA0NDggWiIgZmlsbD0iI2Y1YjkxNiIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjQiLz48dGV4dCB4PSIyNTYiIHk9IjQ2MSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsJ0hlbHZldGljYSBOZXVlJyxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjM0IiBsZXR0ZXItc3BhY2luZz0iOCIgZmlsbD0iIzBiMTIxOSI+TkVVSEVJTTwvdGV4dD48L2c+PC9zdmc+IA==';
 const CENTER = [47.2019, 8.5805]; // Neuheim ZG
@@ -141,29 +141,30 @@ const DEFAULT_SETTINGS = {
   roundMin:30, headStartMin:3, pingEveryMin:5, holdSec:30,
   freezeRadius:30, unfreezeRadius:50,
   ppm:1, surviveBonus:10, catchPts:15, firstCatchBonus:5,
-  groupRadius:50, groupMin:2, groupPenaltyMin:1,
-  hunterJokerEveryMin:10, shieldMin:3, delayMin:3, fakeDist:200, freezeJokerMin:2, answerSec:120,
-  hiderJokers:{invisible:1, fake:1, shield:1, delay:1}
+  groupRadius:50, groupMin:1, groupPenaltyMin:1, dqGraceSec:20,
+  hunterJokerEveryMin:10, fakeDist:200, answerSec:120, revealShowMin:2,
+  speedhuntMax:2, speedhuntPings:3,
+  hiderJokers:{reveal:1, invisible:1, fake:1},
+  photoChallenges:['Fotografiert einen Teil der Kirche','Zeigt uns eine Grünfläche','Fotografiert ein Stoppschild','Fotografiert einen Brunnen','Fotografiert ein Strassenschild mit Namen']
 };
 const SETTINGS_FIELDS = [
   ['roundMin','Rundendauer (Min.)'],['headStartMin','Vorsprung für Gejagte (Min.)'],['pingEveryMin','Ping-Intervall (Min.)'],
-  ['holdSec','Stehenbleiben nach Ping (Sek.)'],['freezeRadius','Freeze: Fänger näher als (m)'],['unfreezeRadius','Freeze endet ab Abstand (m)'],
+  ['holdSec','Stehenbleiben nach Ping (Sek.)'],['freezeRadius','Freeze: Jäger näher als (m)'],['unfreezeRadius','Freeze endet ab Abstand (m)'],
   ['groupRadius','Gruppenbildung: Teams näher als (m, 0 = aus)'],['groupMin','Gruppenbildung: Zeit zum Trennen (Min.)'],['groupPenaltyMin','Live-Standort bleibt nach Trennung sichtbar (Min.)'],
   ['ppm','Punkte pro überlebte Minute'],['surviveBonus','Bonus: Runde überlebt'],['catchPts','Punkte pro Fang'],['firstCatchBonus','Bonus: erster Fang der Runde'],
-  ['hunterJokerEveryMin','Fänger: neuer Joker alle (Min.)'],['shieldMin','Schutzschild-Dauer (Min.)'],['delayMin','Verzögerung (Min.)'],
-  ['fakeDist','Fake-Ping-Abstand (m)'],['freezeJokerMin','Freeze-Joker-Dauer (Min.)'],['answerSec','Antwortzeit Frage/Foto (Sek.)']
+  ['dqGraceSec','Disqualifikation: Zeit zum Zurückkehren (Sek.)'],
+  ['hunterJokerEveryMin','Jäger: neue Frage/Foto-Challenge alle (Min.)'],['answerSec','Antwortzeit Frage/Foto (Sek.)'],
+  ['speedhuntMax','Speedhunts pro Runde'],['speedhuntPings','Speedhunt: Anzahl Pings (1 pro Min.)'],
+  ['fakeDist','Fake-Ping-Abstand (m)'],['revealShowMin','Jäger erfragen: Standorte sichtbar (Min.)']
 ];
 const JH = {
+  reveal:{icon:'🔭',name:'Jäger erfragen',desc:s=>'Ihr seht, wo die Jäger gerade sind'},
   invisible:{icon:'👻',name:'Unsichtbar',desc:s=>'Nächster Ping fällt aus'},
-  fake:{icon:'🎭',name:'Fake-Ping',desc:s=>`Nächster Ping ca. ${s.fakeDist} m daneben`},
-  shield:{icon:'🛡️',name:'Schutzschild',desc:s=>`${s.shieldMin} Min. nicht fangbar`},
-  delay:{icon:'⏳',name:'Verzögerung',desc:s=>`Nächster Ping ${s.delayMin} Min. später`}
+  fake:{icon:'🎭',name:'Fake-Ping',desc:s=>`Nächster Ping ca. ${s.fakeDist} m daneben`}
 };
 const JF = {
-  instant:{icon:'📡',name:'Sofort-Ping',desc:s=>'Position eines Teams jetzt'},
   question:{icon:'❓',name:'Frage',desc:s=>'Ja/Nein-Frage an ein Team'},
-  photo:{icon:'📸',name:'Foto-Pflicht',desc:s=>'Team muss Umgebungsfoto senden'},
-  freeze:{icon:'🧊',name:'Freeze',desc:s=>`Team ${s.freezeJokerMin} Min. einfrieren`}
+  photo:{icon:'📸',name:'Foto-Challenge',desc:s=>'Team muss ein bestimmtes Foto schicken'}
 };
 const QUESTION_IDEAS = ['Seid ihr näher als 200 m bei der Kirche?','Seid ihr auf dem Schulareal?','Seid ihr nördlich vom Dorfplatz?','Seht ihr gerade eine Strasse?','Seid ihr in der Nähe von Wasser?','Seid ihr näher als 300 m bei uns?'];
 
@@ -237,7 +238,7 @@ async function ensureFirebase(){if(window.firebase&&firebase.database)return;awa
 let store=null,G=null,CODE=null,VIEW=null,MY_TEAM=null,DEMO=false,CONNECTED=true;
 const DEV=localStorage.getItem('mh_dev')||(()=>{const d='d'+Math.random().toString(36).slice(2,10);localStorage.setItem('mh_dev',d);return d;})();
 const now=()=>Date.now()+(store?store.offset():0);
-function S(){const g=(G&&G.settings)||{};return Object.assign({},DEFAULT_SETTINGS,g,{hiderJokers:Object.assign({},DEFAULT_SETTINGS.hiderJokers,g.hiderJokers||{})});}
+function S(){const g=(G&&G.settings)||{};const o=Object.assign({},DEFAULT_SETTINGS,g,{hiderJokers:Object.assign({},DEFAULT_SETTINGS.hiderJokers,g.hiderJokers||{})});if(!Array.isArray(o.photoChallenges)||!o.photoChallenges.length)o.photoChallenges=DEFAULT_SETTINGS.photoChallenges;return o;}
 const R_=()=>(G&&G.round)||{n:0,status:'idle'};
 const teams=()=>(G&&G.teams)||{};
 const myTeam=()=>teams()[MY_TEAM];
@@ -333,17 +334,38 @@ function engineTick(){
       if(tm.role==='hider'&&!tm.caught){
         act++;
         if(tm.nextPingAt&&t>=tm.nextPingAt){const k=autoPing(up,id,tm);up[`teams/${id}/nextPingAt`]=t+(k==='nosignal'?30000:s.pingEveryMin*60000);}
+      }
+      if(tm.role==='hider'||tm.role==='hunter'){ // Spielzone: Disqualifikation
         const p=latestPos(id);
-        if(p&&t-p.t<60000){const v=zoneViolation(p);if(v&&t-(tm.lastZonePingAt||0)>60000){pushPing(up,id,p,'zone');up[`teams/${id}/lastZonePingAt`]=t;ev(up,`🚨 ${tm.name} ist ${v==='red'?'in einer Sperrzone':'ausserhalb des Spielfelds'} – Position gepingt!`,'all');}}
+        if(p&&t-p.t<60000&&(p.acc||0)<=60){const v=zoneViolation(p);
+          if(v&&!tm.outSince){up[`teams/${id}/outSince`]=t;ev(up,`⚠️ ${tm.name} ist ${v==='red'?'in einer Sperrzone':'ausserhalb des Spielfelds'}!`,'lead');}
+          else if(v&&t-tm.outSince>=s.dqGraceSec*1000){disqualify(up,id,tm,v);if(tm.role==='hider')act--;}
+          else if(!v&&tm.outSince)up[`teams/${id}/outSince`]=null;}
       }
       if(tm.role==='hunter'&&t>=R.huntStartAt&&tm.nextCreditAt&&t>=tm.nextCreditAt){up[`teams/${id}/credits`]=(tm.credits||0)+1;up[`teams/${id}/nextCreditAt`]=tm.nextCreditAt+s.hunterJokerEveryMin*60000;}
     }
     groupCheck(up,t,s);
-    if(act===0&&endingN!==R.n){endingN=R.n;endRound(up);ev(up,'🎯 Alle Teams wurden gefangen!','all');}
+    speedTick(up,t,s);
+    if(act<=0&&endingN!==R.n){endingN=R.n;endRound(up);ev(up,'🎯 Alle Teams wurden gefangen!','all');}
   }
   if(Object.keys(up).length)store.update(up);
 }
 let ENGINE_MINE=true;
+function disqualify(up,id,tm,v){
+  const T=`teams/${id}/`,lost=(tm.score||0)-(tm.scoreStart??(tm.score||0));
+  up[T+'dqPrevRole']=tm.role;up[T+'role']='out';up[T+'dq']=true;up[T+'dqLost']=lost;up[T+'score']=tm.scoreStart??(tm.score||0);up[T+'outSince']=null;
+  const sp=R_().speed;if(sp&&sp.target===id){up['round/speed']=null;}
+  ev(up,`❌ ${tm.name} ist disqualifiziert (${v==='red'?'Sperrzone betreten':'Spielfeld verlassen'}) – 0 Punkte in dieser Runde.`,'all');
+}
+function undoDQ(id){const o=teams()[id];if(!o||!o.dq)return;const T=`teams/${id}/`;store.update({[T+'role']:o.dqPrevRole||'hider',[T+'dq']:null,[T+'score']:(o.score||0)+(o.dqLost||0),[T+'dqLost']:null,[T+'outSince']:null,[T+'nextPingAt']:o.dqPrevRole==='hider'?now()+S().pingEveryMin*60000:null});toast('Disqualifikation aufgehoben');}
+function speedTick(up,t,s){
+  const sp=R_().speed;if(!sp)return;const tg=teams()[sp.target];
+  if(!tg||tg.role!=='hider'||tg.caught){up['round/speed']=null;return;}
+  if(t>=sp.nextAt){const p=latestPos(sp.target);pushPing(up,sp.target,p&&t-p.t<120000?p:null,p&&t-p.t<120000?'speed':'nosignal');
+    const left=(sp.left||1)-1;
+    if(left<=0){up['round/speed']=null;ev(up,`⚡ Speedhunt auf ${tg.name} ist vorbei – entkommen!`,'all');}
+    else{up['round/speed/left']=left;up['round/speed/nextAt']=sp.nextAt+60000;}}
+}
 function exposed(id){const o=teams()[id];return !!o&&o.role==='hider'&&!o.caught&&(o.exposedUntil||0)>now();}
 function groupCheck(up,t,s){
   const groups=(G&&G.groups)||{},seen=new Set();
@@ -356,7 +378,7 @@ function groupCheck(up,t,s){
         seen.add(key);
         if(t-g.since>=s.groupMin*60000){
           for(const [id,o] of [[a,ao],[b,bo]])if((o.exposedUntil||0)-t<s.groupPenaltyMin*60000-4000)up[`teams/${id}/exposedUntil`]=t+s.groupPenaltyMin*60000;
-          if(!g.exposed){up[`groups/${key}/exposed`]=true;ev(up,`🔴 Gruppenbildung! ${ao.name} und ${bo.name} haben sich nicht getrennt – ihr Live-Standort ist jetzt für die Fänger sichtbar!`,'all');}
+          if(!g.exposed){up[`groups/${key}/exposed`]=true;ev(up,`🔴 Gruppenbildung! ${ao.name} und ${bo.name} haben sich nicht getrennt – ihr Live-Standort ist jetzt für die Jäger sichtbar!`,'all');}
         }
       }else if(d<s.groupRadius){seen.add(key);up['groups/'+key]={a,b,since:t};ev(up,`⚠️ ${ao.name} und ${bo.name} sind näher als ${s.groupRadius} m – sie müssen sich innert ${s.groupMin} Min. trennen.`,'lead');}
     }
@@ -375,7 +397,7 @@ function autoPing(up,id,tm){
 function endRound(up){
   const R=R_(),s=S(),t=Math.min(now(),R.endAt);
   for(const [id,tm] of Object.entries(G.teams)){
-    if(tm.role==='hider'&&!tm.caught){const mins=Math.floor((t-R.startAt)/60000);const pts=mins*s.ppm+s.surviveBonus;up[`teams/${id}/score`]=(tm.score||0)+pts;ev(up,`🏆 ${tm.name} hat die Runde überlebt! (+${pts})`,'all');}
+    if(tm.role==='hider'&&!tm.caught&&!tm.dq){const mins=Math.floor((t-R.startAt)/60000);const pts=mins*s.ppm+s.surviveBonus;up[`teams/${id}/score`]=(tm.score||0)+pts;ev(up,`🏆 ${tm.name} hat die Runde überlebt! (+${pts})`,'all');}
   }
   up.groups=null;up['round/status']='ended';up['round/endedAt']=now();ev(up,`🏁 Runde ${R.n} ist beendet.`,'all');
 }
@@ -390,6 +412,7 @@ function catchUpdates(up,k,c,isNew){
   up[T+'caught']=true;up[T+'caughtAt']=t;up[T+'role']='hunter';up[T+'credits']=1;up[T+'nextCreditAt']=t+s.hunterJokerEveryMin*60000;
   up[T+'score']=(tg.score||0)+mins*s.ppm;up[T+'shieldUntil']=null;up[T+'skipNext']=null;up[T+'fakeNext']=null;up[T+'freezeUntil']=null;up[T+'exposedUntil']=null;
   up[`teams/${c.hunter}/score`]=(hu.score||0)+cp;up['round/catches']=(R.catches||0)+1;
+  if(R.speed&&R.speed.target===c.target){up['round/speed']=null;if((R.speedLeft||0)>0)up['round/speedLeft']=0;ev(up,`⚡ Speedhunt erfolgreich!${(R.speedLeft||0)>0?' Der übrige Speedhunt verfällt.':''}`,'all');}
   ev(up,`🎯 ${hu.name} hat ${tg.name} gefangen! (+${cp}${first?' inkl. Bonus erster Fang':''}) ${tg.name} jagt jetzt mit.`,'all');
   return true;
 }
@@ -400,7 +423,7 @@ function directCatch(target,hunter){if(!target||!hunter||target===hunter)return;
 /* =====================================================================
    SPIELER-ANSICHT
    ===================================================================== */
-let PM=null,lastFix=null,lastSent=0,gpsErr=null,watchId=null,wake=null,proxFrozen=false,seenPingKey=null;
+let zoneBuzzed=false,PM=null,lastFix=null,lastSent=0,gpsErr=null,watchId=null,wake=null,proxFrozen=false,seenPingKey=null;
 function openPlayer(team){
   MY_TEAM=team;VIEW='player';localStorage.setItem('mh_me',JSON.stringify({code:CODE,team}));
   showScreen('player');
@@ -435,7 +458,7 @@ function renderPlayer(){
   const tm=myTeam(),t=now(),s=S(),R=R_();
   if(!tm){setHTML($('#ppanel'),`<div class="card">Dieses Team existiert nicht mehr. <button onclick="leave()">Zurück</button></div>`);return;}
   const run=R.status==='running',hunter=run&&tm.role==='hunter',hider=run&&tm.role==='hider'&&!tm.caught;
-  const role=hunter?'<span class="badge b-hunt">🎯 FÄNGER</span>':hider?'<span class="badge b-hide">🏃 GEJAGT</span>':'<span class="badge">⏸ Pause</span>';
+  const role=hunter?'<span class="badge b-hunt">🎯 JÄGER</span>':hider?'<span class="badge b-hide">🏃 GEJAGT</span>':run&&tm.role==='out'?'<span class="badge" style="background:var(--red)">❌ DQ</span>':'<span class="badge">⏸ Pause</span>';
   setHTML($('#phead'),`<img src="${LOGO}" style="width:30px;height:30px" alt=""><span class="dot" style="background:${tm.color}"></span><b>${esc(tm.name)}</b>${role}<span class="sp"></span>${run?`<span class="badge">⏱ ${cd(R.endAt)}</span>`:''}<span class="badge">⭐ ${tm.score||0}</span>${demoSwitcher()}${!CONNECTED?'<span class="badge" style="background:var(--red)">offline</span>':''}`);
   // Karte
   if(PM){drawZones(PM);PM.d.clearLayers();const me=myPos();
@@ -443,7 +466,8 @@ function renderPlayer(){
     if(hunter){drawPings(PM,id=>{const o=teams()[id];return o&&o.role==='hider'&&!o.caught;},false);
       for(const [id,o] of Object.entries(teams()))if(id!==MY_TEAM&&o.role==='hunter'){const p=latestPos(id);if(p&&t-p.t<120000)teamDot(p,o,'🎯 '+esc(o.name),6).addTo(PM.d);}
       liveMarkers(PM);}
-    if(hider)drawPings(PM,id=>id===MY_TEAM,false);
+    if(hider){drawPings(PM,id=>id===MY_TEAM,false);
+      const rv=tm.reveal;if(rv&&t-rv.t<s.revealShowMin*60000)for(const [id,q] of Object.entries(rv.pts||{})){const o=teams()[id];if(o)teamDot(q,o,`🎯 ${esc(o.name)} · ${ago(rv.t)}`,8).addTo(PM.d);}}
   }
   // Panel
   let h='';
@@ -451,20 +475,25 @@ function renderPlayer(){
   if(!run){
     h+=`<div class="card"><div class="big">⏸ Warten…</div><p>Die nächste Runde startet, sobald die Lehrperson sie freigibt. ${R.n?`Runde ${R.n} ist vorbei.`:''}</p></div>`;
     h+=scoreboard();
+  }else if(tm.role==='out'){
+    h+=`<div class="card" style="border-color:var(--red)"><div class="big">❌ Disqualifiziert</div><p>Ihr habt das Spielfeld verlassen oder eine Sperrzone betreten. 0 Punkte in dieser Runde. Kommt bitte zum Treffpunkt.</p></div>`;
   }else if(hider){
     if(t<R.huntStartAt)h+=`<div class="card" style="border-color:var(--green)"><div class="mut">Versteckt euch!</div><div class="big">🏃 Jagd beginnt in ${cd(R.huntStartAt)}</div></div>`;
     else h+=`<div class="card" style="border-color:var(--green)"><div class="mut">Nächster Ping in</div><div class="big">📍 ${cd(tm.nextPingAt||t)}</div>
-      ${(tm.shieldUntil||0)>t?`<div>🛡️ Schutzschild aktiv: ${cd(tm.shieldUntil)}</div>`:''}${tm.skipNext?'<div>👻 Nächster Ping ist unsichtbar</div>':''}${tm.fakeNext?'<div>🎭 Nächster Ping ist gefälscht</div>':''}</div>`;
+      ${R.speed&&R.speed.target===MY_TEAM?`<div style="color:var(--red);font-weight:800">⚡ SPEEDHUNT auf euch! Noch ${R.speed.left} Ping(s)</div>`:''}${tm.skipNext?'<div>👻 Nächster Ping ist unsichtbar</div>':''}${tm.fakeNext?'<div>🎭 Nächster Ping ist gefälscht</div>':''}${tm.reveal&&t-tm.reveal.t<s.revealShowMin*60000?`<div>🔭 Jäger-Standorte sichtbar: noch ${cd(tm.reveal.t+s.revealShowMin*60000)}</div>`:''}</div>`;
     h+=`<div class="card"><b>🃏 Eure Joker</b><div class="jokers" style="margin-top:8px">${Object.entries(JH).map(([k,j])=>{const n=(tm.jokers||{})[k]||0;return `<button class="joker" ${n>0?'':'disabled'} onclick="askHiderJoker('${k}')"><b>${j.icon} ${j.name} ×${n}</b><span>${esc(j.desc(s))}</span></button>`;}).join('')}</div></div>`;
-    h+=`<div class="card mut">🧊 Kommt ein Fänger näher als ${s.freezeRadius} m, müsst ihr im Versteck bleiben. Nach jedem Ping: ${s.holdSec} Sek. stehen bleiben.${s.groupRadius>0?` 🚫 Keine Gruppen: Nähert ihr euch einem anderen gejagten Team auf weniger als ${s.groupRadius} m, habt ihr ${s.groupMin} Min. Zeit, euch zu trennen – sonst sehen die Fänger euch live.`:''}<button class="wide sm" onclick="selfCaught()">🙋 Wir wurden gefangen</button></div>`;
+    h+=`<div class="card mut">🧊 Kommt ein Jäger näher als ${s.freezeRadius} m, müsst ihr euch sofort in der Nähe verstecken und dort bleiben (gilt nicht beim Speedhunt). 🚫 Wer das grüne Spielfeld verlässt oder eine Sperrzone betritt, wird disqualifiziert. Nach jedem Ping: ${s.holdSec} Sek. stehen bleiben.${s.groupRadius>0?` 🚫 Keine Gruppen: Nähert ihr euch einem anderen gejagten Team auf weniger als ${s.groupRadius} m, habt ihr ${s.groupMin} Min. Zeit, euch zu trennen – sonst sehen die Jäger euch live.`:''}<button class="wide sm" onclick="selfCaught()">🙋 Wir wurden gefangen</button></div>`;
   }else if(hunter){
     if(t<R.huntStartAt)h+=`<div class="card" style="border-color:var(--red)"><div class="mut">Startphase – bleibt am Startpunkt!</div><div class="big">⏳ Jagd beginnt in ${cd(R.huntStartAt)}</div></div>`;
     const act=activeHiders();
     h+=`<div class="card" style="border-color:var(--red)"><b>🎯 Gesuchte Teams (${act.length})</b>${act.map(([id,o])=>{const lp=lastPing(id);const st=exposed(id)?'<b style="color:#ff4d5e">🔴 LIVE</b>':!lp?'<span class="mut">noch kein Ping</span>':lp.kind==='invisible'?'👻 unsichtbar':lp.kind==='nosignal'?'📵 kein Signal':`📍 ${ago(lp.t)}`;
-      return `<div class="trow"><span class="dot" style="background:${o.color}"></span><span class="nm">${esc(o.name)} ${(o.shieldUntil||0)>t?'🛡️':''}${(o.freezeUntil||0)>t?'🧊':''}</span><span>${st}</span></div>`;}).join('')||'<div class="mut">Alle gefangen!</div>'}
+      return `<div class="trow"><span class="dot" style="background:${o.color}"></span><span class="nm">${esc(o.name)} ${R.speed&&R.speed.target===id?'⚡':''}</span><span>${st}</span></div>`;}).join('')||'<div class="mut">Alle gefangen!</div>'}
       <button class="pri wide" ${t<R.huntStartAt?'disabled':''} onclick="reportCatch()">🙌 Fang melden</button></div>`;
+    const sl=R.speedLeft||0,sp=R.speed;
+    h+=`<div class="card" style="border-color:${sp?'var(--red)':'var(--line)'}"><b>⚡ Speedhunt</b> <span class="mut">· noch ${sl} von ${s.speedhuntMax} (für alle Jäger)</span>
+      ${sp?`<p style="margin:8px 0 0"><b>Läuft auf ${esc(teams()[sp.target]?.name)}</b> – nächster Ping in ${cd(sp.nextAt)} (noch ${sp.left})</p>`:`<p class="mut" style="margin:6px 0 8px">Ein Team wird ${s.speedhuntPings} Minuten lang jede Minute angepingt. Gelingt der Fang, verfällt der übrige Speedhunt.</p><button class="red wide" ${sl>0&&t>=R.huntStartAt&&act.length?'':'disabled'} onclick="askSpeedhunt()">⚡ Speedhunt starten</button>`}</div>`;
     const cr=tm.credits||0;
-    h+=`<div class="card"><b>🃏 Joker-Guthaben: ${cr}</b> <span class="mut">${tm.nextCreditAt&&t>=R.huntStartAt?`· nächster in ${cd(tm.nextCreditAt)}`:''}</span><div class="jokers" style="margin-top:8px">${Object.entries(JF).map(([k,j])=>`<button class="joker" ${cr>0&&t>=R.huntStartAt&&act.length?'':'disabled'} onclick="askHunterJoker('${k}')"><b>${j.icon} ${j.name}</b><span>${esc(j.desc(s))}</span></button>`).join('')}</div></div>`;
+    h+=`<div class="card"><b>🃏 Frage/Foto-Guthaben: ${cr}</b> <span class="mut">${tm.nextCreditAt&&t>=R.huntStartAt?`· nächster in ${cd(tm.nextCreditAt)}`:''}</span><div class="jokers" style="margin-top:8px">${Object.entries(JF).map(([k,j])=>`<button class="joker" ${cr>0&&t>=R.huntStartAt&&act.length?'':'disabled'} onclick="askHunterJoker('${k}')"><b>${j.icon} ${j.name}</b><span>${esc(j.desc(s))}</span></button>`).join('')}</div></div>`;
     h+=hunterResults();
     const mine=Object.values(G.catches||{}).filter(c=>c.hunter===MY_TEAM&&c.round===R.n&&c.status==='pending');
     if(mine.length)h+=`<div class="card">⏳ Warte auf Bestätigung: ${mine.map(c=>esc(teams()[c.target]?.name)).join(', ')}</div>`;
@@ -482,7 +511,7 @@ function hunterResults(){
   const all=[...qs,...ps].sort((a,b)=>b.t-a.t);if(!all.length)return '';
   return `<div class="card feed"><b>📨 Antworten</b>${all.map(x=>{const to=esc(teams()[x.to]?.name);const exp=t-x.t>s.answerSec*1000;
     if(x.kind==='q')return `<div>❓ ${to}: «${esc(x.text)}» → ${x.answer?(x.answer==='ja'?'<b style="color:var(--green)">✅ JA</b>':'<b style="color:var(--red)">❌ NEIN</b>'):exp?'⏰ keine Antwort':`⏳ ${cd(x.t+s.answerSec*1000)}`}</div>`;
-    return `<div>📸 Foto von ${to}: ${x.img?`<button class="sm" onclick="showPhoto('${x.k}')">Ansehen</button>`:exp?'⏰ kein Foto':`⏳ ${cd(x.t+s.answerSec*1000)}`}</div>`;}).join('')}</div>`;
+    return `<div>📸 ${to}: «${esc(x.task||'Foto')}» → ${x.img?`<button class="sm" onclick="showPhoto('${x.k}')">Ansehen</button>`:exp?'⏰ kein Foto':`⏳ ${cd(x.t+s.answerSec*1000)}`}</div>`;}).join('')}</div>`;
 }
 const imgCache={};
 async function showPhoto(k){showUI('<div class="mut">Lade Foto…</div>');const d=imgCache[k]||(imgCache[k]=await store.getImg(k));const p=(G.photos||{})[k]||{};showUI(`<b>📸 ${esc(teams()[p.to]?.name)} · ${clock(p.at||p.t)}</b>${d?`<img class="photo" src="${d}">`:'<p>Foto nicht gefunden.</p>'}<button class="wide" onclick="closeUI()">Schliessen</button>`);}
@@ -493,27 +522,28 @@ function playerOverlays(){
   let fz='';
   if(hider&&huntOn()){
     const me=myPos();
-    if(me){let md=Infinity;for(const hp of hunterPositions())md=Math.min(md,dist(me,hp));
+    const sped=R.speed&&R.speed.target===MY_TEAM;
+    if(me&&!sped){let md=Infinity;for(const hp of hunterPositions())md=Math.min(md,dist(me,hp));
       if(!proxFrozen&&md<s.freezeRadius){proxFrozen=true;buzz([400,150,400]);}else if(proxFrozen&&md>s.unfreezeRadius)proxFrozen=false;}
-    if((tm.freezeUntil||0)>t)fz=`🧊 EINGEFROREN!<br><span style="font-size:15px">Joker der Fänger – nicht bewegen: ${fmt(tm.freezeUntil-t)}</span>`;
-    else if(proxFrozen)fz=`🧊 FREEZE – Fänger in der Nähe!<br><span style="font-size:15px">Bleibt im Versteck, bis der Fänger weg ist.</span>`;
+    if(sped){proxFrozen=false;fz=`⚡ SPEEDHUNT auf euch!<br><span style="font-size:15px">Jede Minute ein Ping (noch ${R.speed.left}) – lauft!</span>`;}
+    else if(proxFrozen)fz=`🧊 JÄGER IN DER NÄHE!<br><span style="font-size:15px">Versteckt euch sofort hier in der Nähe und bleibt dort.</span>`;
   }else proxFrozen=false;
   showBn('bnFreeze',fz);
   let hold='';
-  if(hider){const lp=lastPing(MY_TEAM);if(lp&&['auto','zone','instant'].includes(lp.kind)){const left=lp.t+s.holdSec*1000-t;if(left>0)hold=`📍 Ihr wurdet angepingt! Bleibt noch ${Math.ceil(left/1000)} Sek. stehen.`;const key=lp.t+'';if(seenPingKey!==key){if(seenPingKey!==null&&left>0)buzz([200,100,200]);seenPingKey=key;}}}
+  if(hider){const lp=lastPing(MY_TEAM);if(lp&&['auto','instant'].includes(lp.kind)){const left=lp.t+s.holdSec*1000-t;if(left>0)hold=`📍 Ihr wurdet angepingt! Bleibt noch ${Math.ceil(left/1000)} Sek. stehen.`;const key=lp.t+'';if(seenPingKey!==key){if(seenPingKey!==null&&left>0)buzz([200,100,200]);seenPingKey=key;}}}
   showBn('bnHold',hold);
   let gb='';const gEl=$('#bnGroup');
   if(hider){const gs=myGroups(MY_TEAM);
     if(gs.length){const g=gs.sort((a,b)=>a.since-b.since)[0];const other=teams()[g.a===MY_TEAM?g.b:g.a];const dl=g.since+s.groupMin*60000;
       gb=t<dl?`⚠️ Gruppenbildung verboten!<br><span style="font-size:14px">Ihr seid weniger als ${s.groupRadius} m von ${esc(other?.name)} entfernt. Trennt euch innert ${fmt(dl-t)}!</span>`
-             :`🔴 Euer Live-Standort ist für die Fänger sichtbar!<br><span style="font-size:14px">Sofort von ${esc(other?.name)} trennen (mehr als ${s.groupRadius} m).</span>`;
+             :`🔴 Euer Live-Standort ist für die Jäger sichtbar!<br><span style="font-size:14px">Sofort von ${esc(other?.name)} trennen (mehr als ${s.groupRadius} m).</span>`;
       const gk=gs.map(x=>x.a+x.b+(t<dl?'w':'x')).join();if(gEl._k!==gk){gEl._k=gk;buzz([500,150,500,150,500]);}}
-    else if(exposed(MY_TEAM))gb=`🔴 Live-Standort noch ${fmt(tm.exposedUntil-t)} für die Fänger sichtbar.`;
+    else if(exposed(MY_TEAM))gb=`🔴 Live-Standort noch ${fmt(tm.exposedUntil-t)} für die Jäger sichtbar.`;
     else gEl._k='';
   }else if(running()&&tm.role==='hunter'&&huntOn()){const ex=activeHiders().filter(([id])=>exposed(id));if(ex.length){gb=`🔴 LIVE sichtbar: ${ex.map(([id,o])=>esc(o.name)).join(', ')}`;const gk=ex.map(x=>x[0]).join();if(gEl._k!==gk){gEl._k=gk;buzz([300,100,300]);}}else gEl._k='';}
   gEl.classList.toggle('live',gb.startsWith('🔴'));showBn('bnGroup',gb);
   const me=myPos();let zn='';
-  if(me&&running()){const v=zoneViolation(me);if(v)zn=v==='red'?'🚫 Sperrzone! Sofort verlassen.':'🚫 Ausserhalb des Spielfelds! Sofort zurück.';}
+  if(me&&running()&&tm.role!=='out'){const v=zoneViolation(me);if(v){const left=tm.outSince?tm.outSince+s.dqGraceSec*1000-t:s.dqGraceSec*1000;zn=`${v==='red'?'🚫 Sperrzone! Sofort verlassen!':'🚫 Ausserhalb des Spielfelds! Sofort zurück!'}<br><span style="font-size:14px">Sonst Disqualifikation in ${Math.max(0,Math.ceil(left/1000))} Sek.</span>`;if(!zoneBuzzed){zoneBuzzed=true;buzz([600,200,600]);}}else zoneBuzzed=false;}
   showBn('bnZone',zn);showBn('bnLead','');
 }
 function showBn(id,html){const e=document.getElementById(id);if(html){if(e._h!==html){e.innerHTML=html;e._h=html;}e.style.display='block';}else{e.style.display='none';e._h='';}}
@@ -525,15 +555,16 @@ function useHiderJoker(k){
   const T=`teams/${MY_TEAM}/`,up={};up[T+'jokers/'+k]=tm.jokers[k]-1;
   if(k==='invisible')up[T+'skipNext']=true;
   if(k==='fake')up[T+'fakeNext']=true;
-  if(k==='shield'){up[T+'shieldUntil']=t+s.shieldMin*60000;ev(up,`🛡️ ${tm.name} hat ein Schutzschild aktiviert (${s.shieldMin} Min.)`,'all');}
-  if(k==='delay')up[T+'nextPingAt']=(tm.nextPingAt||t)+s.delayMin*60000;
-  if(k!=='shield')ev(up,`${JH[k].icon} ${tm.name} setzt «${JH[k].name}» ein`,'lead');
+  if(k==='reveal'){const pts={};for(const [id,o] of Object.entries(teams()))if(o.role==='hunter'){const q=latestPos(id);if(q&&t-q.t<120000)pts[id]={lat:q.lat,lng:q.lng};}
+    up[T+'reveal']={t,pts};if(!Object.keys(pts).length)toast('Gerade keine Jäger-Position verfügbar');}
+  ev(up,`${JH[k].icon} ${tm.name} setzt «${JH[k].name}» ein`,'lead');
   store.update(up);toast(JH[k].icon+' '+JH[k].name+' aktiviert');
 }
 function pickTeamUI(title,list,fn){showUI(`<h3>${title}</h3>${list.map(([id,o])=>`<button class="wide" style="text-align:left;border-left:8px solid ${o.color}" onclick="${fn}('${id}')">${esc(o.name)}</button>`).join('')||'<p class="mut">Keine Teams verfügbar.</p>'}<button class="wide" onclick="closeUI()">Abbrechen</button>`);}
 let pendingJoker=null;
 function askHunterJoker(k){pendingJoker=k;const j=JF[k];pickTeamUI(`${j.icon} ${j.name} – welches Team?`,activeHiders(),'hunterJokerTarget');}
 function hunterJokerTarget(id){
+  if(pendingJoker==='photo'){qTarget=id;const pc=S().photoChallenges;showUI(`<h3>📸 Foto-Challenge an ${esc(teams()[id]?.name)}</h3><p class="mut">Wähle eine Challenge:</p>${pc.map((c,i)=>`<button class="wide" style="text-align:left" onclick="doHunterJoker('photo',qTarget,S().photoChallenges[${i}])">${esc(c)}</button>`).join('')}<button class="wide" onclick="closeUI()">Abbrechen</button>`);return;}
   if(pendingJoker==='question'){qTarget=id;showUI(`<h3>❓ Frage an ${esc(teams()[id]?.name)}</h3><p class="mut">Nur Ja/Nein-Fragen.</p><textarea id="qtext" rows="2" placeholder="Seid ihr …?"></textarea><div class="chips">${QUESTION_IDEAS.map((q,i)=>`<button onclick="document.getElementById('qtext').value=QUESTION_IDEAS[${i}]">${esc(q)}</button>`).join('')}</div><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="pri" onclick="sendQuestion()">Senden</button></div>`);return;}
   doHunterJoker(pendingJoker,id,null);
 }
@@ -543,14 +574,17 @@ function doHunterJoker(k,target,text){
   const tm=myTeam(),tg=teams()[target],t=now(),s=S();closeUI();
   if(!tm||!tg||(tm.credits||0)<1){toast('Kein Joker-Guthaben');return;}
   const up={};up[`teams/${MY_TEAM}/credits`]=tm.credits-1;
-  if(k==='instant'){const p=latestPos(target);pushPing(up,target,p&&t-p.t<180000?p:null,p&&t-p.t<180000?'instant':'nosignal');ev(up,`📡 ${tm.name} löst einen Sofort-Ping auf ${tg.name} aus!`,'all');}
   if(k==='question'){up['questions/'+store.pushKey()]={from:MY_TEAM,to:target,text,t,round:R_().n};ev(up,`❓ ${tm.name} stellt ${tg.name} eine Frage`,'lead');}
-  if(k==='photo'){up['photos/'+store.pushKey()]={from:MY_TEAM,to:target,t,round:R_().n};ev(up,`📸 ${tm.name} verlangt ein Foto von ${tg.name}`,'all');}
-  if(k==='freeze'){up[`teams/${target}/freezeUntil`]=t+s.freezeJokerMin*60000;ev(up,`🧊 ${tm.name} friert ${tg.name} für ${s.freezeJokerMin} Min. ein!`,'all');}
+  if(k==='photo'){up['photos/'+store.pushKey()]={from:MY_TEAM,to:target,t,round:R_().n,task:text||'Fotografiert eure Umgebung'};ev(up,`📸 ${tm.name} gibt ${tg.name} eine Foto-Challenge`,'all');}
   store.update(up);toast(JF[k].icon+' Joker eingesetzt');
 }
+function askSpeedhunt(){pickTeamUI('⚡ Speedhunt – welches Team?',activeHiders(),'startSpeedhunt');}
+function startSpeedhunt(id){closeUI();const R=R_(),s=S(),t=now(),tg=teams()[id];
+  if(!running()||(R.speedLeft||0)<1||R.speed||!tg){toast('Speedhunt nicht möglich');return;}
+  const up={};up['round/speed']={target:id,by:MY_TEAM,start:t,nextAt:t+60000,left:s.speedhuntPings};up['round/speedLeft']=R.speedLeft-1;
+  ev(up,`⚡ SPEEDHUNT! ${myTeam().name} jagt ${tg.name} – ${s.speedhuntPings} Minuten lang jede Minute ein Ping!`,'all');store.update(up);toast('⚡ Speedhunt gestartet');}
 function reportCatch(){pickTeamUI('🙌 Wen habt ihr gefangen?',activeHiders(),'sendCatch');}
-function sendCatch(id){closeUI();const tg=teams()[id];if((tg?.shieldUntil||0)>now()){toast('🛡️ Dieses Team hat gerade ein Schutzschild!');return;}
+function sendCatch(id){closeUI();const tg=teams()[id];
   const up={},k=store.pushKey();up['catches/'+k]={hunter:MY_TEAM,target:id,t:now(),status:'pending',round:R_().n};ev(up,`🙌 ${myTeam().name} meldet einen Fang: ${tg.name}`,'lead');store.update(up);toast('Gemeldet – das andere Team muss bestätigen');}
 function selfCaught(){pickTeamUI('🙋 Von welchem Team wurdet ihr gefangen?',Object.entries(teams()).filter(([id,o])=>o.role==='hunter'),'selfCaughtBy');}
 function selfCaughtBy(h){closeUI();directCatch(MY_TEAM,h);}
@@ -573,9 +607,9 @@ function pendingModal(){
   for(const [k,c] of Object.entries(G.catches||{}))if(c.status==='pending'&&c.target===MY_TEAM&&c.round===R_().n)
     return {key:'c'+k,html:`<div class="big">🙌 Gefangen?</div><p><b>${esc(teams()[c.hunter]?.name)}</b> meldet, dass sie euch gefangen haben. Stimmt das?</p><div class="row"><button class="red" onclick="rejectCatch('${k}')">Nein</button><button class="grn" onclick="confirmCatch('${k}')">Ja, stimmt</button></div><p class="mut">Ehrlich bleiben – bei Unklarheit entscheidet die Lehrperson.</p>`};
   for(const [k,q] of Object.entries(G.questions||{}))if(q.to===MY_TEAM&&!q.answer&&q.round===R_().n&&t-q.t<s.answerSec*1000)
-    return {key:'q'+k,html:`<div class="big">❓ Frage der Fänger</div><p style="font-size:19px;font-weight:700">«${esc(q.text)}»</p><p class="mut">Ehrlich antworten! Zeit: ${cd(q.t+s.answerSec*1000)}</p><div class="row"><button class="grn" onclick="answerQ('${k}','ja')">✅ Ja</button><button class="red" onclick="answerQ('${k}','nein')">❌ Nein</button></div>`};
+    return {key:'q'+k,html:`<div class="big">❓ Frage der Jäger</div><p style="font-size:19px;font-weight:700">«${esc(q.text)}»</p><p class="mut">Ehrlich antworten! Zeit: ${cd(q.t+s.answerSec*1000)}</p><div class="row"><button class="grn" onclick="answerQ('${k}','ja')">✅ Ja</button><button class="red" onclick="answerQ('${k}','nein')">❌ Nein</button></div>`};
   for(const [k,p] of Object.entries(G.photos||{}))if(p.to===MY_TEAM&&!p.img&&p.round===R_().n&&t-p.t<s.answerSec*1000)
-    return {key:'p'+k,html:`<div class="big">📸 Foto-Pflicht</div><p>Die Fänger verlangen ein Foto eurer Umgebung (keine Personen, nicht zoomen, nicht nach oben in den Himmel).</p><p class="mut">Zeit: ${cd(p.t+s.answerSec*1000)}</p><label class="pri" style="display:block;text-align:center;background:var(--acc);color:#1a1200;padding:12px;border-radius:10px;font-weight:700">📷 Foto aufnehmen<input type="file" accept="image/*" capture="environment" style="display:none" onchange="sendPhoto('${k}',this)"></label>`};
+    return {key:'p'+k,html:`<div class="big">📸 Foto-Challenge</div><p style="font-size:19px;font-weight:700">«${esc(p.task||'Fotografiert eure Umgebung')}»</p><p class="mut">Keine Personen fotografieren. Nicht schummeln!</p><p class="mut">Zeit: ${cd(p.t+s.answerSec*1000)}</p><label class="pri" style="display:block;text-align:center;background:var(--acc);color:#1a1200;padding:12px;border-radius:10px;font-weight:700">📷 Foto aufnehmen<input type="file" accept="image/*" capture="environment" style="display:none" onchange="sendPhoto('${k}',this)"></label>`};
   return null;
 }
 function renderModal(){
@@ -631,8 +665,8 @@ function leadLive(){
   const pend=Object.entries(G.catches||{}).filter(([k,c])=>c.status==='pending'||(c.status==='no'&&c.round===R.n&&t-c.t<600000));
   if(pend.length)h+=`<div class="card" style="border-color:var(--acc)"><b>🙌 Fänge prüfen</b>${pend.map(([k,c])=>`<div class="trow"><span class="nm">${esc(teams()[c.hunter]?.name)} → ${esc(teams()[c.target]?.name)} ${c.status==='no'?'<span class="badge" style="background:var(--red)">bestritten</span>':'<span class="badge">offen</span>'}</span><button class="sm grn" onclick="leadConfirm('${k}')">Gilt</button><button class="sm" onclick="leadDismiss('${k}')">Gilt nicht</button></div>`).join('')}</div>`;
   h+=`<div class="card"><b>👥 Teams live</b>${Object.entries(teams()).map(([id,o])=>{const p=latestPos(id);const on=p&&t-p.t<30000;const nDev=Object.keys((G.pos||{})[id]||{}).length;
-    const st=running()?(o.role==='hunter'?(o.caught?'🎯 (gefangen)':'🎯 Fänger'):'🏃 gejagt'):'';
-    const extra=running()&&o.role==='hider'&&!o.caught?` · Ping ${cd(o.nextPingAt||t)}${(o.shieldUntil||0)>t?' 🛡️':''}${o.skipNext?' 👻':''}${o.fakeNext?' 🎭':''}${(o.freezeUntil||0)>t?' 🧊':''}${exposed(id)?' 🔴LIVE':myGroups(id).length?' ⚠️Gruppe':''}`:running()&&o.role==='hunter'?` · 🃏${o.credits||0}`:'';
+    const st=running()?(o.role==='hunter'?(o.caught?'🎯 (gefangen)':'🎯 Jäger'):'🏃 gejagt'):'';
+    const extra=o.role==='out'?' · <b style="color:var(--red)">❌ DQ</b>':o.outSince?' · <b style="color:var(--red)">🚫 ausserhalb!</b>':running()&&o.role==='hider'&&!o.caught?` · Ping ${cd(o.nextPingAt||t)}${R.speed&&R.speed.target===id?' ⚡':''}${o.skipNext?' 👻':''}${o.fakeNext?' 🎭':''}${(o.freezeUntil||0)>t?' 🧊':''}${exposed(id)?' 🔴LIVE':myGroups(id).length?' ⚠️Gruppe':''}`:running()&&o.role==='hunter'?` · 🃏${o.credits||0}`:'';
     return `<div class="trow"><span class="dot" style="background:${o.color}"></span><span class="nm"><b>${esc(o.name)}</b> <span class="mut">${st}${extra}</span><br><span class="mut">${on?'🟢 online':p?`🔴 letztes Signal ${ago(p.t)}`:'⚪ noch nie verbunden'}${nDev?` · ${nDev} Gerät(e)`:''}</span></span><b>${o.score||0}</b></div>`;}).join('')}</div>`;
   h+=`<div class="card"><b>📢 Nachricht an alle</b><textarea id="bmsg" rows="2" placeholder="z.B. Noch 5 Minuten!" oninput="bmsgVal=this.value">${esc(bmsgVal)}</textarea><div class="row" style="margin-top:8px"><button onclick="sendMsg()">Senden</button><button class="red" onclick="sendSOS()">🚨 Alle zum Treffpunkt</button></div></div>`;
   h+=feed(()=>true,40);
@@ -654,26 +688,26 @@ function leadRound(){
   if(!hunterSel){const mn=Math.min(...tms.map(([id,o])=>o.hunterStarts||0));const sug=tms.filter(([id,o])=>(o.hunterStarts||0)===mn).slice(0,1).map(([id])=>id);hunterSel=new Set(sug);}
   if(rDur===null)rDur=s.roundMin;if(rHead===null)rHead=s.headStartMin;
   return `<div class="card"><h3>🚦 Runde ${(R.n||0)+1} starten</h3>
-    <label>Start-Fänger wählen (Vorschlag: wer am wenigsten gejagt hat)</label>
-    ${tms.map(([id,o])=>`<div class="trow"><input type="checkbox" ${hunterSel.has(id)?'checked':''} onchange="toggleHunter('${id}',this.checked)"><span class="dot" style="background:${o.color}"></span><span class="nm">${esc(o.name)} <span class="mut">· ${o.hunterStarts||0}× Start-Fänger</span></span></div>`).join('')}
+    <label>Start-Jäger wählen (Vorschlag: wer am wenigsten gejagt hat)</label>
+    ${tms.map(([id,o])=>`<div class="trow"><input type="checkbox" ${hunterSel.has(id)?'checked':''} onchange="toggleHunter('${id}',this.checked)"><span class="dot" style="background:${o.color}"></span><span class="nm">${esc(o.name)} <span class="mut">· ${o.hunterStarts||0}× Start-Jäger</span></span></div>`).join('')}
     <div class="row"><div><label>Dauer (Min.)</label><input type="number" min="5" value="${rDur}" onchange="rDur=+this.value"></div><div><label>Vorsprung (Min.)</label><input type="number" min="0" value="${rHead}" onchange="rHead=+this.value"></div></div>
     <button class="pri wide" onclick="startRound()">▶️ Runde starten</button></div>`+leadRules();
 }
-function leadRules(){const s=S();return `<div class="card mut"><b>Ablauf:</b> Gejagte haben ${rHead??s.headStartMin} Min. Vorsprung. Danach wird ihr Standort alle ${s.pingEveryMin} Min. an die Fänger gesendet. Gefangene Teams werden zu Fängern. Gejagte Teams dürfen keine Gruppen bilden (unter ${s.groupRadius} m → ${s.groupMin} Min. Zeit zum Trennen, sonst Live-Standort für Fänger). Punkte: ${s.ppm}/überlebte Minute, +${s.surviveBonus} fürs Überleben, +${s.catchPts} pro Fang (+${s.firstCatchBonus} erster Fang).</div>`;}
+function leadRules(){const s=S();return `<div class="card mut"><b>Ablauf:</b> Gejagte haben ${rHead??s.headStartMin} Min. Vorsprung. Danach wird ihr Standort alle ${s.pingEveryMin} Min. an die Jäger gesendet. Gefangene Teams werden zu Jägern. Gejagte Teams dürfen keine Gruppen bilden (unter ${s.groupRadius} m → ${s.groupMin} Min. Zeit zum Trennen, sonst Live-Standort für Jäger). Wer das Spielfeld verlässt oder eine Sperrzone betritt, hat ${s.dqGraceSec} Sek. Zeit zurückzukehren, sonst Disqualifikation mit 0 Punkten für die Runde. ${s.speedhuntMax} Speedhunts pro Runde. Punkte: ${s.ppm}/überlebte Minute, +${s.surviveBonus} fürs Überleben, +${s.catchPts} pro Fang (+${s.firstCatchBonus} erster Fang).</div>`;}
 function toggleHunter(id,on){if(on)hunterSel.add(id);else hunterSel.delete(id);}
 function startRound(){
   const s=S(),t=now(),R=R_(),tms=teams();const hs=[...hunterSel].filter(id=>tms[id]);
-  if(!hs.length){toast('Mindestens ein Fänger-Team wählen');return;}
+  if(!hs.length){toast('Mindestens ein Jäger-Team wählen');return;}
   if(hs.length>=Object.keys(tms).length){toast('Mindestens ein Team muss gejagt werden');return;}
   const dur=Math.max(1,+rDur||s.roundMin),head=Math.max(0,+rHead||0),n=(R.n||0)+1,hs0=t+head*60000;
-  const up={round:{n,status:'running',startAt:t,huntStartAt:hs0,endAt:t+dur*60000,catches:0},groups:null};
+  const up={round:{n,status:'running',startAt:t,huntStartAt:hs0,endAt:t+dur*60000,catches:0,speedLeft:s.speedhuntMax},groups:null};
   for(const [id,o] of Object.entries(tms)){const T=`teams/${id}/`,isH=hs.includes(id);
     up[T+'role']=isH?'hunter':'hider';up[T+'caught']=false;up[T+'caughtAt']=null;
     up[T+'credits']=isH?1:null;up[T+'nextCreditAt']=isH?hs0+s.hunterJokerEveryMin*60000:null;
     up[T+'jokers']=isH?null:{...s.hiderJokers};up[T+'nextPingAt']=isH?null:hs0;
-    up[T+'skipNext']=null;up[T+'fakeNext']=null;up[T+'shieldUntil']=null;up[T+'freezeUntil']=null;up[T+'lastZonePingAt']=null;up[T+'exposedUntil']=null;
+    up[T+'skipNext']=null;up[T+'fakeNext']=null;up[T+'shieldUntil']=null;up[T+'freezeUntil']=null;up[T+'lastZonePingAt']=null;up[T+'exposedUntil']=null;up[T+'outSince']=null;up[T+'dq']=null;up[T+'dqLost']=null;up[T+'dqPrevRole']=null;up[T+'reveal']=null;up[T+'scoreStart']=o.score||0;
     if(isH)up[T+'hunterStarts']=(o.hunterStarts||0)+1;}
-  ev(up,`🚦 Runde ${n} gestartet! Fänger: ${hs.map(id=>tms[id].name).join(', ')}. Jagd beginnt in ${head} Min.`,'all');
+  ev(up,`🚦 Runde ${n} gestartet! Jäger: ${hs.map(id=>tms[id].name).join(', ')}. Jagd beginnt in ${head} Min.`,'all');
   store.update(up);hunterSel=null;endingN=-1;toast('Runde gestartet');
 }
 function askStop(){showUI(`<h3>Runde beenden?</h3><p>Überlebende Teams erhalten ihre Punkte.</p><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="red" onclick="doStop()">Beenden</button></div>`);}
@@ -686,6 +720,7 @@ function leadTeams(){
     <div class="row"><input value="${esc(o.name)}" onchange="renameTeam('${id}',this.value)"><b style="flex:none;font-size:20px">⭐ ${o.score||0}</b></div>
     <div class="row" style="margin-top:8px"><button class="sm" onclick="addScore('${id}',-5)">−5</button><button class="sm" onclick="addScore('${id}',-1)">−1</button><button class="sm" onclick="addScore('${id}',1)">+1</button><button class="sm" onclick="addScore('${id}',5)">+5</button></div>
     ${run&&o.role==='hider'&&!o.caught?`<button class="sm wide" onclick="leadCatchUI('${id}')">🎯 Als gefangen eintragen…</button>`:''}
+    ${o.dq?`<button class="sm wide" onclick="undoDQ('${id}')">↩︎ Disqualifikation aufheben</button>`:''}
     ${run&&o.role==='hider'&&!o.caught?`<div class="mut" style="margin-top:6px">Joker: ${Object.entries(JH).map(([k,j])=>`${j.icon}${(o.jokers||{})[k]||0}`).join(' ')}</div>`:''}
   </div>`).join('');
 }
@@ -749,6 +784,7 @@ function leadSettings(){
   const s=S();
   return `<div class="card"><h3>⚙️ Spielregeln</h3>${SETTINGS_FIELDS.map(([k,l])=>`<label>${l}</label><input type="number" id="set_${k}" value="${s[k]}" min="0">`).join('')}
     <h3 style="margin-top:14px">🃏 Joker pro Runde (Gejagte)</h3>${Object.entries(JH).map(([k,j])=>`<label>${j.icon} ${j.name}</label><input type="number" id="hj_${k}" value="${s.hiderJokers[k]}" min="0">`).join('')}
+    <h3 style="margin-top:14px">📸 Foto-Challenges (eine pro Zeile)</h3><textarea id="set_pc" rows="6">${esc(s.photoChallenges.join('\n'))}</textarea>
     <button class="pri wide" onclick="saveSettings()">💾 Speichern</button></div>
     <div class="card"><h3>🧹 Aufräumen &amp; Datenschutz</h3>
     <button class="wide" onclick="confirmDo('Alle Punkte auf 0 setzen?','resetScores')">Punkte zurücksetzen</button>
@@ -758,7 +794,7 @@ function leadSettings(){
     <div class="card mut">Spielcode: <b>${esc(CODE)}</b> · Gerät: ${DEV}<br>${DEMO?'Demo-Modus: Daten nur in diesem Browser.':'Verbunden mit Firebase.'}<br><button class="sm" style="margin-top:6px" onclick="leaveLead()">Spielleitung verlassen</button></div>`;
 }
 function saveSettings(){const o={};for(const [k] of SETTINGS_FIELDS){const v=+$('#set_'+k).value;o[k]=isFinite(v)?v:DEFAULT_SETTINGS[k];}o.hiderJokers={};for(const k of Object.keys(JH)){o.hiderJokers[k]=Math.max(0,+$('#hj_'+k).value||0);}
-  if(o.unfreezeRadius<o.freezeRadius)o.unfreezeRadius=o.freezeRadius+10;store.update({settings:o});rDur=null;rHead=null;toast('Gespeichert');}
+  if(o.unfreezeRadius<o.freezeRadius)o.unfreezeRadius=o.freezeRadius+10;o.photoChallenges=($('#set_pc').value||'').split('\n').map(x=>x.trim()).filter(Boolean);store.update({settings:o});rDur=null;rHead=null;toast('Gespeichert');}
 let confirmFn=null;
 function confirmDo(q,fn){confirmFn=fn;showUI(`<h3>${q}</h3><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="red" onclick="closeUI();window[confirmFn]()">Ja</button></div>`);}
 function resetScores(){const up={};for(const id of Object.keys(teams())){up[`teams/${id}/score`]=0;up[`teams/${id}/hunterStarts`]=0;}store.update(up);toast('Punkte zurückgesetzt');}
