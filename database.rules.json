@@ -1,0 +1,22 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "mh": {
+      "$code": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "mh_img": {
+      "$code": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "mh_tpl": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}
