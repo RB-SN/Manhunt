@@ -1,5 +1,4 @@
-   window.MH_CONFIG = {
-const firebaseConfig = {
+window.MH_CONFIG = {
   apiKey: "AIzaSyAH_ZZ9YDra6VVnqXBisEn1oEk7ELiWZnY",
   authDomain: "hide-and-seek-3aab1.firebaseapp.com",
   databaseURL: "https://hide-and-seek-3aab1-default-rtdb.europe-west1.firebasedatabase.app",
