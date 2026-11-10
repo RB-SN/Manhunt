@@ -815,8 +815,16 @@ function renderHome(){
   if(ld&&ld!=='DEMO'&&cfg)r+=`<button class="wide" onclick="openLeadCode('${esc(ld)}')">↩︎ Spielleitung ${esc(ld)} öffnen</button>`;
   $('#resume').innerHTML=r?`<div class="card">${r}</div>`:'';
   const g=new URLSearchParams(location.search).get('g');if(g)$('#jcode').value=g.toUpperCase();
-  $('#leadBox').innerHTML=cfg?`<button class="pri wide" onclick="createGame()">＋ Neues Spiel erstellen</button><div class="row" style="margin-top:8px"><input id="lcode" placeholder="Code" autocapitalize="characters"><button style="flex:none" onclick="openLeadCode($('#lcode').value)">Öffnen</button></div>${FIREBASE_CONFIG?'':'<button class="sm" style="margin-top:8px" onclick="localStorage.removeItem(\'mh_cfg\');renderHome()">Firebase-Konfiguration ändern</button>'}`
+  $('#leadBox').innerHTML=cfg?`<button class="pri wide" onclick="createGame()">＋ Neues Spiel erstellen</button><div class="row" style="margin-top:8px"><input id="lcode" placeholder="Code" autocapitalize="characters"><button style="flex:none" onclick="openLeadCode($('#lcode').value)">Öffnen</button></div>${FIREBASE_CONFIG?'':'<div class="card" style="margin:10px 0 0;background:var(--card2)"><b>📦 Konfiguration fest einbauen</b><p class="mut">Lädt eine index.html herunter, in der deine Firebase-Daten schon drin sind. Diese auf GitHub hochladen (alte ersetzen) – dann können SuS auf jedem Gerät nur mit dem Spielcode beitreten.</p><button class="pri wide" onclick="bakeConfig()">⬇️ index.html herunterladen</button></div><button class="sm" style="margin-top:8px" onclick="localStorage.removeItem(\'mh_cfg\');renderHome()">Firebase-Konfiguration ändern</button>'}`
    :`<p class="mut">Einmalig: Firebase-Konfiguration einfügen. Danach kannst du Spiele erstellen.</p><details style="margin-bottom:8px"><summary class="mut">So geht's (ca. 10 Min., gratis)</summary><ol class="mut" style="padding-left:18px"><li>console.firebase.google.com öffnen → <b>Projekt hinzufügen</b> (Analytics aus).</li><li>Links <b>Build → Realtime Database → Datenbank erstellen</b>, Standort <b>Belgien (europe-west1)</b>, <b>Testmodus</b>.</li><li>Zahnrad → <b>Projekteinstellungen → Meine Apps → Web (&lt;/&gt;)</b> registrieren.</li><li>Den Block <code>const firebaseConfig = {…}</code> kopieren und hier einfügen.</li></ol></details><textarea id="cfgtxt" rows="6" placeholder="const firebaseConfig = { apiKey: '…', databaseURL: '…', … };"></textarea><button class="pri wide" onclick="saveCfg()">Speichern</button>`;
+}
+async function bakeConfig(){
+  const cfg=getCfg();if(!cfg){toast('Zuerst die Konfiguration speichern');return;}
+  let src;try{src=await (await fetch(location.href.split(/[?#]/)[0],{cache:'no-store'})).text();}catch(e){toast('Geht nur, wenn die Seite online (z.B. GitHub Pages) geöffnet ist.',6000);return;}
+  const mark='const FIREBASE_CONFIG = null;';if(!src.includes(mark)){toast('Diese Datei enthält schon eine Konfiguration.',5000);return;}
+  src=src.replace(mark,'const FIREBASE_CONFIG = '+JSON.stringify(cfg)+';');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([src],{type:'text/html'}));a.download='index.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},2000);
+  toast('index.html heruntergeladen – jetzt auf GitHub hochladen',6000);
 }
 function saveCfg(){try{const c=parseCfg($('#cfgtxt').value);localStorage.setItem('mh_cfg',JSON.stringify(c));toast('Gespeichert');renderHome();}catch(e){toast('Fehler: '+e.message,5000);}}
 async function createGame(){try{const code=genCode();await connect(code);const g=initialGame(false);let tpl=null;try{tpl=await store.getTpl();}catch(e){}if(tpl&&tpl.zones)g.zones=tpl.zones;await store.update(g);if(tpl&&tpl.zones)toast('Standard-Zonen übernommen ✔');const ok=await waitFor(()=>G&&G.teams,8000);if(!ok){toast('Keine Verbindung zur Datenbank. Regeln/URL prüfen.',6000);return;}openLead();leadTabSet(tpl&&tpl.zones?'live':'zones');if(!(tpl&&tpl.zones))toast('Spiel erstellt: '+code);}catch(e){toast('Fehler: '+e.message,6000);}}
@@ -824,7 +832,9 @@ async function openLeadCode(code){code=(code||'').trim().toUpperCase();if(!code)
 async function joinStep(){
   const code=$('#jcode').value.trim().toUpperCase();if(!code)return;
   if(code==='DEMO'){startDemo();return;}
-  try{await connect(code);}catch(e){toast(e.message==='nocfg'?'Bitte den Beitritts-Link oder QR-Code der Lehrperson öffnen.':'Verbindung fehlgeschlagen: '+e.message,6000);return;}
+  if(!getCfg()){$('#teamPick').innerHTML=`<div class="card" style="border-color:var(--red);margin-top:10px"><b>⚠️ Dieses Gerät kennt die Datenbank noch nicht.</b><p class="mut" style="margin-bottom:0">Bitte einmal den <b>QR-Code oder Link der Lehrperson</b> öffnen. Danach funktioniert auch der Spielcode.<br><br>Lehrperson: Unter «Lehrperson» → «Konfiguration fest einbauen» eine index.html herunterladen und auf GitHub hochladen – dann reicht überall der Code.</p></div>`;return;}
+  $('#teamPick').innerHTML='<p class="mut">Verbinde…</p>';
+  try{await connect(code);}catch(e){$('#teamPick').innerHTML=`<p style="color:var(--red)">Verbindung fehlgeschlagen: ${esc(e.message)}</p>`;return;}
   $('#teamPick').innerHTML='<p class="mut">Verbinde…</p>';
   const ok=await waitFor(()=>G&&G.teams,8000);if(!ok){$('#teamPick').innerHTML='<p style="color:var(--red)">Spiel nicht gefunden. Code prüfen.</p>';return;}
   $('#teamPick').innerHTML=`<label>Wähle dein Team</label>${Object.entries(teams()).map(([id,o])=>`<button class="wide" style="text-align:left;border-left:8px solid ${o.color}" onclick="openPlayer('${id}')">${esc(o.name)}</button>`).join('')}<p class="mut">Danach den Standort-Zugriff erlauben.</p>`;
