@@ -69,6 +69,12 @@ label{display:block;margin:8px 0 4px;color:var(--mut);font-size:13px}
 #modal{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.72);padding:16px}
 #modal.on{display:flex}
 #modalBox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;width:100%;max-width:440px;max-height:88vh;overflow:auto}
+#pinline{flex:none;max-height:46vh;overflow:auto}
+#pinbox:empty{display:none}#pinbox{padding:8px 8px 0}
+#pinbox .card{margin:0;border:2px solid var(--acc)}
+#pinbox p{font-size:17px!important;margin:2px 0 10px}#pinbox .big{font-size:22px}
+#player #banners{position:static;padding:8px 8px 0;pointer-events:auto}
+#player #banners .bn{box-shadow:none}
 #banners{position:fixed;top:calc(58px + env(safe-area-inset-top));left:8px;right:8px;z-index:1500;display:flex;flex-direction:column;gap:6px;pointer-events:none}
 .bn{display:none;border-radius:12px;padding:12px;font-weight:800;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.4)}
 #bnFreeze{background:#1e6edc;color:#fff;font-size:20px}
@@ -79,6 +85,7 @@ label{display:block;margin:8px 0 4px;color:var(--mut);font-size:13px}
 #bnLead{background:#7c3aed;color:#fff;font-size:13px;padding:6px}
 #toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#000d;color:#fff;padding:10px 16px;border-radius:12px;z-index:4000;display:none;max-width:90vw;text-align:center}
 
+.leaflet-popup-content{font:14px/1.3 -apple-system,system-ui,sans-serif;color:#111;margin:8px 12px}
 .numlabel{font-size:15px!important;padding:1px 7px!important}
 .trk{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 2px}.trk button{padding:6px 12px;font-size:14px;font-weight:700}.trk button.on{background:#ff2d55;color:#fff}
 .pinglabel{background:rgba(0,0,0,.78)!important;color:#fff!important;border:0!important;border-radius:6px!important;font-weight:700;padding:2px 6px!important;box-shadow:none!important;font-size:12px}
@@ -119,6 +126,7 @@ code{background:#0b1219;padding:1px 5px;border-radius:5px}
 <div id="player" class="screen">
   <header id="phead"></header>
   <div id="pmap" class="map"></div>
+  <div id="pinline"><div id="pinbox"></div></div>
   <div id="ppanel" class="panel"></div>
 </div>
 
@@ -165,7 +173,7 @@ code{background:#0b1219;padding:1px 5px;border-radius:5px}
    Lehrperson sie beim ersten Start in der App ein (wird im Link mitgegeben).
    ===================================================================== */
 const FIREBASE_CONFIG = null;
-const APP_VERSION = '2026-11-10 · v11';
+const APP_VERSION = '2026-11-11 · v12';
 
 const LOGO='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJiZyIgY3g9IjUwJSIgY3k9IjQwJSIgcj0iNjUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMxZjJmNDIiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYjEyMTkiLz48L3JhZGlhbEdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZTI3YSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YyYTkwMCIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJyaW5nIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+PHN0b3Agb2Zmc2V0PSIuNSIgc3RvcC1jb2xvcj0iI2M5ZDRlMCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzdkOGVhMyIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJoYW5kbGUiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIwIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMzYTJhMWEiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjNmI0YTJiIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMmExZDEwIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImxlbnMiPjxjaXJjbGUgY3g9IjIzNiIgY3k9IjIyNiIgcj0iMTE4Ii8+PC9jbGlwUGF0aD48cGF0aCBpZD0iYXJjVG9wIiBkPSJNIDY2IDI1NiBBIDE5MCAxOTAgMCAwIDEgNDQ2IDI1NiIvPjxwYXRoIGlkPSJhcmNCb3QiIGQ9Ik0gODQgMjY4IEEgMTcyIDE3MiAwIDAgMCA0MjggMjY4Ii8+PC9kZWZzPjwhLS0gQmFkZ2UgLS0+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyNDQiIGZpbGw9InVybCgjYmcpIi8+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyMzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1YjkxNiIgc3Ryb2tlLXdpZHRoPSIxMCIvPjxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmNWI5MTYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iNCA4IiBvcGFjaXR5PSIuNiIvPjwhLS0gUGluZy1XZWxsZW4gLS0+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY0ZDVlIiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxwYXRoIGQ9Ik0gMzg0IDIwMCBBIDE1MCAxNTAgMCAwIDEgMzc3IDI3NyIgc3Ryb2tlLXdpZHRoPSI5IiBvcGFjaXR5PSIuOTUiLz48cGF0aCBkPSJNIDQxMCAxOTUgQSAxNzYgMTc2IDAgMCAxIDQwMSAyODYiIHN0cm9rZS13aWR0aD0iNyIgb3BhY2l0eT0iLjU1Ii8+PC9nPjwhLS0gR3JpZmYgZGVyIEx1cGUgLS0+PGcgdHJhbnNmb3JtPSJyb3RhdGUoLTQ1IDIzNiAyMjYpIj48cmVjdCB4PSIyMjEiIHk9IjM1MCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjM0IiByeD0iNiIgZmlsbD0idXJsKCNyaW5nKSIvPjxyZWN0IHg9IjIxNiIgeT0iMzgwIiB3aWR0aD0iNDAiIGhlaWdodD0iMTAwIiByeD0iMTgiIGZpbGw9InVybCgjaGFuZGxlKSIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjQiLz48cmVjdCB4PSIyMTYiIHk9IjQwNCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjciIGZpbGw9IiNmNWI5MTYiLz48cmVjdCB4PSIyMTYiIHk9IjQyMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjciIGZpbGw9IiNmNWI5MTYiLz48L2c+PCEtLSBMaW5zZSBtaXQgV2FwcGVuLU1vdGl2IC0tPjxnIGNsaXAtcGF0aD0idXJsKCNsZW5zKSI+PHJlY3QgeD0iMTAwIiB5PSIxMDAiIHdpZHRoPSIyODAiIGhlaWdodD0iMjYwIiBmaWxsPSJ1cmwoI2dvbGQpIi8+PCEtLSBTb25uZW5zdHJhaGxlbiBkZXplbnQgLS0+PGcgc3Ryb2tlPSIjZmZmM2MyIiBzdHJva2Utd2lkdGg9IjEwIiBvcGFjaXR5PSIuMzUiPjxsaW5lIHgxPSIyMzYiIHkxPSIxOTAiIHgyPSIxMjAiIHkyPSIxMTAiLz48bGluZSB4MT0iMjM2IiB5MT0iMTkwIiB4Mj0iMjM2IiB5Mj0iOTAiLz48bGluZSB4MT0iMjM2IiB5MT0iMTkwIiB4Mj0iMzUyIiB5Mj0iMTEwIi8+PC9nPjwhLS0gSMO8Z2VsIChEcmVpYmVyZykgLS0+PHBhdGggZD0iTSAxMDAgMzYwIEwgMTAwIDMwMCBRIDE0MCAyNjIgMTc4IDI4NiBRIDIzNiAyMzYgMjk0IDI4NiBRIDMzMiAyNjIgMzcyIDMwMCBMIDM3MiAzNjAgWiIgZmlsbD0iIzFmOGEzYSIvPjxwYXRoIGQ9Ik0gMTAwIDM2MCBMIDEwMCAzMTggUSAxNTAgMjk2IDIwMCAzMTIgUSAyNTAgMjkyIDMwMCAzMTIgUSAzNDAgMjk4IDM3MiAzMTggTCAzNzIgMzYwIFoiIGZpbGw9IiMxNzcwMmUiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzYgMjkyKSBzY2FsZSguODIpIHRyYW5zbGF0ZSgtMjM2IC0yOTIpIj48IS0tIFN0YW1tIC0tPjxwYXRoIGQ9Ik0gMjI2IDI5MiBMIDIzMCAyMjYgUSAyMzYgMjE0IDI0MiAyMjYgTCAyNDYgMjkyIFEgMjM2IDMwMCAyMjYgMjkyIFoiIGZpbGw9IiMxNDYyMmEiLz48cGF0aCBkPSJNIDIzMiAyNDYgUSAyMTQgMjMyIDIwNCAyMTQgTSAyNDAgMjQwIFEgMjU4IDIyNiAyNjggMjEwIiBzdHJva2U9IiMxNDYyMmEiIHN0cm9rZS13aWR0aD0iNyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PCEtLSBLcm9uZSBkZXIgTGluZGUgLS0+PGcgZmlsbD0iIzFmOGEzYSI+PGNpcmNsZSBjeD0iMjM2IiBjeT0iMTc4IiByPSI1NiIvPjxjaXJjbGUgY3g9IjE5MCIgY3k9IjE5NiIgcj0iMzgiLz48Y2lyY2xlIGN4PSIyODIiIGN5PSIxOTYiIHI9IjM4Ii8+PGNpcmNsZSBjeD0iMjA2IiBjeT0iMTUwIiByPSIzNiIvPjxjaXJjbGUgY3g9IjI2NiIgY3k9IjE1MCIgcj0iMzYiLz48Y2lyY2xlIGN4PSIyMzYiIGN5PSIxMjgiIHI9IjM0Ii8+PC9nPjxnIGZpbGw9IiMyZmFlNGQiPjxjaXJjbGUgY3g9IjIyMCIgY3k9IjE0MCIgcj0iMjIiLz48Y2lyY2xlIGN4PSIxODIiIGN5PSIxODYiIHI9IjE2Ii8+PGNpcmNsZSBjeD0iMjUyIiBjeT0iMTIyIiByPSIxNCIvPjwvZz48IS0tIExpbmRlbmJsw6R0dGVyIChIZXJ6Zm9ybSkgLS0+PC9nPjwhLS0gUGluZy1QdW5rdCAtLT48Y2lyY2xlIGN4PSIzMTIiIGN5PSIyNTAiIHI9IjE2IiBmaWxsPSIjZmY0ZDVlIiBvcGFjaXR5PSIuMyIvPjxjaXJjbGUgY3g9IjMxMiIgY3k9IjI1MCIgcj0iOSIgZmlsbD0iI2ZmNGQ1ZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMiLz48IS0tIEdsYW56IC0tPjxwYXRoIGQ9Ik0gMTUwIDE3MCBBIDk2IDk2IDAgMCAxIDIyMCAxMjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxMiIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIuNTUiLz48L2c+PGNpcmNsZSBjeD0iMjM2IiBjeT0iMjI2IiByPSIxMTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNyaW5nKSIgc3Ryb2tlLXdpZHRoPSIyMCIvPjxjaXJjbGUgY3g9IjIzNiIgY3k9IjIyNiIgcj0iMTI5IiBmaWxsPSJub25lIiBzdHJva2U9IiMwYjEyMTkiIHN0cm9rZS13aWR0aD0iMyIgb3BhY2l0eT0iLjciLz48IS0tIFNjaHJpZnQgLS0+PHRleHQgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsJ0hlbHZldGljYSBOZXVlJyxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjU0IiBsZXR0ZXItc3BhY2luZz0iNiIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjIiIHBhaW50LW9yZGVyPSJzdHJva2UiPjx0ZXh0UGF0aCBocmVmPSIjYXJjVG9wIiBzdGFydE9mZnNldD0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NQU5IVU5UPC90ZXh0UGF0aD48L3RleHQ+PGc+PHBhdGggZD0iTSAxMjAgNDIwIEwgMzkyIDQyMCBMIDM4MCA0NDggTCAzOTIgNDc2IEwgMTIwIDQ3NiBMIDEzMiA0NDggWiIgZmlsbD0iI2Y1YjkxNiIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjQiLz48dGV4dCB4PSIyNTYiIHk9IjQ2MSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsJ0hlbHZldGljYSBOZXVlJyxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjM0IiBsZXR0ZXItc3BhY2luZz0iOCIgZmlsbD0iIzBiMTIxOSI+TkVVSEVJTTwvdGV4dD48L2c+PC9zdmc+IA==';
 const CENTER = [47.2019, 8.5805]; // Neuheim ZG
@@ -175,7 +183,7 @@ const DEFAULT_SETTINGS = {
   freezeRadius:30, unfreezeRadius:50,
   ppm:1, surviveBonus:10, catchPts:15, firstCatchBonus:5,
   groupRadius:50, groupMin:1, groupPenaltyMin:1, dqGraceSec:20,
-  challengePenalty:5, inactiveMin:2, fakeDist:200, answerSec:120, revealShowMin:2,
+  challengePenalty:5, inactiveMin:2, fakeDist:200, answerSec:120, revealShowMin:5, countdownSec:60,
   speedhuntMax:1, speedhuntPings:3, speedhuntMin:4, speedSurvivePts:10, speedFailPenalty:5,
   hiderJokers:{reveal:1, invisible:1, fake:1},
   photoChallenges:['Fotografiert einen Teil der Kirche','Zeigt uns eine Grünfläche','Fotografiert ein Stoppschild','Fotografiert einen Brunnen','Fotografiert ein Strassenschild mit Namen']
@@ -188,7 +196,7 @@ const SETTINGS_FIELDS = [
   ['dqGraceSec','Disqualifikation: Zeit zum Zurückkehren (Sek.)'],
   ['answerSec','Antwortzeit Frage/Foto (Sek.)'],['challengePenalty','Challenge nicht erfüllt: Punkteabzug'],['inactiveMin','Alarm: Team ohne Signal nach (Min.)'],
   ['speedhuntMax','Speedhunts pro Runde'],['speedhuntPings','Speedhunt: zusätzliche Pings (nach dem ersten)'],['speedhuntMin','Speedhunt: Dauer (Min.)'],['speedSurvivePts','Speedhunt überlebt: Pluspunkte Gejagte'],['speedFailPenalty','Speedhunt gescheitert: Abzug Jäger-Team'],
-  ['fakeDist','Fake-Ping-Abstand (m)'],['revealShowMin','Jäger erfragen: Standorte sichtbar (Min.)']
+  ['fakeDist','Fake-Ping-Abstand (m)'],['revealShowMin','Jäger erfragen: Standorte sichtbar (Min.)'],['countdownSec','Countdown vor Rundenstart (Sek.)']
 ];
 const JH = {
   reveal:{icon:'🔭',name:'Jäger erfragen',desc:s=>'Ihr seht, wo die Jäger gerade sind'},
@@ -348,15 +356,17 @@ function drawZones(M){
     if(z.type==='green')all.push(...z.pts);}
   if(all.length&&!M.fitted){M.m.fitBounds(all,{padding:[16,16]});M.fitted=true;}
 }
-function drawPings(M,filter,showFake,perm=true,anon=false,label=null){
+function drawPings(M,filter,showFake,perm=true,anon=false,label=null,trailAll=false){
   const by={};for(const p of Object.values((G&&G.pings)||{})){if(p.round!==R_().n||p.lat==null||!filter(p.team,p))continue;(by[p.team]=by[p.team]||[]).push(p);}
   for(const [id,arr] of Object.entries(by)){const tm=teams()[id];if(!tm)continue;arr.sort((a,b)=>b.t-a.t);
     if(anon){const c='#ff2d55',lab=label||String(tm.code||'?');
-      if(TRACK===id&&arr.length>1){const pts=arr.slice().reverse().map(p=>[p.lat,p.lng]);L.polyline(pts,{color:c,weight:3,dashArray:'6',opacity:.8,interactive:false}).addTo(M.d);
-        arr.slice(1).forEach(p=>L.circleMarker([p.lat,p.lng],{radius:6,color:c,weight:2,fillColor:'#fff',fillOpacity:.9,interactive:false}).addTo(M.d));}
-      const p=arr[0];L.circleMarker([p.lat,p.lng],{radius:13,color:c,weight:3,fillColor:c,fillOpacity:.35}).bindTooltip(lab,{permanent:true,direction:'top',offset:[0,-12],className:'pinglabel numlabel'}).addTo(M.d);continue;}
+      const n=arr.length,pl=(p,i)=>`<b>Ping ${n-i}</b> · ${clock(p.t)} Uhr${p.kind==='speed'?' ⚡':''}`;
+      if((TRACK===id||trailAll)&&n>1){const pts=arr.slice().reverse().map(p=>[p.lat,p.lng]);L.polyline(pts,{color:c,weight:3,dashArray:'6',opacity:.8,interactive:false}).addTo(M.d);
+        arr.slice(1).forEach((p,i)=>L.circleMarker([p.lat,p.lng],{radius:8,color:c,weight:2,fillColor:'#fff',fillOpacity:.95}).bindPopup(pl(p,i+1)).addTo(M.d));}
+      const p=arr[0];L.circleMarker([p.lat,p.lng],{radius:13,color:c,weight:3,fillColor:c,fillOpacity:.35}).bindTooltip(lab,{permanent:true,direction:'top',offset:[0,-12],className:'pinglabel numlabel'}).bindPopup(pl(p,0)).addTo(M.d);continue;}
     arr.slice(0,4).forEach((p,i)=>{const L0=i===0;const mk=L.circleMarker([p.lat,p.lng],{radius:L0?13:6,color:tm.color,weight:L0?3:1,fillColor:tm.color,fillOpacity:L0?.35:.18,opacity:L0?1:.55,dashArray:L0?null:'3'});
       if(L0)mk.bindTooltip(`📍 ${esc(tm.name)} (${tnum(id)})${showFake&&p.fake?' (FAKE)':''}`,{permanent:perm,direction:'top',offset:[0,-12],className:'pinglabel'});
+      mk.bindPopup(`<b>${esc(tm.name)} (${tnum(id)})</b><br>Ping ${arr.length-i} · ${clock(p.t)} Uhr${p.kind==='speed'?' ⚡':''}${showFake&&p.fake?' · FAKE':''}`);
       mk.addTo(M.d);});}
 }
 function liveMarkers(M){for(const [id,o] of activeHiders())if(exposed(id)){const p=latestPos(id);if(!p)continue;
@@ -376,7 +386,7 @@ function engineTick(){
   if(eng&&eng.dev!==DEV&&t-eng.t<15000){ENGINE_MINE=false;return;}
   ENGINE_MINE=true;
   if(!eng||eng.dev!==DEV||t-eng.t>5000)up.engine={dev:DEV,t};
-  if(R.status==='running'){
+  if(R.status==='running'&&t>=(R.startAt||0)){
     if(t>=R.endAt){if(endingN!==R.n){endingN=R.n;endRound(up);}store.update(up);return;}
     let act=0;
     for(const [id,tm] of Object.entries(G.teams)){
@@ -393,7 +403,7 @@ function engineTick(){
       }
       if(tm.role==='hunter'&&t>=R.huntStartAt&&tm.nextCreditAt&&t>=tm.nextCreditAt){up[`teams/${id}/credits`]=(tm.credits||0)+1;up[`teams/${id}/nextCreditAt`]=tm.nextCreditAt+s.hunterJokerEveryMin*60000;}
     }
-    groupCheck(up,t,s);
+    if(t>=R.huntStartAt)groupCheck(up,t,s);
     speedTick(up,t,s);
     challengeCheck(up,t,s);
     inactiveCheck(up,t,s,R);
@@ -491,15 +501,15 @@ function catchUpdates(up,k,c,isNew){
   const mins=Math.floor((t-R.startAt)/60000),first=!(R.catches>0),cp=s.catchPts+(first?s.firstCatchBonus:0);
   if(isNew)up['catches/'+k]={...c,status:'ok'};else up[`catches/${k}/status`]='ok';
   const T=`teams/${c.target}/`;
-  up[T+'caught']=true;up[T+'caughtAt']=t;up[T+'role']='hunter';up[T+'used']=null;
+  up[T+'caught']=true;up[T+'caughtAt']=t;up[T+'role']='caught';up[T+'used']=null;
   up[T+'score']=(tg.score||0)+mins*s.ppm;up[T+'shieldUntil']=null;up[T+'skipNext']=null;up[T+'fakeNext']=null;up[T+'freezeUntil']=null;up[T+'exposedUntil']=null;
   up[`teams/${c.hunter}/score`]=(hu.score||0)+cp;up['round/catches']=(R.catches||0)+1;
   if(R.speed&&R.speed.target===c.target){up['round/speed']=null;if((R.speedLeft||0)>0)up['round/speedLeft']=0;ev(up,`⚡ Speedhunt erfolgreich!${(R.speedLeft||0)>0?' Der übrige Speedhunt verfällt.':''}`,'all');}
-  ev(up,`🎯 ${hu.name} hat ${tg.name} gefangen! (+${cp}${first?' inkl. Bonus erster Fang':''}) ${tg.name} jagt jetzt mit.`,'all');
-  note(up,c.target,`🎯 Ihr wurdet gefangen! Ab jetzt jagt ihr mit.`);noteRole(up,'hunter',`🎯 ${hu.name} hat ${tg.name} gefangen! ${tg.name} jagt jetzt mit.`);
+  ev(up,`🎯 ${hu.name} hat ${tg.name} gefangen! (+${cp}${first?' inkl. Bonus erster Fang':''})`,'all');
+  note(up,c.target,`🎯 Ihr wurdet gefangen! Kommt zum Treffpunkt und wartet dort bis zur nächsten Runde.`);noteRole(up,'hunter',`🎯 ${hu.name} hat ${tg.name} gefangen!`);
   return true;
 }
-function confirmCatch(k){const c=G.catches&&G.catches[k];if(!c||c.status!=='pending')return;const up={};catchUpdates(up,k,c,false);store.update(up);modalKey=null;}
+function confirmCatch(k){const c=G.catches&&G.catches[k];if(!c||c.status!=='pending')return;const up={};catchUpdates(up,k,c,false);store.update(up);modalKey=null;inlineKey=null;}
 function rejectCatch(k){const c=G.catches&&G.catches[k];if(!c)return;const up={};up[`catches/${k}/status`]='no';ev(up,`❌ ${teams()[c.target]?.name} bestreitet den Fang durch ${teams()[c.hunter]?.name} – Lehrperson entscheidet.`,'lead');ev(up,`❌ ${teams()[c.target]?.name} bestreitet den Fang.`,'hunters');store.update(up);modalKey=null;}
 function directCatch(target,hunter){if(!target||!hunter||target===hunter)return;const k=store.pushKey(),up={};const ok=catchUpdates(up,k,{hunter,target,t:now(),status:'pending',round:R_().n},true);store.update(up);toast(ok?'Fang eingetragen':'Fang nicht möglich (Schutzschild oder schon gefangen)');}
 
@@ -512,7 +522,9 @@ function openPlayer(team){
   showScreen('player');
   if(!PM){PM=mkMap('pmap');PM.m.on('click',e=>{if(DEMO&&VIEW==='player'&&MY_TEAM){store.update({[`pos/${MY_TEAM}/${DEV}`]:{lat:e.latlng.lat,lng:e.latlng.lng,acc:5,t:now()}});}});}
   PM.zsig=null;PM.centered=false;setTimeout(()=>PM.m.invalidateSize(),120);
+  $('#pinline').insertBefore($('#banners'),$('#pinbox'));
   startGPS();render();
+  if(!DEMO&&localStorage.getItem('mh_lockinfo_'+CODE)!=='1')showLockInfo();
 }
 function startGPS(){
   if(DEMO)return;requestWake();
@@ -540,13 +552,13 @@ function demoSwitch(v){closeUI();if(v==='lead')openLead();else openPlayer(v);}
 function renderPlayer(){
   const tm=myTeam(),t=now(),s=S(),R=R_();
   if(!tm){setHTML($('#ppanel'),`<div class="card">Dieses Team existiert nicht mehr. <button onclick="leave()">Zurück</button></div>`);return;}
-  const run=R.status==='running',hunter=run&&tm.role==='hunter',hider=run&&tm.role==='hider'&&!tm.caught;
-  const role=hunter?'<span class="badge b-hunt">🎯 JÄGER</span>':hider?'<span class="badge b-hide">🏃 GEJAGT</span>':run&&tm.role==='out'?'<span class="badge" style="background:var(--red)">❌ DQ</span>':'<span class="badge">⏸ Pause</span>';
+  const run=R.status==='running',pre=run&&t<R.startAt,hunter=run&&!pre&&tm.role==='hunter',hider=run&&!pre&&tm.role==='hider'&&!tm.caught;
+  const role=pre?'<span class="badge" style="background:var(--acc);color:#1a1200">🚩 Countdown</span>':hunter?'<span class="badge b-hunt">🎯 JÄGER</span>':hider?'<span class="badge b-hide">🏃 GEJAGT</span>':run&&tm.role==='caught'?'<span class="badge">🎯 gefangen</span>':run&&tm.role==='out'?'<span class="badge" style="background:var(--red)">❌ DQ</span>':'<span class="badge">⏸ Pause</span>';
   setHTML($('#phead'),`<img src="${LOGO}" style="width:30px;height:30px" alt=""><span class="dot" style="background:${tm.color}"></span><b>${esc(tm.name)}</b>${role}<span class="sp"></span>${run?`<span class="badge">⏱ ${cd(R.endAt)}</span>`:''}${demoSwitcher()}${!CONNECTED?'<span class="badge" style="background:var(--red)">offline</span>':''}`);
   // Karte
   if(PM){drawZones(PM);PM.d.clearLayers();const me=myPos();
     if(me){if(me.acc>8)L.circle([me.lat,me.lng],{radius:me.acc,color:'#4aa8ff',weight:1,fillOpacity:.07,interactive:false}).addTo(PM.d);L.circleMarker([me.lat,me.lng],{radius:10,color:'#fff',weight:3,fillColor:'#4aa8ff',fillOpacity:1,interactive:false}).addTo(PM.d);if(!PM.centered){PM.m.setView([me.lat,me.lng],17);PM.centered=true;}}
-    if(hunter){drawPings(PM,id=>{const o=teams()[id];return o&&o.role==='hider'&&!o.caught&&(!TRACK||TRACK===id);},false,true,true);
+    if(hunter){if(R.speed)drawPings(PM,(id,p)=>id===R.speed.target&&p.kind==='speed',false,true,true,null,true);else drawPings(PM,id=>{const o=teams()[id];return o&&o.role==='hider'&&!o.caught&&(!TRACK||TRACK===id);},false,true,true);
       for(const [id,o] of Object.entries(teams()))if(id!==MY_TEAM&&o.role==='hunter'){const p=latestPos(id);if(p&&t-p.t<120000)L.circleMarker([p.lat,p.lng],{radius:6,color:'#fff',weight:2,fillColor:'#4aa8ff',fillOpacity:1,interactive:false}).addTo(PM.d);}
       liveMarkers(PM);}
     if(hider){drawPings(PM,(id,p)=>id===MY_TEAM&&p.kind!=='speed',false,true,true,'Euer letzter Ping');
@@ -557,8 +569,12 @@ function renderPlayer(){
   if(DEMO)h+=`<div class="card mut">🧪 Demo: Tippe auf die Karte, um <b>${esc(tm.name)}</b> zu bewegen. Joker-Anfragen bestätigst du oben unter «👁 Spielleitung».</div>`;
   const pr=pendingReqOf(MY_TEAM);
   const prHtml=pr?`<div class="card" style="border-color:var(--acc)">⏳ Wartet auf Freigabe durch die Spielleitung: <b>${jinfo(pr[1].kind).icon} ${jinfo(pr[1].kind).name}</b></div>`:'';
-  if(!run){
+  if(run&&t<R.startAt){
+    h+=`<div class="card" style="border:2px solid var(--acc)"><div class="mut">Runde ${R.n} – alle zum Aussetzungsort!</div><div class="big">🚩 Start in ${cd(R.startAt)}</div><p style="margin:8px 0 0">Ihr seid: <b>${tm.role==='hunter'?'🎯 Jäger':'🏃 Gejagte'}</b>${tm.role==='hunter'?' – nach dem Start wartet ihr noch '+Math.round((R.huntStartAt-R.startAt)/60000)+' Min. am Aussetzungsort.':' – beim Start schwärmt ihr aus!'}</p><p class="mut" style="margin:6px 0 0">📱 Bildschirmsperre aus? Ton laut?</p></div>`;
+  }else if(!run){
     h+=`<div class="card"><div class="big">⏸ Pause</div><p style="margin-bottom:0">Die nächste Runde startet, sobald die Spielleitung sie freigibt.</p></div>`;
+  }else if(run&&tm.role==='caught'){
+    h+=`<div class="card"><div class="big">🎯 Gefangen</div><p style="margin-bottom:0">Ihr wurdet in dieser Runde gefangen. Kommt zum Treffpunkt und wartet dort bis zur nächsten Runde.</p></div>`;
   }else if(tm.role==='out'){
     h+=`<div class="card" style="border-color:var(--red)"><div class="big">❌ Disqualifiziert</div><p style="margin-bottom:0">Ihr habt das Spielfeld verlassen oder eine Sperrzone betreten. 0 Punkte in dieser Runde. Kommt bitte zum Treffpunkt.</p></div>`;
   }else if(hider){
@@ -570,11 +586,13 @@ function renderPlayer(){
     h+=`<button class="wide sm" onclick="selfCaught()">🙋 Wir wurden gefangen</button>`;
   }else if(hunter){
     const hunt=t>=R.huntStartAt,act=activeHiders();
+    const nx=act.map(([id,o])=>o.nextPingAt||0).filter(x=>x>t).sort((a,b)=>a-b)[0];
+    if(hunt&&nx)h+=`<div class="card" style="border-color:var(--red)"><div class="mut">Nächster Ping in</div><div class="big">📍 ${cd(nx)}</div>${R.speed?`<div style="color:var(--red);font-weight:800;margin-top:4px">⚡ Speedhunt läuft – ihr seht nur die Pings von ${tnum(R.speed.target)}</div>`:''}</div>`;
     if(!hunt)h+=`<div class="card" style="border-color:var(--red)"><div class="mut">Startphase – bleibt am Startpunkt!</div><div class="big">⏳ Jagd beginnt in ${cd(R.huntStartAt)}</div></div>`;
     if(TRACK&&!act.some(([id])=>id===TRACK))TRACK=null;
     h+=`<div class="card" style="border-color:var(--red)"><b>🎯 Gesuchte Teams (${act.length})</b>
-      <div class="trk"><button class="${TRACK?'':'on'}" onclick="setTrack(null)">Alle</button>${hiderListByCode().map(([id])=>`<button class="${TRACK===id?'on':''}" onclick="setTrack('${id}')">${teams()[id].code||'?'}</button>`).join('')}</div>
-      <p class="mut" style="margin:2px 0 4px">${TRACK?`Laufweg von Nr. ${teams()[TRACK].code}: alle Pings dieser Runde`:'Tippe auf eine Nummer, um den Laufweg zu sehen.'}</p>${hiderListByCode().map(([id,o])=>{const lp=lastPing(id);const st=exposed(id)?'<b style="color:#ff4d5e">🔴 LIVE</b>':!lp?'<span class="mut">noch kein Ping</span>':lp.kind==='invisible'?'👻 unsichtbar':lp.kind==='nosignal'?'📵 kein Signal':'📍 auf der Karte';
+      ${R.speed?'':`<div class="trk"><button class="${TRACK?'':'on'}" onclick="setTrack(null)">Alle</button>${hiderListByCode().map(([id])=>`<button class="${TRACK===id?'on':''}" onclick="setTrack('${id}')">${teams()[id].code||'?'}</button>`).join('')}</div>
+      <p class="mut" style="margin:2px 0 4px">${TRACK?`Laufweg von Nr. ${teams()[TRACK].code}: alle Pings dieser Runde. Tippe auf einen Kreis für die Uhrzeit.`:'Tippe auf eine Nummer, um den Laufweg zu sehen.'}</p>`}${hiderListByCode().map(([id,o])=>{const lp=lastPing(id);const st=exposed(id)?'<b style="color:#ff4d5e">🔴 LIVE</b>':!lp?'<span class="mut">noch kein Ping</span>':lp.kind==='invisible'?'👻 unsichtbar':lp.kind==='nosignal'?'📵 kein Signal':'📍 auf der Karte';
       return `<div class="trow"><span class="nm"><b>${tnum(id)}</b> ${R.speed&&R.speed.target===id?'⚡':''}</span><span>${st}</span></div>`;}).join('')||'<div class="mut">Alle gefangen!</div>'}
       <button class="pri wide" ${hunt?'':'disabled'} onclick="reportCatch()">🙌 Fang melden</button></div>`;
     h+=prHtml;
@@ -604,7 +622,9 @@ function hunterResults(){
 const imgCache={};
 async function showPhoto(k){showUI('<div class="mut">Lade Foto…</div>');const d=imgCache[k]||(imgCache[k]=await store.getImg(k));const p=(G.photos||{})[k]||{};showUI(`<b>📸 ${esc(teams()[p.to]?.name)} · ${clock(p.at||p.t)}</b>${d?`<img class="photo" src="${d}">`:'<p>Foto nicht gefunden.</p>'}<button class="wide" onclick="closeUI()">Schliessen</button>`);}
 
+let startBuzzN=null;
 function playerOverlays(){
+  {const R0=R_();if(R0.status==='running'&&now()>=R0.startAt&&now()-R0.startAt<5000&&startBuzzN!==R0.n){startBuzzN=R0.n;alertFx([600,150,600,150,600],6);}}
   const tm=myTeam(),t=now(),s=S(),R=R_();if(!tm)return;
   const hider=running()&&tm.role==='hider'&&!tm.caught;
   let fz='';
@@ -632,7 +652,7 @@ function playerOverlays(){
   }else if(running()&&tm.role==='hunter'&&huntOn()){const ex=activeHiders().filter(([id])=>exposed(id));if(ex.length){gb=`🔴 LIVE sichtbar: ${ex.map(([id])=>tnum(id)).join(', ')}`;const gk=ex.map(x=>x[0]).join();if(gEl._k!==gk){gEl._k=gk;alertFx([300,100,300],3);}}else gEl._k='';}
   gEl.classList.toggle('live',gb.startsWith('🔴'));showBn('bnGroup',gb);
   const me=myPos();let zn='';
-  if(me&&running()&&tm.role!=='out'){const v=zoneViolation(me);if(v){const left=tm.outSince?tm.outSince+s.dqGraceSec*1000-t:s.dqGraceSec*1000;zn=`${v==='red'?'🚫 Sperrzone! Sofort verlassen!':'🚫 Ausserhalb des Spielfelds! Sofort zurück!'}<br><span style="font-size:14px">Sonst Disqualifikation in ${Math.max(0,Math.ceil(left/1000))} Sek.</span>`;if(!zoneBuzzed){zoneBuzzed=true;alertFx([600,200,600],6);}}else zoneBuzzed=false;}
+  if(me&&running()&&now()>=R_().startAt&&tm.role!=='out'){const v=zoneViolation(me);if(v){const left=tm.outSince?tm.outSince+s.dqGraceSec*1000-t:s.dqGraceSec*1000;zn=`${v==='red'?'🚫 Sperrzone! Sofort verlassen!':'🚫 Ausserhalb des Spielfelds! Sofort zurück!'}<br><span style="font-size:14px">Sonst Disqualifikation in ${Math.max(0,Math.ceil(left/1000))} Sek.</span>`;if(!zoneBuzzed){zoneBuzzed=true;alertFx([600,200,600],6);}}else zoneBuzzed=false;}
   showBn('bnZone',zn);showBn('bnLead','');
 }
 function showBn(id,html){const e=document.getElementById(id);if(html){if(e._h!==html){e.innerHTML=html;e._h=html;}e.style.display='block';}else{e.style.display='none';e._h='';}}
@@ -729,12 +749,12 @@ function sendCatch(id){closeUI();const tg=teams()[id];
   const up={},k=store.pushKey();up['catches/'+k]={hunter:MY_TEAM,target:id,t:now(),status:'pending',round:R_().n};ev(up,`🙌 ${myTeam().name} meldet einen Fang: ${tg.name}`,'lead');store.update(up);toast('Gemeldet – das andere Team muss bestätigen');}
 function selfCaught(){pickTeamUI('🙋 Von welchem Team wurdet ihr gefangen?',Object.entries(teams()).filter(([id,o])=>o.role==='hunter'),'selfCaughtBy');}
 function selfCaughtBy(h){closeUI();directCatch(MY_TEAM,h);}
-function answerQ(k,a){store.update({[`questions/${k}/answer`]:a,[`questions/${k}/at`]:now()});modalKey=null;toast('Antwort gesendet');}
+function answerQ(k,a){store.update({[`questions/${k}/answer`]:a,[`questions/${k}/at`]:now()});modalKey=null;inlineKey=null;toast('Antwort gesendet');}
 async function sendPhoto(k,input){const f=input.files&&input.files[0];if(!f)return;toast('Foto wird gesendet…');
-  try{const d=await compressImage(f);await store.putImg(k,d);imgCache[k]=d;await store.update({[`photos/${k}/img`]:true,[`photos/${k}/at`]:now()});modalKey=null;toast('📸 Foto gesendet');}catch(e){toast('Foto fehlgeschlagen: '+e.message);}}
+  try{const d=await compressImage(f);await store.putImg(k,d);imgCache[k]=d;await store.update({[`photos/${k}/img`]:true,[`photos/${k}/at`]:now()});modalKey=null;inlineKey=null;toast('📸 Foto gesendet');}catch(e){toast('Foto fehlgeschlagen: '+e.message);}}
 function compressImage(file){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,720/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(img.src);res(c.toDataURL('image/jpeg',.6));};img.onerror=()=>rej(new Error('Bild nicht lesbar'));img.src=URL.createObjectURL(file);});}
-function ackNote(t){localStorage.setItem('mh_nseen_'+CODE+'_'+MY_TEAM,String(t));modalKey=null;renderModal();}
-function ackMsg(id){localStorage.setItem('mh_seen_'+CODE,id);modalKey=null;renderModal();}
+function ackNote(t){localStorage.setItem('mh_nseen_'+CODE+'_'+MY_TEAM,String(t));modalKey=null;inlineKey=null;renderModal();}
+function ackMsg(id){localStorage.setItem('mh_seen_'+CODE,id);modalKey=null;inlineKey=null;renderModal();}
 function askLeave(){showUI(`<h3>Spiel verlassen?</h3><p>Euer Team wird für andere Handys wieder frei.</p><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="red" onclick="closeUI();leave()">Verlassen</button></div>`);}
 function leave(){if(store&&MY_TEAM&&!DEMO&&teams()[MY_TEAM]?.claimedBy===DEV)store.update({[`teams/${MY_TEAM}/claimedBy`]:null});localStorage.removeItem('mh_me');location.href=location.pathname+location.search.replace(/[?&]g=[^&]*/,'')+location.hash;}
 
@@ -758,7 +778,13 @@ function pendingModal(){
     return {key:'p'+k,html:`<div class="big">📸 Foto-Challenge</div><p style="font-size:19px;font-weight:700">«${esc(p.task||'Fotografiert eure Umgebung')}»</p><p class="mut">Keine Personen fotografieren. Nicht schummeln!</p><p class="mut">Zeit: ${cd(p.t+s.answerSec*1000)}</p><label class="pri" style="display:block;text-align:center;background:var(--acc);color:#1a1200;padding:12px;border-radius:10px;font-weight:700">📷 Foto aufnehmen<input type="file" accept="image/*" capture="environment" style="display:none" onchange="sendPhoto('${k}',this)"></label>`};
   return null;
 }
+let inlineKey=null;
 function renderModal(){
+  if(VIEW==='player'){const pm=pendingModal(),box=$('#pinbox');
+    if(!pm){if(inlineKey!==null){box.innerHTML='';inlineKey=null;}}
+    else if(pm.key!==inlineKey){inlineKey=pm.key;box.innerHTML=`<div class="card">${pm.html}</div>`;tick(true);alertFx([300,100,300],4);}
+    const el=$('#modal');if(!UI){if(el.classList.contains('on')){el.classList.remove('on');modalKey=null;}return;}
+    if(modalKey==='ui'+UI.id)return;modalKey='ui'+UI.id;$('#modalBox').innerHTML=UI.html;el.classList.add('on');return;}
   const m=UI?{key:'ui'+UI.id,html:UI.html}:pendingModal();const el=$('#modal');
   if(!m){if(modalKey!==null||el.classList.contains('on')){el.classList.remove('on');modalKey=null;}return;}
   if(m.key===modalKey)return;modalKey=m.key;$('#modalBox').innerHTML=m.html;el.classList.add('on');tick(true);
@@ -780,7 +806,15 @@ function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classL
    SPIELLEITUNG
    ===================================================================== */
 let LM=null,leadTab='zones',SETUP=false,DRAW=null,hunterSel=null,bmsgVal='',rDur=null,rHead=null,leadReqSeen=null;
+function showLockInfo(){showUI(`<h3>📱 Wichtig vor dem Start</h3>
+  <p><b>Schaltet die automatische Bildschirmsperre aus</b>, sonst verliert die App das GPS-Signal:</p>
+  <ul style="padding-left:18px;margin:6px 0"><li><b>iPhone:</b> Einstellungen → Anzeige &amp; Helligkeit → Automatische Sperre → <b>Nie</b></li>
+  <li><b>Android:</b> Einstellungen → Display → Bildschirm-Timeout → <b>längste Zeit</b></li></ul>
+  <p><b>Ton laut stellen</b> (iPhone: Stummschalter aus), damit ihr Alarme hört.</p>
+  <p class="mut">Lasst diese Seite während des ganzen Spiels geöffnet. Nach dem Spiel könnt ihr die Sperre wieder einschalten.</p>
+  <button class="pri wide" onclick="localStorage.setItem('mh_lockinfo_'+CODE,'1');closeUI()">✅ Erledigt</button>`);}
 function openLead(){
+  document.body.appendChild($('#banners'));
   VIEW='lead';MY_TEAM=null;localStorage.setItem('mh_lead',CODE);showScreen('lead');
   if(!LM){LM=mkMap('lmap');LM.m.on('click',e=>{if(DRAW){if(DRAW.sel!==null){DRAW.sel=null;}else DRAW.pts.push(rnd(e.latlng));drawSig=null;renderLead(true);}});}
   LM.zsig=null;setTimeout(()=>LM.m.invalidateSize(),150);requestWake();loadTpl();clearPanels();renderLead(true);
@@ -829,10 +863,10 @@ function leadReq(){
 }
 function leadTeamsLive(){
   const t=now(),R=R_();
-  const ord=o=>!running()?0:o.role==='hider'&&!o.caught?(o.code||50):o.role==='hunter'?100:200;
+  const ord=o=>!running()?0:o.role==='hider'&&!o.caught?(o.code||50):o.role==='hunter'?100:o.role==='caught'?150:200;
   const list=Object.entries(teams()).sort((a,b)=>ord(a[1])-ord(b[1]));
   return `<div class="card"><b>👥 Teams live</b>${list.map(([id,o])=>{const p=latestPos(id);const on=p&&t-p.t<30000;
-    const st=running()?(o.role==='hunter'?(o.caught?'🎯 Jäger (gefangen)':'🎯 Jäger'):o.role==='out'?'':'🏃 gejagt'):'';
+    const st=running()?(o.role==='hunter'?'🎯 Jäger':o.role==='caught'?'✅ gefangen':o.role==='out'?'':'🏃 gejagt'):'';
     const extra=o.role==='out'?'<b style="color:var(--red)">❌ DQ</b>':o.outSince?' · <b style="color:var(--red)">🚫 ausserhalb!</b>':running()&&o.role==='hider'&&!o.caught?` · Ping ${cd(o.nextPingAt||t)}${R.speed&&R.speed.target===id?' ⚡':''}${o.skipNext?' 👻':''}${o.fakeNext?' 🎭':''}${exposed(id)?' 🔴LIVE':myGroups(id).length?' ⚠️Gruppe':''} · 🃏${Object.values(o.jokers||{}).reduce((a,b)=>a+b,0)}`:running()&&o.role==='hunter'?` · 🃏${2-Object.keys(o.used||{}).length}`:'';
     const mbtn=o.claimedBy||o.members?`<button class="sm" title="Team anschreiben" aria-label="${esc(o.name)} anschreiben" onclick="askMsgTeam('${id}')">✉️</button>`:'';
     const btn=mbtn+(running()&&(o.role==='hider'||o.role==='hunter')?`<button class="sm" title="Team disqualifizieren" aria-label="${esc(o.name)} disqualifizieren" onclick="askDQ('${id}')">❌ DQ</button>`:o.dq?`<button class="sm" onclick="undoDQ('${id}')">↩︎</button>`:'');
@@ -853,6 +887,8 @@ function doSOS(){closeUI();const up={msg:{id:store.pushKey(),text:'🚨 SPIEL UN
 
 function leadRound(){
   const R=R_(),s=S(),t=now(),tms=Object.entries(teams());
+  if(R.status==='running'&&t<R.startAt){
+    return `<div class="card" style="border-color:var(--acc)"><b>🚩 Runde ${R.n}: Countdown</b><div class="big" style="margin:6px 0">${cd(R.startAt)}</div><p class="mut" style="margin:0 0 8px">Alle am Aussetzungsort sammeln.</p><button class="red wide" onclick="askStop()">Abbrechen</button></div>`;}
   if(R.status==='running'){
     return `<div class="card" style="border-color:var(--red)"><b>🚦 Runde ${R.n} läuft</b><div class="big" style="margin:6px 0">${cd(R.endAt)}</div><p class="mut" style="margin:0 0 6px">${t<R.huntStartAt?`Vorsprung: Jagd beginnt in ${cd(R.huntStartAt)}`:'Jagd läuft'} · ⚡ Speedhunts übrig: ${R.speedLeft||0}${R.speed?` · läuft auf ${esc(teams()[R.speed.target]?.name)} (noch ${R.speed.left} Pings, endet in ${cd(R.speed.endAt)})`:''}</p>
       <p style="margin:0 0 8px">Noch gejagt: ${activeHiders().map(([id,o])=>`<span class="dot" style="background:${o.color}"></span>${esc(o.name)}`).join(', ')||'–'}</p>
@@ -864,15 +900,15 @@ function leadRound(){
     <label>Start-Jäger (Vorschlag: wer am wenigsten gejagt hat)</label>
     ${tms.map(([id,o])=>`<div class="trow"><input type="checkbox" ${hunterSel.has(id)?'checked':''} onchange="toggleHunter('${id}',this.checked)" aria-label="${esc(o.name)} als Jäger"><span class="dot" style="background:${o.color}"></span><span class="nm">${esc(o.name)} <span class="mut">· ${o.hunterStarts||0}×</span></span></div>`).join('')}
     <div class="row"><div><label>Dauer (Min.)</label><input type="number" min="5" value="${rDur}" onchange="rDur=+this.value"></div><div><label>Vorsprung (Min.)</label><input type="number" min="0" value="${rHead}" onchange="rHead=+this.value"></div></div>
-    <button class="pri wide" onclick="startRound()">▶️ Runde starten</button></div>`;
+    <button class="pri wide" onclick="startRound()">⏱ Countdown starten (${S().countdownSec} Sek.)</button><p class="mut" style="margin:6px 0 0">Alle versammeln sich am Aussetzungsort. Nach dem Countdown startet die Runde.</p></div>`;
 }
 function toggleHunter(id,on){if(on)hunterSel.add(id);else hunterSel.delete(id);}
 function startRound(){
   const s=S(),t=now(),R=R_(),tms=teams();const hs=[...hunterSel].filter(id=>tms[id]);
   if(!hs.length){toast('Mindestens ein Jäger-Team wählen');return;}
   if(hs.length>=Object.keys(tms).length){toast('Mindestens ein Team muss gejagt werden');return;}
-  const dur=Math.max(1,+rDur||s.roundMin),head=Math.max(0,+rHead||0),n=(R.n||0)+1,hs0=t+head*60000;
-  const up={round:{n,status:'running',startAt:t,huntStartAt:hs0,endAt:t+dur*60000,catches:0,speedLeft:s.speedhuntMax},groups:null};
+  const dur=Math.max(1,+rDur||s.roundMin),head=Math.max(0,+rHead||0),n=(R.n||0)+1,t0=t+Math.max(0,+s.countdownSec||0)*1000,hs0=t0+head*60000;
+  const up={round:{n,status:'running',startAt:t0,announcedAt:t,huntStartAt:hs0,endAt:t0+dur*60000,catches:0,speedLeft:s.speedhuntMax},groups:null};
   const hid=Object.keys(tms).filter(id=>!hs.includes(id)),codes=hid.map((_,i)=>i+1).sort(()=>Math.random()-.5);
   for(const [id,o] of Object.entries(tms)){const T=`teams/${id}/`,isH=hs.includes(id);
     up[T+'code']=isH?null:codes[hid.indexOf(id)];
@@ -881,8 +917,8 @@ function startRound(){
     up[T+'jokers']=isH?null:{...s.hiderJokers};up[T+'nextPingAt']=isH?null:hs0;
     up[T+'skipNext']=null;up[T+'fakeNext']=null;up[T+'shieldUntil']=null;up[T+'freezeUntil']=null;up[T+'lastZonePingAt']=null;up[T+'exposedUntil']=null;up[T+'outSince']=null;up[T+'dq']=null;up[T+'dqLost']=null;up[T+'dqPrevRole']=null;up[T+'reveal']=null;up[T+'scoreStart']=o.score||0;
     if(isH)up[T+'hunterStarts']=(o.hunterStarts||0)+1;}
-  ev(up,`🚦 Runde ${n} gestartet! Jäger: ${hs.map(id=>tms[id].name).join(', ')}. Jagd beginnt in ${head} Min.`,'all');
-  store.update(up);hunterSel=null;endingN=-1;toast('Runde gestartet');
+  ev(up,`🚦 Runde ${n}: Countdown läuft – Start in ${s.countdownSec} Sek. Jäger: ${hs.map(id=>tms[id].name).join(', ')}.`,'all');
+  store.update(up);hunterSel=null;endingN=-1;toast('Countdown gestartet');
 }
 function askStop(){showUI(`<h3>Runde beenden?</h3><p>Überlebende Teams erhalten ihre Punkte.</p><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="red" onclick="doStop()">Beenden</button></div>`);}
 function doStop(){closeUI();const up={};endingN=R_().n;endRound(up);store.update(up);}
