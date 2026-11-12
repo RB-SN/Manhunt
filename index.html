@@ -21,6 +21,24 @@ h1{margin:6px 0 2px;font-size:26px} h3{margin:0 0 8px}
 header{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top));background:#0b1219;border-bottom:1px solid var(--line);min-height:50px}
 header .sp{flex:1}
 #lbody{flex:1;display:flex;min-height:0}
+.lnav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:8px;background:#0b1219;border-bottom:1px solid var(--line);flex:none}
+.lnav button{padding:10px 4px;font-size:14px;font-weight:700;border-radius:10px}
+.lnav button.on{background:var(--acc);color:#1a1200}
+.sgroup{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.sgroup>summary{list-style:none;cursor:pointer;padding:12px 14px;font-weight:800;font-size:16px;display:flex;align-items:center;gap:8px}
+.sgroup>summary::-webkit-details-marker{display:none}
+.sgroup>summary::after{content:'▾';margin-left:auto;color:var(--mut)}.sgroup[open]>summary::after{content:'▴'}
+.sgroup>summary small{font-weight:400;color:var(--mut);font-size:12px}
+.sbody{padding:0 14px 12px}
+.srow{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line)}
+.srow label{flex:1;margin:0;color:var(--txt);font-size:14px}
+.srow label small{display:block;color:var(--mut);font-size:12px}
+.srow .num{display:flex;align-items:center;gap:6px;flex:none}
+.srow input{width:76px;text-align:right;padding:7px 8px}
+.srow .unit{color:var(--mut);font-size:13px;min-width:34px}
+.tline{display:grid;grid-template-columns:14px minmax(0,1.1fr) minmax(0,1.4fr) auto;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.tline input{padding:7px 8px;font-size:14px}
+.tline .sc{display:flex;align-items:center;gap:4px}.tline .sc b{min-width:34px;text-align:center}
 #lmapwrap{flex:1 1 44%;min-width:0;position:relative}
 #lmap{position:absolute;inset:0;z-index:1}
 #lside{flex:1 1 56%;min-width:0;display:flex;flex-direction:column;min-height:0;border-left:1px solid var(--line)}
@@ -35,7 +53,7 @@ header .sp{flex:1}
 .reqrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--line)}
 .reqrow:last-child{border-bottom:0}.reqrow .nm{flex:1 1 200px;min-width:0}
 @media(max-width:1250px){.dgrid{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:860px){#lbody{flex-direction:column;overflow:auto}#lmapwrap{flex:none;height:36vh}#lead.setup #lmapwrap{height:52vh}#lside{flex:none;border-left:0}#ldash{overflow:visible}#lsetup .panel{overflow:visible}}
+@media(max-width:860px){#lead.nomap #lmapwrap{display:none}.lnav{position:sticky;top:0;z-index:20}#lbody{flex-direction:column;overflow:auto}#lmapwrap{flex:none;height:36vh}#lead.setup #lmapwrap{height:52vh}#lside{flex:none;border-left:0}#ldash{overflow:visible}#lsetup .panel{overflow:visible}}
 .map{height:42vh;min-height:220px;flex:none;z-index:1}
 .panel{flex:1;overflow:auto;padding:12px;padding-bottom:max(16px,env(safe-area-inset-bottom))}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
@@ -142,6 +160,12 @@ code{background:#0b1219;padding:1px 5px;border-radius:5px}
   <div id="lbody">
     <div id="lmapwrap"><div id="lmap"></div></div>
     <div id="lside">
+      <nav class="lnav" id="ltabs" aria-label="Bereiche der Spielleitung">
+        <button data-t="home" onclick="leadTabSet('home')">🏠 Übersicht</button>
+        <button data-t="zones" onclick="leadTabSet('zones')">🗺️ Zonen</button>
+        <button data-t="teams" onclick="leadTabSet('teams')">👥 Teams</button>
+        <button data-t="settings" onclick="leadTabSet('settings')">⚙️ Regeln</button>
+      </nav>
       <div id="ldash">
         <div id="p_req"></div>
         <div class="dgrid">
@@ -150,12 +174,6 @@ code{background:#0b1219;padding:1px 5px;border-radius:5px}
         </div>
       </div>
       <div id="lsetup">
-        <div class="tabs" id="ltabs">
-          <button data-t="zones" onclick="leadTabSet('zones')">🗺️ Zonen</button>
-          <button data-t="teams" onclick="leadTabSet('teams')">👥 Teams &amp; Punkte</button>
-          <button data-t="settings" onclick="leadTabSet('settings')">⚙️ Einstellungen</button>
-          <button onclick="closeSetup()" style="margin-left:auto">✕ Zurück</button>
-        </div>
         <div id="lpanel" class="panel"></div>
       </div>
     </div>
@@ -179,7 +197,7 @@ code{background:#0b1219;padding:1px 5px;border-radius:5px}
    Lehrperson sie beim ersten Start in der App ein (wird im Link mitgegeben).
    ===================================================================== */
 const FIREBASE_CONFIG = null;
-const APP_VERSION = '2026-11-12 · v18';
+const APP_VERSION = '2026-11-12 · v19';
 
 const LOGO='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJiZyIgY3g9IjUwJSIgY3k9IjQwJSIgcj0iNjUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMxZjJmNDIiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYjEyMTkiLz48L3JhZGlhbEdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZTI3YSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YyYTkwMCIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJyaW5nIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+PHN0b3Agb2Zmc2V0PSIuNSIgc3RvcC1jb2xvcj0iI2M5ZDRlMCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzdkOGVhMyIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJoYW5kbGUiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIwIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMzYTJhMWEiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjNmI0YTJiIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMmExZDEwIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImxlbnMiPjxjaXJjbGUgY3g9IjIzNiIgY3k9IjIyNiIgcj0iMTE4Ii8+PC9jbGlwUGF0aD48cGF0aCBpZD0iYXJjVG9wIiBkPSJNIDY2IDI1NiBBIDE5MCAxOTAgMCAwIDEgNDQ2IDI1NiIvPjxwYXRoIGlkPSJhcmNCb3QiIGQ9Ik0gODQgMjY4IEEgMTcyIDE3MiAwIDAgMCA0MjggMjY4Ii8+PC9kZWZzPjwhLS0gQmFkZ2UgLS0+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyNDQiIGZpbGw9InVybCgjYmcpIi8+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyMzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1YjkxNiIgc3Ryb2tlLXdpZHRoPSIxMCIvPjxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmNWI5MTYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iNCA4IiBvcGFjaXR5PSIuNiIvPjwhLS0gUGluZy1XZWxsZW4gLS0+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY0ZDVlIiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxwYXRoIGQ9Ik0gMzg0IDIwMCBBIDE1MCAxNTAgMCAwIDEgMzc3IDI3NyIgc3Ryb2tlLXdpZHRoPSI5IiBvcGFjaXR5PSIuOTUiLz48cGF0aCBkPSJNIDQxMCAxOTUgQSAxNzYgMTc2IDAgMCAxIDQwMSAyODYiIHN0cm9rZS13aWR0aD0iNyIgb3BhY2l0eT0iLjU1Ii8+PC9nPjwhLS0gR3JpZmYgZGVyIEx1cGUgLS0+PGcgdHJhbnNmb3JtPSJyb3RhdGUoLTQ1IDIzNiAyMjYpIj48cmVjdCB4PSIyMjEiIHk9IjM1MCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjM0IiByeD0iNiIgZmlsbD0idXJsKCNyaW5nKSIvPjxyZWN0IHg9IjIxNiIgeT0iMzgwIiB3aWR0aD0iNDAiIGhlaWdodD0iMTAwIiByeD0iMTgiIGZpbGw9InVybCgjaGFuZGxlKSIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjQiLz48cmVjdCB4PSIyMTYiIHk9IjQwNCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjciIGZpbGw9IiNmNWI5MTYiLz48cmVjdCB4PSIyMTYiIHk9IjQyMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjciIGZpbGw9IiNmNWI5MTYiLz48L2c+PCEtLSBMaW5zZSBtaXQgV2FwcGVuLU1vdGl2IC0tPjxnIGNsaXAtcGF0aD0idXJsKCNsZW5zKSI+PHJlY3QgeD0iMTAwIiB5PSIxMDAiIHdpZHRoPSIyODAiIGhlaWdodD0iMjYwIiBmaWxsPSJ1cmwoI2dvbGQpIi8+PCEtLSBTb25uZW5zdHJhaGxlbiBkZXplbnQgLS0+PGcgc3Ryb2tlPSIjZmZmM2MyIiBzdHJva2Utd2lkdGg9IjEwIiBvcGFjaXR5PSIuMzUiPjxsaW5lIHgxPSIyMzYiIHkxPSIxOTAiIHgyPSIxMjAiIHkyPSIxMTAiLz48bGluZSB4MT0iMjM2IiB5MT0iMTkwIiB4Mj0iMjM2IiB5Mj0iOTAiLz48bGluZSB4MT0iMjM2IiB5MT0iMTkwIiB4Mj0iMzUyIiB5Mj0iMTEwIi8+PC9nPjwhLS0gSMO8Z2VsIChEcmVpYmVyZykgLS0+PHBhdGggZD0iTSAxMDAgMzYwIEwgMTAwIDMwMCBRIDE0MCAyNjIgMTc4IDI4NiBRIDIzNiAyMzYgMjk0IDI4NiBRIDMzMiAyNjIgMzcyIDMwMCBMIDM3MiAzNjAgWiIgZmlsbD0iIzFmOGEzYSIvPjxwYXRoIGQ9Ik0gMTAwIDM2MCBMIDEwMCAzMTggUSAxNTAgMjk2IDIwMCAzMTIgUSAyNTAgMjkyIDMwMCAzMTIgUSAzNDAgMjk4IDM3MiAzMTggTCAzNzIgMzYwIFoiIGZpbGw9IiMxNzcwMmUiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzYgMjkyKSBzY2FsZSguODIpIHRyYW5zbGF0ZSgtMjM2IC0yOTIpIj48IS0tIFN0YW1tIC0tPjxwYXRoIGQ9Ik0gMjI2IDI5MiBMIDIzMCAyMjYgUSAyMzYgMjE0IDI0MiAyMjYgTCAyNDYgMjkyIFEgMjM2IDMwMCAyMjYgMjkyIFoiIGZpbGw9IiMxNDYyMmEiLz48cGF0aCBkPSJNIDIzMiAyNDYgUSAyMTQgMjMyIDIwNCAyMTQgTSAyNDAgMjQwIFEgMjU4IDIyNiAyNjggMjEwIiBzdHJva2U9IiMxNDYyMmEiIHN0cm9rZS13aWR0aD0iNyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PCEtLSBLcm9uZSBkZXIgTGluZGUgLS0+PGcgZmlsbD0iIzFmOGEzYSI+PGNpcmNsZSBjeD0iMjM2IiBjeT0iMTc4IiByPSI1NiIvPjxjaXJjbGUgY3g9IjE5MCIgY3k9IjE5NiIgcj0iMzgiLz48Y2lyY2xlIGN4PSIyODIiIGN5PSIxOTYiIHI9IjM4Ii8+PGNpcmNsZSBjeD0iMjA2IiBjeT0iMTUwIiByPSIzNiIvPjxjaXJjbGUgY3g9IjI2NiIgY3k9IjE1MCIgcj0iMzYiLz48Y2lyY2xlIGN4PSIyMzYiIGN5PSIxMjgiIHI9IjM0Ii8+PC9nPjxnIGZpbGw9IiMyZmFlNGQiPjxjaXJjbGUgY3g9IjIyMCIgY3k9IjE0MCIgcj0iMjIiLz48Y2lyY2xlIGN4PSIxODIiIGN5PSIxODYiIHI9IjE2Ii8+PGNpcmNsZSBjeD0iMjUyIiBjeT0iMTIyIiByPSIxNCIvPjwvZz48IS0tIExpbmRlbmJsw6R0dGVyIChIZXJ6Zm9ybSkgLS0+PC9nPjwhLS0gUGluZy1QdW5rdCAtLT48Y2lyY2xlIGN4PSIzMTIiIGN5PSIyNTAiIHI9IjE2IiBmaWxsPSIjZmY0ZDVlIiBvcGFjaXR5PSIuMyIvPjxjaXJjbGUgY3g9IjMxMiIgY3k9IjI1MCIgcj0iOSIgZmlsbD0iI2ZmNGQ1ZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMiLz48IS0tIEdsYW56IC0tPjxwYXRoIGQ9Ik0gMTUwIDE3MCBBIDk2IDk2IDAgMCAxIDIyMCAxMjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxMiIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIuNTUiLz48L2c+PGNpcmNsZSBjeD0iMjM2IiBjeT0iMjI2IiByPSIxMTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNyaW5nKSIgc3Ryb2tlLXdpZHRoPSIyMCIvPjxjaXJjbGUgY3g9IjIzNiIgY3k9IjIyNiIgcj0iMTI5IiBmaWxsPSJub25lIiBzdHJva2U9IiMwYjEyMTkiIHN0cm9rZS13aWR0aD0iMyIgb3BhY2l0eT0iLjciLz48IS0tIFNjaHJpZnQgLS0+PHRleHQgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsJ0hlbHZldGljYSBOZXVlJyxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjU0IiBsZXR0ZXItc3BhY2luZz0iNiIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjIiIHBhaW50LW9yZGVyPSJzdHJva2UiPjx0ZXh0UGF0aCBocmVmPSIjYXJjVG9wIiBzdGFydE9mZnNldD0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NQU5IVU5UPC90ZXh0UGF0aD48L3RleHQ+PGc+PHBhdGggZD0iTSAxMjAgNDIwIEwgMzkyIDQyMCBMIDM4MCA0NDggTCAzOTIgNDc2IEwgMTIwIDQ3NiBMIDEzMiA0NDggWiIgZmlsbD0iI2Y1YjkxNiIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjQiLz48dGV4dCB4PSIyNTYiIHk9IjQ2MSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsJ0hlbHZldGljYSBOZXVlJyxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjM0IiBsZXR0ZXItc3BhY2luZz0iOCIgZmlsbD0iIzBiMTIxOSI+TkVVSEVJTTwvdGV4dD48L2c+PC9zdmc+IA==';
 const CENTER = [47.2019, 8.5805]; // Neuheim ZG
@@ -865,7 +883,7 @@ function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classL
 /* =====================================================================
    SPIELLEITUNG
    ===================================================================== */
-let rSecond=null,LM=null,leadTab='zones',SETUP=false,DRAW=null,hunterSel=null,bmsgVal='',rDur=null,rHead=null,leadReqSeen=null;
+let rSecond=null,LM=null,leadTab='home',SETUP=false,DRAW=null,hunterSel=null,bmsgVal='',rDur=null,rHead=null,leadReqSeen=null;
 function showLockInfo(){showUI(`<h3>📱 Wichtig vor dem Start</h3>
   <p><b>Schaltet die automatische Bildschirmsperre aus</b>, sonst verliert die App das GPS-Signal:</p>
   <ul style="padding-left:18px;margin:6px 0"><li><b>iPhone:</b> Einstellungen → Anzeige &amp; Helligkeit → Automatische Sperre → <b>Nie</b></li>
@@ -877,18 +895,21 @@ function openLead(){
   document.body.appendChild($('#banners'));
   VIEW='lead';MY_TEAM=null;localStorage.setItem('mh_lead',CODE);showScreen('lead');
   if(!LM){LM=mkMap('lmap');LM.m.on('click',e=>{if(DRAW){if(DRAW.sel!==null){DRAW.sel=null;}else DRAW.pts.push(rnd(e.latlng));drawSig=null;renderLead(true);}});}
-  LM.zsig=null;setTimeout(()=>LM.m.invalidateSize(),150);requestWake();loadTpl();clearPanels();renderLead(true);
+  LM.zsig=null;setTimeout(()=>LM.m.invalidateSize(),150);requestWake();loadTpl();leadTabSet(leadTab||'home');
 }
 function clearPanels(){['#lpanel','#p_req','#p_round','#p_teams','#p_rank','#p_feed','#p_msg','#lhead'].forEach(s=>{const e=$(s);if(e)e._h=null;});}
-function openSetup(t){SETUP=true;$('#lead').classList.add('setup');leadTabSet(t||leadTab);setTimeout(()=>LM&&LM.m.invalidateSize(),80);}
-function closeSetup(){SETUP=false;DRAW=null;drawSig=null;if(LM)LM.zsig=null;$('#lead').classList.remove('setup');clearPanels();renderLead(true);setTimeout(()=>LM&&LM.m.invalidateSize(),80);}
-function leadTabSet(t){leadTab=t;document.querySelectorAll('#ltabs button[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===t));$('#lpanel')._h=null;renderLead(true);}
+function openSetup(t){leadTabSet(t||'zones');}
+function closeSetup(){leadTabSet('home');}
+function leadTabSet(t){if(t!=='zones'&&DRAW){DRAW=null;drawSig=null;if(LM)LM.zsig=null;}
+  leadTab=t;SETUP=t!=='home';$('#lead').classList.toggle('setup',SETUP);$('#lead').classList.toggle('nomap',t==='teams'||t==='settings');
+  document.querySelectorAll('#ltabs button[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  clearPanels();renderLead(true);setTimeout(()=>LM&&LM.m.invalidateSize(),80);$('#lpanel').scrollTop=0;}
 function leadOverlays(){showBn('bnLead',!ENGINE_MINE?'⚠️ Die Spielleitung läuft auf einem anderen Gerät.':'');}
 function setPanel(sel,html,force){const el=$(sel);if(!el)return;const ae=document.activeElement;if(!force&&ae&&el.contains(ae)&&ae.matches('input,textarea,select'))return;setHTML(el,html);}
 function renderLead(force){
   if(!G||!G.teams){setHTML($('#p_req'),'<div class="card">Lade Spiel… (Falls das so bleibt: Spielcode prüfen)</div>');return;}
   const R=R_(),t=now();
-  setHTML($('#lhead'),`<img src="${LOGO}" style="width:30px;height:30px" alt=""><b>Spielleitung</b><span class="badge" style="background:var(--acc);color:#1a1200">${DEMO?'DEMO':esc(CODE)}</span>${!CONNECTED?'<span class="badge" style="background:var(--red)">offline</span>':''}<span class="sp"></span>${R.status==='running'?`<span class="badge b-hunt">Runde ${R.n} · ${cd(R.endAt)}</span>`:`<span class="badge">${R.n?`Runde ${R.n} beendet`:'Keine Runde'}</span>`}${demoSwitcher()}${DEMO?'':'<button class="sm" onclick="showJoin()">📲 QR</button>'}<button class="sm ${SETUP?'':'pri'}" title="Zonen, Teams &amp; Einstellungen" onclick="${SETUP?'closeSetup()':'openSetup()'}">${SETUP?'✕ Zurück zum Dashboard':'⚙️ Zonen · Teams · Einstellungen'}</button>`);
+  setHTML($('#lhead'),`<img src="${LOGO}" style="width:30px;height:30px" alt=""><b>Spielleitung</b><span class="badge" style="background:var(--acc);color:#1a1200">${DEMO?'DEMO':esc(CODE)}</span>${!CONNECTED?'<span class="badge" style="background:var(--red)">offline</span>':''}<span class="sp"></span>${R.status==='running'?`<span class="badge b-hunt">Runde ${R.n} · ${cd(R.endAt)}</span>`:`<span class="badge">${R.n?`Runde ${R.n} beendet`:'Keine Runde'}</span>`}${demoSwitcher()}${DEMO?'':'<button class="sm" onclick="showJoin()">📲 QR</button>'}`);
   // Karte
   if(LM){drawZones(LM);LM.d.clearLayers();
     if(running())drawPings(LM,id=>{const o=teams()[id];return o&&o.role==='hider'&&!o.caught;},true,false);
@@ -905,12 +926,12 @@ function renderLead(force){
     if(leadTab==='settings'&&!force)return;
     setHTML(panel,{teams:leadTeams,zones:leadZones,settings:leadSettings}[leadTab]());return;
   }
-  setPanel('#p_req',leadReq()+`<div class="row" style="margin-bottom:10px;flex-wrap:wrap"><button class="sm" onclick="openSetup('zones')">🗺️ Zonen</button><button class="sm" onclick="openSetup('teams')">👥 Teams &amp; Punkte</button><button class="sm" onclick="openSetup('settings')">⚙️ Einstellungen</button>${DEMO?'':'<button class="sm" onclick="showJoin()">📲 QR-Code</button>'}</div>`,force);setPanel('#p_round',leadRound(),force);setPanel('#p_teams',leadTeamsLive(),force);
+  setPanel('#p_req',leadReq(),force);setPanel('#p_round',leadRound(),force);setPanel('#p_teams',leadTeamsLive(),force);
   setPanel('#p_rank',leadRank(),force);setPanel('#p_feed',`<div class="card"><b>📰 Ereignisse</b><div class="feed feedbox">${feedItems(()=>true,60)}</div></div>`,force);setPanel('#p_msg',leadMsg(),force);
 }
 function leadReq(){
   const R=R_(),t=now();let h='';
-  if(!DEMO&&!G.zones)h+=`<div class="card" style="border-color:var(--acc);margin-bottom:10px">👉 Zuerst unter ⚙️ → <b>Zonen</b> das Spielfeld (grün) und Sperrzonen (rot) einzeichnen. <button class="sm" onclick="openSetup('zones')">Zonen öffnen</button></div>`;
+  if(!DEMO&&!G.zones)h+=`<div class="card" style="border-color:var(--acc);margin-bottom:10px">👉 Zuerst im Reiter <b>🗺️ Zonen</b> das Spielfeld (grün) und Sperrzonen (rot) einzeichnen. <button class="sm" onclick="openSetup('zones')">Zonen öffnen</button></div>`;
   const reqs=Object.entries(G.requests||{}).filter(([k,r])=>r.status==='pending'&&r.round===R.n).sort((a,b)=>a[1].t-b[1].t);
   const cat=Object.entries(G.catches||{}).filter(([k,c])=>c.status==='no'&&c.round===R.n&&t-c.t<600000);
   const al=running()?Object.entries(teams()).filter(([id,o])=>(o.role==='hider'||o.role==='hunter')&&(o.outSince||o.inactiveAt)):[];
@@ -985,15 +1006,15 @@ function doStop(){closeUI();const up={};endingN=R_().n;endRound(up);store.update
 
 function leadTeams(){
   const tms=Object.entries(teams()),run=running();
-  return `<div class="card"><div class="row"><b style="flex:2">${tms.length} Teams</b><button class="sm" onclick="addTeam()" ${tms.length>=8?'disabled':''}>＋ Team</button><button class="sm" onclick="removeTeam()" ${tms.length<=2||run?'disabled':''}>－ Team</button></div>${DEMO?'':'<button class="wide" onclick="showJoin()">📲 Beitritts-Link &amp; QR-Code zeigen</button>'}</div>`+
-  tms.map(([id,o])=>`<div class="card" style="border-left:6px solid ${o.color}">
-    <div class="row"><input value="${esc(o.name)}" aria-label="Teamname" onchange="renameTeam('${id}',this.value)"><b style="flex:none;font-size:20px">⭐ ${o.score||0}</b></div>
-    <label>Mitglieder</label><div class="row"><input value="${esc(o.members||'')}" placeholder="noch niemand angemeldet" aria-label="Mitglieder" onchange="store.update({['teams/${id}/members']:this.value.trim()||null})">${o.claimedBy?`<button class="sm" style="flex:none" onclick="releaseTeam('${id}')">🔓 Handy freigeben</button>`:''}</div>
-    <div class="row" style="margin-top:8px"><button class="sm" onclick="addScore('${id}',-5)">−5</button><button class="sm" onclick="addScore('${id}',-1)">−1</button><button class="sm" onclick="addScore('${id}',1)">+1</button><button class="sm" onclick="addScore('${id}',5)">+5</button></div>
-    ${run&&o.role==='hider'&&!o.caught?`<button class="sm wide" onclick="leadCatchUI('${id}')">🎯 Als gefangen eintragen…</button>`:''}
-    ${o.dq?`<button class="sm wide" onclick="undoDQ('${id}')">↩︎ Disqualifikation aufheben</button>`:''}
-    ${run&&o.role==='hider'&&!o.caught?`<div class="mut" style="margin-top:6px">Joker: ${Object.entries(JH).map(([k,j])=>`${j.icon}${(o.jokers||{})[k]||0}`).join(' ')}</div>`:''}
-  </div>`).join('');
+  return `<div class="card"><div class="row" style="flex-wrap:wrap"><b style="flex:2">👥 ${tms.length} Teams</b><button class="sm" style="flex:none" onclick="addTeam()" ${tms.length>=8?'disabled':''}>＋ Team</button><button class="sm" style="flex:none" onclick="removeTeam()" ${tms.length<=2||run?'disabled':''}>－ Team</button>${DEMO?'':'<button class="sm" style="flex:none" onclick="showJoin()">📲 QR-Code</button>'}</div>
+    <div class="tline mut" style="border-top:0;font-size:12px"><span></span><span>Teamname</span><span>Mitglieder</span><span>Punkte</span></div>
+    ${tms.map(([id,o])=>`<div class="tline"><span class="dot" style="background:${o.color}"></span>
+      <input value="${esc(o.name)}" aria-label="Teamname" onchange="renameTeam('${id}',this.value)">
+      <input value="${esc(o.members||'')}" placeholder="frei" aria-label="Mitglieder" onchange="store.update({['teams/${id}/members']:this.value.trim()||null})">
+      <span class="sc"><button class="sm" onclick="addScore('${id}',-1)" aria-label="minus 1">−</button><b>${o.score||0}</b><button class="sm" onclick="addScore('${id}',1)" aria-label="plus 1">+</button></span>
+      ${o.claimedBy||(run&&o.role==='hider'&&!o.caught)||o.dq?`<span style="grid-column:2/-1;display:flex;gap:6px;flex-wrap:wrap">${o.claimedBy?`<button class="sm" onclick="releaseTeam('${id}')">🔓 Handy freigeben</button>`:''}${run&&o.role==='hider'&&!o.caught?`<button class="sm" onclick="leadCatchUI('${id}')">🎯 Als gefangen eintragen</button>`:''}${o.dq?`<button class="sm" onclick="undoDQ('${id}')">↩︎ DQ aufheben</button>`:''}</span>`:''}
+    </div>`).join('')}
+    <p class="mut" style="margin:8px 0 0">Punkte in Fünferschritten? Tippe mehrmals auf + oder −.</p></div>`;
 }
 function renameTeam(id,v){v=v.trim().slice(0,24);if(v)store.update({[`teams/${id}/name`]:v});}
 function addScore(id,n){const o=teams()[id];store.update({[`teams/${id}/score`]:(o.score||0)+n});}
@@ -1063,22 +1084,48 @@ function finishZone(){if(DRAW.editKey){store.update({[`zones/${DRAW.editKey}/pts
 function delZone(k){store.update({['zones/'+k]:null});}
 function zoomZone(k){const z=G.zones[k];if(z&&z.pts)LM.m.fitBounds(z.pts,{padding:[20,20]});}
 
+const SGROUPS=[
+  ['🚦','Rundenablauf','Dauer, Start und Pings',[
+    ['roundMin','Rundendauer','Min.'],['countdownSec','Countdown vor dem Start','Sek.'],['headStartMin','Jäger warten nach dem Start','Min.'],
+    ['secondPingMin','2. Ping nach dem Start-Ping','Min.'],['pingEveryMin','Ping-Intervall danach','Min.'],['holdSec','Stehen bleiben nach einem Ping','Sek.']]],
+  ['🧊','Regeln & Alarme','Freeze, Gruppen, Zone, Signal',[
+    ['freezeRadius','«Jäger in der Nähe» ab','m'],['unfreezeRadius','Freeze endet ab Abstand','m'],
+    ['groupRadius','Gruppenbildung: Teams näher als','m','0 = Regel aus'],['groupMin','Gruppenbildung: Zeit zum Trennen','Min.'],['groupPenaltyMin','Live-Standort sichtbar nach Trennung','Min.'],
+    ['dqGraceSec','Zeit zurück ins Spielfeld vor DQ','Sek.'],['inactiveMin','Alarm bei fehlendem Signal nach','Min.']]],
+  ['🃏','Joker','Was die Teams pro Runde haben',[
+    ['hj:reveal','🔭 Jäger erfragen (Gejagte)','×'],['hj:invisible','👻 Unsichtbar (Gejagte)','×'],['hj:fake','🎭 Fake-Ping (Gejagte)','×'],
+    ['revealShowMin','Jäger-Standorte sichtbar für','Min.'],['fakeDist','Fake-Ping liegt daneben','m'],
+    ['answerSec','Zeit für Frage / Foto-Challenge','Sek.'],['challengePenalty','Abzug, wenn nicht erfüllt','Pkt.']]],
+  ['⚡','Speedhunt','Spezial-Joker der Jäger',[
+    ['speedhuntMax','Speedhunts pro Runde','×'],['speedhuntMin','Dauer','Min.'],['speedhuntPings','Zusätzliche Pings (nach dem ersten)','×'],
+    ['speedSurvivePts','Überlebt: Pluspunkte Gejagte','Pkt.'],['speedFailPenalty','Gescheitert: Abzug Jäger','Pkt.']]],
+  ['⭐','Punkte','Wofür es Punkte gibt',[
+    ['ppm','Pro überlebte Minute','Pkt.'],['surviveBonus','Bonus: Runde überlebt','Pkt.'],['catchPts','Pro Fang','Pkt.'],['firstCatchBonus','Bonus: erster Fang der Runde','Pkt.']]]
+];
+let openGroups=new Set(['Rundenablauf']);
 function leadSettings(){
   const s=S();
-  return `<div class="card"><h3>⚙️ Spielregeln</h3>${SETTINGS_FIELDS.map(([k,l])=>`<label>${l}</label><input type="number" id="set_${k}" value="${s[k]}" min="0">`).join('')}
-    <h3 style="margin-top:14px">🃏 Joker pro Runde (Gejagte)</h3>${Object.entries(JH).map(([k,j])=>`<label>${j.icon} ${j.name}</label><input type="number" id="hj_${k}" value="${s.hiderJokers[k]}" min="0">`).join('')}
-    <h3 style="margin-top:14px">📸 Foto-Challenges (eine pro Zeile)</h3><textarea id="set_pc" rows="6">${esc(s.photoChallenges.join('\n'))}</textarea>
-    <button class="pri wide" onclick="saveSettings()">💾 Speichern</button></div>
-    <div class="card"><h3>🧹 Aufräumen &amp; Datenschutz</h3>
+  const val=k=>k.startsWith('hj:')?s.hiderJokers[k.slice(3)]:s[k];
+  const grp=([ic,title,sub,fields])=>`<details class="sgroup" ${openGroups.has(title)?'open':''} ontoggle="this.open?openGroups.add('${title}'):openGroups.delete('${title}')"><summary>${ic} ${title} <small>${sub}</small></summary><div class="sbody">
+    ${fields.map(([k,l,u,help])=>`<div class="srow"><label for="set_${k.replace(':','_')}">${l}${help?`<small>${help}</small>`:''}</label><span class="num"><input type="number" inputmode="numeric" min="0" id="set_${k.replace(':','_')}" value="${val(k)}" onchange="setSetting('${k}',this.value)"><span class="unit">${u}</span></span></div>`).join('')}
+    ${title==='Joker'?`<div style="padding-top:8px;border-top:1px solid var(--line)"><label for="set_pc" style="color:var(--txt)">📸 Foto-Challenges <small style="color:var(--mut)">(eine pro Zeile)</small></label><textarea id="set_pc" rows="5" onchange="setChallenges(this.value)">${esc(s.photoChallenges.join('\n'))}</textarea></div>`:''}
+  </div></details>`;
+  return `<p class="mut" style="margin:0 0 10px">Änderungen werden sofort gespeichert und gelten ab der nächsten Runde.</p>`+SGROUPS.map(grp).join('')+
+  `<details class="sgroup" ${openGroups.has('System')?'open':''} ontoggle="this.open?openGroups.add('System'):openGroups.delete('System')"><summary>🔧 System &amp; Daten <small>Aufräumen, config.js, Version</small></summary><div class="sbody">
     <button class="wide" onclick="confirmDo('Alle Punkte auf 0 setzen?','resetScores')">Punkte zurücksetzen</button>
     <button class="wide" onclick="confirmDo('Alle Standorte, Pings, Fotos und Ereignisse löschen?','wipeData')">Standorte &amp; Verlauf löschen</button>
     <button class="wide red" onclick="confirmDo('Ganzes Spiel endgültig löschen?','deleteGame')">Spiel löschen</button>
-    <p class="mut">Nach dem Spieltag: «Spiel löschen» entfernt alle Daten.</p></div>
-    ${DEMO?'':`<div class="card"><h3>📦 config.js</h3><p class="mut">${window.MH_CONFIG?'✅ config.js ist auf dem Server.':'Noch keine config.js auf dem Server. Lade sie herunter und lege sie auf GitHub neben die index.html – dann reicht für die SuS überall der Spielcode.'}</p><button class="wide" onclick="downloadConfigJs()">⬇️ config.js herunterladen</button></div>`}
-    <div class="card mut">Version: <b>${APP_VERSION}</b><br>Spielcode: <b>${esc(CODE)}</b> · Gerät: ${DEV}<br>${DEMO?'Demo-Modus: Daten nur in diesem Browser.':'Verbunden mit Firebase.'}<br><button class="sm" style="margin-top:6px" onclick="leaveLead()">Spielleitung verlassen</button></div>`;
+    ${DEMO?'':`<button class="wide" onclick="downloadConfigJs()">⬇️ config.js herunterladen</button><p class="mut">${window.MH_CONFIG?'✅ config.js ist auf dem Server.':'Noch keine config.js auf dem Server.'}</p>`}
+    <p class="mut">Version ${APP_VERSION} · Spielcode ${esc(CODE)}</p><button class="sm" onclick="leaveLead()">Spielleitung verlassen</button>
+  </div></details>`;
 }
-function saveSettings(){rSecond=null;const o={};for(const [k] of SETTINGS_FIELDS){const v=+$('#set_'+k).value;o[k]=isFinite(v)?v:DEFAULT_SETTINGS[k];}o.hiderJokers={};for(const k of Object.keys(JH)){o.hiderJokers[k]=Math.max(0,+$('#hj_'+k).value||0);}
-  if(o.unfreezeRadius<o.freezeRadius)o.unfreezeRadius=o.freezeRadius+10;if(G.settings&&G.settings.maskOutside===false)o.maskOutside=false;o.photoChallenges=($('#set_pc').value||'').split('\n').map(x=>x.trim()).filter(Boolean);store.update({settings:o});rDur=null;rHead=null;toast('Gespeichert');}
+function setSetting(k,v){let n=+v;if(!isFinite(n)||n<0){toast('Bitte eine Zahl ≥ 0 eingeben');return;}
+  const up={};if(k.startsWith('hj:'))up['settings/hiderJokers/'+k.slice(3)]=Math.round(n);else up['settings/'+k]=n;
+  const s=S();if(k==='freezeRadius'&&s.unfreezeRadius<n+10)up['settings/unfreezeRadius']=n+10;
+  if(k==='roundMin')rDur=null;if(k==='headStartMin')rHead=null;if(k==='secondPingMin')rSecond=null;
+  store.update(up);toast('✓ Gespeichert',1200);}
+function setChallenges(v){const a=(v||'').split('\n').map(x=>x.trim()).filter(Boolean);if(!a.length){toast('Mindestens eine Challenge');return;}store.update({'settings/photoChallenges':a});toast('✓ Gespeichert',1200);}
+function saveSettings(){toast('Wird automatisch gespeichert');}
 let confirmFn=null;
 function confirmDo(q,fn){confirmFn=fn;showUI(`<h3>${q}</h3><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="red" onclick="closeUI();window[confirmFn]()">Ja</button></div>`);}
 function resetScores(){const up={};for(const id of Object.keys(teams())){up[`teams/${id}/score`]=0;up[`teams/${id}/hunterStarts`]=0;}store.update(up);toast('Punkte zurückgesetzt');}
