@@ -187,6 +187,15 @@ code{background:#0b1219;padding:1px 5px;border-radius:5px}
   <div class="bn" id="bnHold"></div>
   <div class="bn" id="bnZone"></div>
 </div>
+<div id="replay" style="display:none;position:fixed;inset:0;z-index:2600;background:var(--bg);flex-direction:column">
+  <header><b>🎬 Rückblick</b><select id="rpRound" style="width:auto;padding:5px 8px" onchange="rpLoad(+this.value)" aria-label="Runde wählen"></select><span class="sp"></span><button class="sm" onclick="closeReplay()">✕ Schliessen</button></header>
+  <div id="rpmap" style="flex:1;min-height:0;z-index:1"></div>
+  <div style="padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;background:#0b1219;border-top:1px solid var(--line)">
+    <div class="row"><button class="pri" style="flex:none;min-width:56px;font-size:18px" id="rpPlay" onclick="rpToggle()" aria-label="Abspielen">▶</button><input type="range" id="rpSlider" min="0" max="100" value="0" oninput="rpSeek(+this.value)" style="flex:1" aria-label="Zeit"><b id="rpTime" style="flex:none;min-width:110px;text-align:right">0:00</b></div>
+    <div class="row" style="flex-wrap:wrap;gap:6px"><span class="mut" style="flex:none">Tempo:</span><span id="rpSpeeds" style="display:flex;gap:6px;flex:none"></span></div>
+    <div id="rpLegend" class="chips" style="margin:0"></div>
+  </div>
+</div>
 <div id="modal"><div id="modalBox"></div></div>
 <div id="toast"></div>
 
@@ -197,22 +206,23 @@ code{background:#0b1219;padding:1px 5px;border-radius:5px}
    Lehrperson sie beim ersten Start in der App ein (wird im Link mitgegeben).
    ===================================================================== */
 const FIREBASE_CONFIG = null;
-const APP_VERSION = '2026-11-13 · v23';
+const APP_VERSION = '2026-11-18 · v24';
 
 const LOGO='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJiZyIgY3g9IjUwJSIgY3k9IjQwJSIgcj0iNjUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMxZjJmNDIiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYjEyMTkiLz48L3JhZGlhbEdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZTI3YSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YyYTkwMCIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJyaW5nIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+PHN0b3Agb2Zmc2V0PSIuNSIgc3RvcC1jb2xvcj0iI2M5ZDRlMCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzdkOGVhMyIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJoYW5kbGUiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIwIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMzYTJhMWEiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjNmI0YTJiIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMmExZDEwIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImxlbnMiPjxjaXJjbGUgY3g9IjIzNiIgY3k9IjIyNiIgcj0iMTE4Ii8+PC9jbGlwUGF0aD48cGF0aCBpZD0iYXJjVG9wIiBkPSJNIDY2IDI1NiBBIDE5MCAxOTAgMCAwIDEgNDQ2IDI1NiIvPjxwYXRoIGlkPSJhcmNCb3QiIGQ9Ik0gODQgMjY4IEEgMTcyIDE3MiAwIDAgMCA0MjggMjY4Ii8+PC9kZWZzPjwhLS0gQmFkZ2UgLS0+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyNDQiIGZpbGw9InVybCgjYmcpIi8+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyMzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1YjkxNiIgc3Ryb2tlLXdpZHRoPSIxMCIvPjxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmNWI5MTYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iNCA4IiBvcGFjaXR5PSIuNiIvPjwhLS0gUGluZy1XZWxsZW4gLS0+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY0ZDVlIiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxwYXRoIGQ9Ik0gMzg0IDIwMCBBIDE1MCAxNTAgMCAwIDEgMzc3IDI3NyIgc3Ryb2tlLXdpZHRoPSI5IiBvcGFjaXR5PSIuOTUiLz48cGF0aCBkPSJNIDQxMCAxOTUgQSAxNzYgMTc2IDAgMCAxIDQwMSAyODYiIHN0cm9rZS13aWR0aD0iNyIgb3BhY2l0eT0iLjU1Ii8+PC9nPjwhLS0gR3JpZmYgZGVyIEx1cGUgLS0+PGcgdHJhbnNmb3JtPSJyb3RhdGUoLTQ1IDIzNiAyMjYpIj48cmVjdCB4PSIyMjEiIHk9IjM1MCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjM0IiByeD0iNiIgZmlsbD0idXJsKCNyaW5nKSIvPjxyZWN0IHg9IjIxNiIgeT0iMzgwIiB3aWR0aD0iNDAiIGhlaWdodD0iMTAwIiByeD0iMTgiIGZpbGw9InVybCgjaGFuZGxlKSIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjQiLz48cmVjdCB4PSIyMTYiIHk9IjQwNCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjciIGZpbGw9IiNmNWI5MTYiLz48cmVjdCB4PSIyMTYiIHk9IjQyMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjciIGZpbGw9IiNmNWI5MTYiLz48L2c+PCEtLSBMaW5zZSBtaXQgV2FwcGVuLU1vdGl2IC0tPjxnIGNsaXAtcGF0aD0idXJsKCNsZW5zKSI+PHJlY3QgeD0iMTAwIiB5PSIxMDAiIHdpZHRoPSIyODAiIGhlaWdodD0iMjYwIiBmaWxsPSJ1cmwoI2dvbGQpIi8+PCEtLSBTb25uZW5zdHJhaGxlbiBkZXplbnQgLS0+PGcgc3Ryb2tlPSIjZmZmM2MyIiBzdHJva2Utd2lkdGg9IjEwIiBvcGFjaXR5PSIuMzUiPjxsaW5lIHgxPSIyMzYiIHkxPSIxOTAiIHgyPSIxMjAiIHkyPSIxMTAiLz48bGluZSB4MT0iMjM2IiB5MT0iMTkwIiB4Mj0iMjM2IiB5Mj0iOTAiLz48bGluZSB4MT0iMjM2IiB5MT0iMTkwIiB4Mj0iMzUyIiB5Mj0iMTEwIi8+PC9nPjwhLS0gSMO8Z2VsIChEcmVpYmVyZykgLS0+PHBhdGggZD0iTSAxMDAgMzYwIEwgMTAwIDMwMCBRIDE0MCAyNjIgMTc4IDI4NiBRIDIzNiAyMzYgMjk0IDI4NiBRIDMzMiAyNjIgMzcyIDMwMCBMIDM3MiAzNjAgWiIgZmlsbD0iIzFmOGEzYSIvPjxwYXRoIGQ9Ik0gMTAwIDM2MCBMIDEwMCAzMTggUSAxNTAgMjk2IDIwMCAzMTIgUSAyNTAgMjkyIDMwMCAzMTIgUSAzNDAgMjk4IDM3MiAzMTggTCAzNzIgMzYwIFoiIGZpbGw9IiMxNzcwMmUiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzYgMjkyKSBzY2FsZSguODIpIHRyYW5zbGF0ZSgtMjM2IC0yOTIpIj48IS0tIFN0YW1tIC0tPjxwYXRoIGQ9Ik0gMjI2IDI5MiBMIDIzMCAyMjYgUSAyMzYgMjE0IDI0MiAyMjYgTCAyNDYgMjkyIFEgMjM2IDMwMCAyMjYgMjkyIFoiIGZpbGw9IiMxNDYyMmEiLz48cGF0aCBkPSJNIDIzMiAyNDYgUSAyMTQgMjMyIDIwNCAyMTQgTSAyNDAgMjQwIFEgMjU4IDIyNiAyNjggMjEwIiBzdHJva2U9IiMxNDYyMmEiIHN0cm9rZS13aWR0aD0iNyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PCEtLSBLcm9uZSBkZXIgTGluZGUgLS0+PGcgZmlsbD0iIzFmOGEzYSI+PGNpcmNsZSBjeD0iMjM2IiBjeT0iMTc4IiByPSI1NiIvPjxjaXJjbGUgY3g9IjE5MCIgY3k9IjE5NiIgcj0iMzgiLz48Y2lyY2xlIGN4PSIyODIiIGN5PSIxOTYiIHI9IjM4Ii8+PGNpcmNsZSBjeD0iMjA2IiBjeT0iMTUwIiByPSIzNiIvPjxjaXJjbGUgY3g9IjI2NiIgY3k9IjE1MCIgcj0iMzYiLz48Y2lyY2xlIGN4PSIyMzYiIGN5PSIxMjgiIHI9IjM0Ii8+PC9nPjxnIGZpbGw9IiMyZmFlNGQiPjxjaXJjbGUgY3g9IjIyMCIgY3k9IjE0MCIgcj0iMjIiLz48Y2lyY2xlIGN4PSIxODIiIGN5PSIxODYiIHI9IjE2Ii8+PGNpcmNsZSBjeD0iMjUyIiBjeT0iMTIyIiByPSIxNCIvPjwvZz48IS0tIExpbmRlbmJsw6R0dGVyIChIZXJ6Zm9ybSkgLS0+PC9nPjwhLS0gUGluZy1QdW5rdCAtLT48Y2lyY2xlIGN4PSIzMTIiIGN5PSIyNTAiIHI9IjE2IiBmaWxsPSIjZmY0ZDVlIiBvcGFjaXR5PSIuMyIvPjxjaXJjbGUgY3g9IjMxMiIgY3k9IjI1MCIgcj0iOSIgZmlsbD0iI2ZmNGQ1ZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMiLz48IS0tIEdsYW56IC0tPjxwYXRoIGQ9Ik0gMTUwIDE3MCBBIDk2IDk2IDAgMCAxIDIyMCAxMjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxMiIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIuNTUiLz48L2c+PGNpcmNsZSBjeD0iMjM2IiBjeT0iMjI2IiByPSIxMTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNyaW5nKSIgc3Ryb2tlLXdpZHRoPSIyMCIvPjxjaXJjbGUgY3g9IjIzNiIgY3k9IjIyNiIgcj0iMTI5IiBmaWxsPSJub25lIiBzdHJva2U9IiMwYjEyMTkiIHN0cm9rZS13aWR0aD0iMyIgb3BhY2l0eT0iLjciLz48IS0tIFNjaHJpZnQgLS0+PHRleHQgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsJ0hlbHZldGljYSBOZXVlJyxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjU0IiBsZXR0ZXItc3BhY2luZz0iNiIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjIiIHBhaW50LW9yZGVyPSJzdHJva2UiPjx0ZXh0UGF0aCBocmVmPSIjYXJjVG9wIiBzdGFydE9mZnNldD0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NQU5IVU5UPC90ZXh0UGF0aD48L3RleHQ+PGc+PHBhdGggZD0iTSAxMjAgNDIwIEwgMzkyIDQyMCBMIDM4MCA0NDggTCAzOTIgNDc2IEwgMTIwIDQ3NiBMIDEzMiA0NDggWiIgZmlsbD0iI2Y1YjkxNiIgc3Ryb2tlPSIjMGIxMjE5IiBzdHJva2Utd2lkdGg9IjQiLz48dGV4dCB4PSIyNTYiIHk9IjQ2MSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsJ0hlbHZldGljYSBOZXVlJyxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjM0IiBsZXR0ZXItc3BhY2luZz0iOCIgZmlsbD0iIzBiMTIxOSI+TkVVSEVJTTwvdGV4dD48L2c+PC9zdmc+IA==';
 const CENTER = [47.2019, 8.5805]; // Neuheim ZG
 const COLORS = ['#e6194b','#3cb44b','#4363d8','#f58231','#911eb4','#14b8c4','#f032e6','#9ccc00'];
 const COLOR_NAMES = ['Rot','Grün','Blau','Orange','Violett','Türkis','Pink','Hellgrün'];
 const DEFAULT_SETTINGS = {
-  roundMin:30, headStartMin:0, secondPingMin:5, pingEveryMin:5, holdSec:30,
+  roundMin:30, headStartMin:0, secondPingMin:5, pingEveryMin:5, holdSec:0,
+  missionPts:10, missionRadius:20, missionFromMin:5, endPhaseMin:10, endPingSec:120, autoQuestions:3, photoSec:300,
   freezeRadius:30, unfreezeRadius:50,
-  ppm:1, surviveBonus:10, catchPts:15, firstCatchBonus:5,
+  ppm:1, surviveBonus:10, catchPts:20, firstCatchBonus:5,
   groupRadius:50, groupMin:1, groupPenaltyMin:1, dqGraceSec:20,
   challengePenalty:5, inactiveMin:2, fakeDist:200, answerSec:120, revealShowMin:5, countdownSec:60,
-  speedhuntMax:1, speedhuntPings:3, speedhuntMin:4, speedSurvivePts:10, speedFailPenalty:5,
+  speedhuntMax:1, speedhuntPings:3, speedhuntMin:4, speedSurvivePts:10, speedFailPenalty:10,
   hiderJokers:{reveal:1, invisible:1, fake:1},
   questionIdeas:['Seid ihr näher als 200 m bei der Kirche?','Seid ihr auf dem Schulareal?','Seid ihr nördlich vom Dorfplatz?','Seht ihr gerade eine Strasse?','Seid ihr in der Nähe von Wasser?','Seid ihr näher als 300 m bei uns?'],
-  photoChallenges:['Fotografiert einen Teil der Kirche','Zeigt uns eine Grünfläche','Fotografiert ein Stoppschild','Fotografiert einen Brunnen','Fotografiert ein Strassenschild mit Namen']
+  photoChallenges:['Legt 5 verschiedene Blätter nebeneinander auf den Boden','Baut aus Ästen oder Steinen den Buchstaben M','Etwas Rotes, etwas Gelbes und etwas Blaues in einem Bild','Etwas, das mit «K» beginnt – ohne Schrift im Bild','Eure Schuhe gespiegelt in einer Pfütze oder auf nassem Boden','Etwas Kreisrundes (Deckel, Rad, Uhr …)']
 };
 const SETTINGS_FIELDS = [
   ['roundMin','Rundendauer (Min.)'],['headStartMin','Jäger warten nach dem Start (Min.)'],['secondPingMin','2. Ping nach dem Start-Ping (Min.)'],['pingEveryMin','Ping-Intervall danach (Min.)'],
@@ -230,8 +240,9 @@ const JH = {
   fake:{icon:'🎭',name:'Fake-Ping',desc:s=>`Nächster Ping ca. ${s.fakeDist} m daneben`}
 };
 const JF = {
-  question:{icon:'❓',name:'Frage',desc:s=>'Ja/Nein-Frage an ein Team'},
-  photo:{icon:'📸',name:'Foto-Challenge',desc:s=>'Team muss ein bestimmtes Foto schicken'}
+  radar:{icon:'📡',name:'Radar',desc:s=>'Ist ein Team in einem Kreis?'},
+  direction:{icon:'🧭',name:'Richtung',desc:s=>'Wo ist ein Team von euch aus?'},
+  photo:{icon:'📸',name:'Foto-Challenge',desc:s=>'Team muss eine Aufgabe fotografieren'}
 };
 const JS={speedhunt:{icon:'⚡',name:'Speedhunt',desc:s=>''}};
 const tnum=id=>{const o=teams()[id];return o&&o.code?'Nr. '+o.code:'Nr. ?';};
@@ -420,11 +431,13 @@ function engineTick(){
     if(!R.started){up['round/started']=true;const sp=R.secondPingMin??s.secondPingMin,hw=Math.round((R.huntStartAt-R.startAt)/60000);
       noteRole(up,'hider',`🚩 Das Spiel geht los! Lass dich nicht erwischen! Der Start-Ping ist gesetzt – der nächste kommt in ${sp} Min.`);
       noteRole(up,'hunter',hw>0?`🚩 Los geht's! Ihr startet in ${hw} Min. – der Start-Ping kommt jetzt.`:`🚩 Los geht's! Der Start-Ping ist auf der Karte. Viel Erfolg bei der Jagd!`);}
+    phaseTick(up,t,s,R);
+    trackTick(up,t,R);
     let act=0;
     for(const [id,tm] of Object.entries(G.teams)){
       if(tm.role==='hider'&&!tm.caught){
         act++;
-        if(tm.nextPingAt&&t>=tm.nextPingAt){const k=autoPing(up,id,tm,tm.firstPing?'start':'auto');const gap=tm.firstPing?(R.secondPingMin??s.secondPingMin):s.pingEveryMin;up[`teams/${id}/nextPingAt`]=t+(k==='nosignal'?30000:gap*60000);if(k!=='nosignal')up[`teams/${id}/firstPing`]=null;}
+        if(tm.nextPingAt&&t>=tm.nextPingAt){const k=autoPing(up,id,tm,tm.firstPing?'start':'auto');const gap=tm.firstPing?(R.secondPingMin??s.secondPingMin):s.pingEveryMin;const gms=inEnd(R,s,t)&&!tm.firstPing?s.endPingSec*1000:gap*60000;up[`teams/${id}/nextPingAt`]=t+(k==='nosignal'?30000:gms);if(k!=='nosignal')up[`teams/${id}/firstPing`]=null;}
       }
       if(tm.role==='hider'||tm.role==='hunter'){ // Spielzone: Disqualifikation
         const p=latestPos(id);
@@ -492,7 +505,7 @@ function challengeCheck(up,t,s){
   const R=R_();
   for(const [coll,done,label] of [['questions','answer','Frage'],['photos','img','Foto-Challenge']])
     for(const [k,q] of Object.entries(G[coll]||{})){
-      if(q.round!==R.n||q[done]||q.penalized||t-q.t<=s.answerSec*1000)continue;
+      if(q.round!==R.n||q[done]||q.penalized||t-q.t<=(coll==='photos'?s.photoSec:s.answerSec)*1000)continue;
       up[`${coll}/${k}/penalized`]=true;const o=teams()[q.to];if(!o)continue;
       up[`teams/${q.to}/score`]=(o.score||0)-s.challengePenalty;
       ev(up,`⏰ ${o.name}: ${label} nicht erfüllt – −${s.challengePenalty} Punkte`,'lead');
@@ -508,6 +521,32 @@ function inactiveCheck(up,t,s,R){
     else if(!ina&&o.inactiveAt)up[`teams/${id}/inactiveAt`]=null;
   }
 }
+function phaseTick(up,t,s,R){
+  if(missionOpen(R,s,t)&&!R.mNote){up['round/mNote']=true;
+    noteRole(up,'hider',`⭐ Die Missionsorte sind jetzt auf der Karte! Erreicht EINEN davon für +${s.missionPts} Punkte – aber bei der Ankunft werdet ihr angepingt.`);
+    noteRole(up,'hunter',`⭐ Die Missionsorte sind sichtbar. Wer einen erreicht, wird automatisch angepingt.`);}
+  if(missionOpen(R,s,t)){const ms=Object.values(G.missions||{});
+    for(const [id,o] of activeHiders()){if(o.missionDone)continue;const p=latestPos(id);if(!p||t-p.t>60000)continue;
+      const m=ms.find(m=>dist(p,m)<=s.missionRadius);if(!m)continue;
+      up[`teams/${id}/missionDone`]=m.name||'Mission';up[`teams/${id}/score`]=(o.score||0)+s.missionPts;pushPing(up,id,p,'mission');
+      ev(up,`⭐ ${o.name} (${tnum(id)}) hat die Mission «${m.name}» erfüllt (+${s.missionPts})`,'all');
+      note(up,id,`⭐ Mission erfüllt! +${s.missionPts} Punkte – aber die Jäger haben euch gerade angepingt. Lauft!`);
+      noteRole(up,'hunter',`⭐ ${tnum(id)} hat eine Mission erfüllt – frischer Ping auf der Karte!`);}}
+  if(inEnd(R,s,t)&&!R.endNote){up['round/endNote']=true;
+    for(const [id,o] of activeHiders()){up[`teams/${id}/nextPingAt`]=t;
+      if(o.skipNext){up[`teams/${id}/skipNext`]=null;up[`teams/${id}/jokers/invisible`]=((o.jokers||{}).invisible||0)+1;}
+      if(o.fakeNext){up[`teams/${id}/fakeNext`]=null;up[`teams/${id}/jokers/fake`]=((o.jokers||{}).fake||0)+1;}}
+    noteRole(up,'hider',`⏰ SCHLUSSPHASE! Jetzt alle ${Math.round(s.endPingSec/60*10)/10} Min. ein Ping. Unsichtbar & Fake-Ping sind gesperrt.`);
+    noteRole(up,'hunter',`⏰ SCHLUSSPHASE! Jetzt alle ${Math.round(s.endPingSec/60*10)/10} Min. ein Ping von allen Teams.`);
+    ev(up,'⏰ Schlussphase beginnt','all');}
+}
+const TRK={},TRKT={sample:0,flush:0};
+function trkLoad(n){if(TRK[n])return;TRK[n]={};const g=((G.tracks||{})[n])||{};for(const [id,s] of Object.entries(g))if(id!=='info'&&typeof s==='string')TRK[n][id]=s?s.split(';'):[];}
+function trackTick(up,t,R){if(t<R.startAt)return;trkLoad(R.n);const B=TRK[R.n];
+  if(t-TRKT.sample>=15000){TRKT.sample=t;for(const [id,o] of Object.entries(teams())){if(!(o.role==='hider'||o.role==='hunter'))continue;const p=latestPos(id);if(!p||t-p.t>60000)continue;
+    (B[id]=B[id]||[]).push(Math.round((t-R.startAt)/1000)+','+p.lat.toFixed(5)+','+p.lng.toFixed(5));}}
+  if(t-TRKT.flush>=60000){TRKT.flush=t;flushTracks(up,R);}}
+function flushTracks(up,R){const B=TRK[R.n];if(!B)return;for(const [id,a] of Object.entries(B))up[`tracks/${R.n}/${id}`]=a.join(';');}
 function speedTick(up,t,s){
   const sp=R_().speed;if(!sp)return;const tg=teams()[sp.target];
   if(!tg||tg.role!=='hider'||tg.caught){up['round/speed']=null;return;}
@@ -556,6 +595,7 @@ function endRound(up){
     :`🏆 ${names.length===1?names[0]+' hat':names.slice(0,-1).join(', ')+' und '+names[names.length-1]+' haben'} überlebt! Bitte alle zurück zum Treffpunkt.`;
   up['round/result']=msg;
   for(const id of Object.keys(G.teams))up[`notes/${id}/${store.pushKey()}`]={t:now(),text:msg,lead:true};
+  flushTracks(up,R);up[`tracks/${R.n}/info/end`]=now();
   up.groups=null;up['round/status']='ended';up['round/endedAt']=now();ev(up,`🏁 Runde ${R.n} ist beendet.`,'all');
 }
 function catchUpdates(up,k,c,isNew){
@@ -608,6 +648,9 @@ function sendPos(force){if(!lastFix||!MY_TEAM||!store||DEMO)return;const t=now()
 async function requestWake(){try{if('wakeLock' in navigator&&(!wake||wake.released))wake=await navigator.wakeLock.request('screen');}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&VIEW)requestWake();});
 function myPos(){if(DEMO)return latestPos(MY_TEAM);return lastFix||latestPos(MY_TEAM);}
+function missionOpen(R,s,t){return R.status==='running'&&Object.keys((G&&G.missions)||{}).length>0&&t>=R.startAt+s.missionFromMin*60000&&t<R.endAt-s.endPhaseMin*60000;}
+function inEnd(R,s,t){return R.status==='running'&&t>=R.startAt&&t>=R.endAt-s.endPhaseMin*60000;}
+const DIRS=['nördlich','nordöstlich','östlich','südöstlich','südlich','südwestlich','westlich','nordwestlich'];
 function myGroups(id){return Object.values((G&&G.groups)||{}).filter(g=>g&&(g.a===id||g.b===id));}
 function hunterPositions(){const t=now();return Object.entries(teams()).filter(([id,o])=>o.role==='hunter'&&id!==MY_TEAM).map(([id])=>latestPos(id)).filter(p=>p&&t-p.t<60000);}
 
@@ -629,8 +672,11 @@ function renderPlayer(){
     if(me){if(me.acc>8)L.circle([me.lat,me.lng],{radius:me.acc,color:'#4aa8ff',weight:1,fillOpacity:.07,interactive:false}).addTo(PM.d);L.circleMarker([me.lat,me.lng],{radius:10,color:'#fff',weight:3,fillColor:'#4aa8ff',fillOpacity:1,interactive:false}).addTo(PM.d);if(!PM.centered){PM.m.setView([me.lat,me.lng],17);PM.centered=true;}}
     if(hunter){if(R.speed)drawPings(PM,(id,p)=>id===R.speed.target&&p.kind==='speed',false,true,true,null,true);else drawPings(PM,id=>{const o=teams()[id];return o&&o.role==='hider'&&!o.caught&&(!TRACK||TRACK===id);},false,true,true);
       for(const [id,o] of Object.entries(teams()))if(id!==MY_TEAM&&o.role==='hunter'){const p=latestPos(id);if(p&&t-p.t<120000)L.circleMarker([p.lat,p.lng],{radius:6,color:'#fff',weight:2,fillColor:'#4aa8ff',fillOpacity:1,interactive:false}).addTo(PM.d);}
-      liveMarkers(PM);}
+      liveMarkers(PM);if(missionOpen(R,s,t))drawMissions(PM);
+      for(const q of Object.values(G.qres||{}))if(q.round===R.n&&q.kind==='radar'&&q.c){L.circle([q.c.lat,q.c.lng],{radius:q.c.r,color:q.inside?'#2fd27a':'#8ea0b4',weight:2,fillOpacity:q.inside?.12:.04,interactive:false}).addTo(PM.d);
+        L.circleMarker([q.c.lat,q.c.lng],{radius:3,color:'#fff',fillOpacity:1,interactive:false}).bindTooltip(`📡 ${tnum(q.target)} ${q.inside?'drin':'nicht drin'}`,{permanent:true,direction:'bottom',className:'pinglabel'}).addTo(PM.d);}}
     if(hider){drawPings(PM,(id,p)=>id===MY_TEAM&&p.kind!=='speed',false,true,true,'Euer Ping');
+      if(missionOpen(R,s,t))drawMissions(PM);
       const rv=tm.reveal;if(rv&&t-rv.t<s.revealShowMin*60000)for(const [id,q] of Object.entries(rv.pts||{})){const o=teams()[id];if(o)teamDot(q,o,'🎯 Jäger',8).addTo(PM.d);}}
   }
   {const cb=document.getElementById('circBtn');if(cb)cb.parentElement.style.display=hunter?'':'none';if(!hunter&&CIRC.placing){CIRC.placing=false;}}
@@ -657,13 +703,20 @@ function renderPlayer(){
     if(t<R.huntStartAt)h+=`<div class="card" style="border-color:var(--green)"><div class="mut">Lauft los und versteckt euch!</div><div class="big">📍 ${cd(tm.nextPingAt||t)}</div><div class="mut">bis zum nächsten Ping · Jäger starten in ${cd(R.huntStartAt)}</div></div>`;
     else h+=`<div class="card" style="border-color:var(--green)"><div class="mut">Nächster Ping in</div><div class="big">📍 ${cd(tm.nextPingAt||t)}</div>
       ${R.speed?`<div style="color:var(--red);font-weight:800">⚡ SPEEDHUNT läuft! Pings bisher: ${R.speed.used||0} · endet in ${cd(R.speed.endAt)}</div>`:''}${tm.skipNext?'<div>👻 Nächster Ping ist unsichtbar</div>':''}${tm.fakeNext?'<div>🎭 Nächster Ping ist gefälscht</div>':''}${tm.reveal&&t-tm.reveal.t<s.revealShowMin*60000?`<div>🔭 Jäger-Standorte sichtbar: noch ${cd(tm.reveal.t+s.revealShowMin*60000)}</div>`:''}</div>`;
+    if(inEnd(R,s,t))h+=`<div class="card" style="border-color:var(--red)"><b>⏰ Schlussphase</b> – alle ${fmt(s.endPingSec*1000)} Min. ein Ping. Durchhalten!</div>`;
+    else if(Object.keys(G.missions||{}).length){
+      if(tm.missionDone)h+=`<div class="card" style="border-color:var(--acc)">⭐ Mission erfüllt: <b>${esc(tm.missionDone)}</b> (+${s.missionPts})</div>`;
+      else if(missionOpen(R,s,t))h+=`<div class="card" style="border-color:var(--acc)"><b>⭐ Mission:</b> Erreicht einen ⭐-Ort auf der Karte für <b>+${s.missionPts}</b>. Achtung: Bei der Ankunft werdet ihr angepingt! <span class="mut">Offen noch ${cd(R.endAt-s.endPhaseMin*60000)}</span></div>`;
+      else if(t<R.startAt+s.missionFromMin*60000)h+=`<div class="card mut">⭐ Missionsorte erscheinen in ${cd(R.startAt+s.missionFromMin*60000)}</div>`;}
     h+=prHtml;
-    h+=`<div class="card"><b>🃏 Eure Joker</b><div class="jokers" style="margin-top:8px">${Object.entries(JH).map(([k,j])=>{const n=(tm.jokers||{})[k]||0;return `<button class="joker" ${n>0&&!(pr&&k==='reveal')?'':'disabled'} onclick="askHiderJoker('${k}')"><b>${j.icon} ${j.name}</b><span>${n>0?esc(j.desc(s)):'✓ eingesetzt'}</span></button>`;}).join('')}</div><p class="mut" style="margin:8px 0 0">Jeder Joker 1× pro Runde. 🔭 braucht die Freigabe der Spielleitung.</p></div>`;
+    h+=`<div class="card"><b>🃏 Eure Joker</b><div class="jokers" style="margin-top:8px">${Object.entries(JH).map(([k,j])=>{const n=(tm.jokers||{})[k]||0;const lock=(k==='invisible'||k==='fake')&&inEnd(R,s,t);return `<button class="joker" ${n>0&&!lock&&!(pr&&k==='reveal')?'':'disabled'} onclick="askHiderJoker('${k}')"><b>${j.icon} ${j.name}</b><span>${lock?'🔒 Schlussphase':n>0?esc(j.desc(s)):'✓ eingesetzt'}</span></button>`;}).join('')}</div><p class="mut" style="margin:8px 0 0">Jeder Joker 1× pro Runde. 🔭 braucht die Freigabe der Spielleitung.</p></div>`;
     h+=`<button class="wide sm" onclick="selfCaught()">🙋 Wir wurden gefangen</button>`;
   }else if(hunter){
     const hunt=t>=R.huntStartAt,act=activeHiders();
     const nx=act.map(([id,o])=>o.nextPingAt||0).filter(x=>x>t).sort((a,b)=>a-b)[0];
     if(nx)h+=`<div class="card" style="border-color:var(--red)"><div class="mut">Nächster Ping in</div><div class="big">📍 ${cd(nx)}</div>${R.speed?`<div style="color:var(--red);font-weight:800;margin-top:4px">⚡ Speedhunt läuft – ihr seht nur die Pings von ${tnum(R.speed.target)}</div>`:''}</div>`;
+    if(inEnd(R,s,t))h+=`<div class="card" style="border-color:var(--red)"><b>⏰ Schlussphase</b> – alle ${fmt(s.endPingSec*1000)} Min. ein Ping von allen Teams.</div>`;
+    else if(missionOpen(R,s,t))h+=`<div class="card mut">⭐ Missionen laufen: Wer einen ⭐-Ort erreicht, wird automatisch gepingt.</div>`;
     if(!hunt)h+=`<div class="card" style="border-color:var(--red)"><div class="mut">Startphase – bleibt am Startpunkt!</div><div class="big">⏳ Jagd beginnt in ${cd(R.huntStartAt)}</div></div>`;
     if(TRACK&&!act.some(([id])=>id===TRACK))TRACK=null;
     h+=`<div class="card" style="border-color:var(--red)"><b>🎯 Gesuchte Teams (${act.length})</b>
@@ -675,9 +728,9 @@ function renderPlayer(){
     const sl=R.speedLeft||0,sp=R.speed,used=tm.used||{},can=hunt&&act.length&&!pr;
     h+=`<div class="card"><b>🃏 Joker</b> <span class="mut">· jeder 1× pro Runde</span>
       ${sp?`<div style="margin:8px 0 0;padding:10px;border-radius:10px;background:rgba(255,77,94,.12)"><b style="color:var(--red)">⚡ Speedhunt auf ${tnum(sp.target)}</b> · Pings: ${sp.used||0} · endet in ${cd(sp.endAt)}<button class="red wide" ${sp.left>0?'':'disabled'} onclick="speedPing()">📍 Ping jetzt auslösen (noch ${sp.left})</button></div>`:''}
-      <div class="jokers" style="margin-top:8px;grid-template-columns:repeat(3,minmax(0,1fr))">
+      <div class="jokers" style="margin-top:8px">
         <button class="joker" ${can&&sl>0&&!sp?'':'disabled'} onclick="askSpeedhunt()"><b>⚡ Speedhunt</b><span>${sl>0?'Anfrage an Spielleitung':'✓ eingesetzt'}</span></button>
-        ${Object.entries(JF).map(([k,j])=>`<button class="joker" ${can&&!used[k]?'':'disabled'} onclick="askHunterJoker('${k}')"><b>${j.icon} ${j.name}</b><span>${used[k]?'✓ eingesetzt':esc(j.desc(s))}</span></button>`).join('')}
+        ${Object.entries(JF).map(([k,j])=>{const ql=R.questionsLeft??s.autoQuestions,isQ=k!=='photo',ok=isQ?ql>0:!used[k];return `<button class="joker" ${can&&ok?'':'disabled'} onclick="askHunterJoker('${k}')"><b>${j.icon} ${j.name}</b><span>${isQ?(ql>0?`${esc(j.desc(s))} · noch ${ql}`:'✓ keine Fragen mehr'):used[k]?'✓ eingesetzt':esc(j.desc(s))}</span></button>`;}).join('')}
       </div></div>`;
     h+=hunterResults();
     const mine=Object.values(G.catches||{}).filter(c=>c.hunter===MY_TEAM&&c.round===R.n&&c.status==='pending');
@@ -690,10 +743,12 @@ function hunterResults(){
   const R=R_(),t=now(),s=S();
   const qs=Object.entries(G.questions||{}).filter(([k,q])=>q.round===R.n).map(([k,q])=>({k,...q,kind:'q'}));
   const ps=Object.entries(G.photos||{}).filter(([k,p])=>p.round===R.n).map(([k,p])=>({k,...p,kind:'p'}));
-  const all=[...qs,...ps].sort((a,b)=>b.t-a.t);if(!all.length)return '';
+  const qr=Object.values(G.qres||{}).filter(q=>q.round===R.n).map(q=>({...q,kind:'r'}));
+  const all=[...qs,...ps,...qr].sort((a,b)=>b.t-a.t);if(!all.length)return '';
   return `<div class="card feed"><b>📨 Antworten</b>${all.map(x=>{const to=tnum(x.to);const exp=t-x.t>s.answerSec*1000;
+    if(x.kind==='r')return `<div>${esc(x.text)}</div>`;
     if(x.kind==='q')return `<div>❓ ${to}: «${esc(x.text)}» → ${x.answer?(x.answer==='ja'?'<b style="color:var(--green)">✅ JA</b>':'<b style="color:var(--red)">❌ NEIN</b>'):exp?'⏰ keine Antwort':`⏳ ${cd(x.t+s.answerSec*1000)}`}</div>`;
-    return `<div>📸 ${to}: «${esc(x.task||'Foto')}» → ${x.img?`<button class="sm" onclick="showPhoto('${x.k}')">Ansehen</button>`:exp?'⏰ kein Foto':`⏳ ${cd(x.t+s.answerSec*1000)}`}</div>`;}).join('')}</div>`;
+    const pexp=t-x.t>s.photoSec*1000;return `<div>📸 ${to}: «${esc(x.task||'Foto')}» → ${x.img?`<button class="sm" onclick="showPhoto('${x.k}')">Ansehen</button>`:pexp?'⏰ kein Foto':`⏳ ${cd(x.t+s.photoSec*1000)}`}</div>`;}).join('')}</div>`;
 }
 const imgCache={};
 const audioCache={};
@@ -730,7 +785,7 @@ function playerOverlays(){
   }else proxFrozen=false;
   showBn('bnFreeze',fz);
   let hold='';
-  if(hider){const lp=lastPing(MY_TEAM);if(lp&&['auto','instant'].includes(lp.kind)){const left=lp.t+s.holdSec*1000-t;if(left>0)hold=`📍 Ihr wurdet angepingt! Bleibt noch ${Math.ceil(left/1000)} Sek. stehen.`;const key=lp.t+'';if(seenPingKey!==key){if(seenPingKey!==null&&left>0)alertFx([200,100,200],2);seenPingKey=key;}}}
+  // (Stehregel nach Pings entfernt)
   showBn('bnHold',hold);
   let gb='';const gEl=$('#bnGroup');
   if(hider){const gs=myGroups(MY_TEAM);
@@ -753,7 +808,7 @@ function askHiderJoker(k){const j=JH[k];showUI(`<h3>${j.icon} ${j.name}</h3><p>$
 function useHiderJoker(k){
   const tm=myTeam();if(!tm||!running()||!((tm.jokers||{})[k]>0)){closeUI();return;}
   if(k==='reveal'){requestJoker(k);return;}
-  closeUI();const up={};if(applyJoker(up,{team:MY_TEAM,kind:k})){store.update(up);toast(`${JH[k].icon} ${JH[k].name} aktiviert`);}else toast('Joker nicht möglich');}
+  closeUI();const up={};if(applyJoker(up,{team:MY_TEAM,kind:k})){store.update(up);toast(`${JH[k].icon} ${JH[k].name} aktiviert`);}else toast(inEnd(R_(),S(),now())?'🔒 In der Schlussphase gesperrt':'Joker nicht möglich');}
 function _oldUseHiderJoker(k){
   const tm=myTeam(),s=S(),t=now();closeUI();if(!tm||!running()||!((tm.jokers||{})[k]>0))return;
   const T=`teams/${MY_TEAM}/`,up={};up[T+'jokers/'+k]=tm.jokers[k]-1;
@@ -775,6 +830,7 @@ function applyJoker(up,r){
   const tm=teams()[r.team],t=now(),s=S(),R=R_(),T=`teams/${r.team}/`,j=jinfo(r.kind);if(!tm||!running())return false;
   if(JH[r.kind]){
     if(tm.role!=='hider'||tm.caught||!((tm.jokers||{})[r.kind]>0))return false;
+    if((r.kind==='invisible'||r.kind==='fake')&&inEnd(R,s,t))return false;
     up[T+'jokers/'+r.kind]=tm.jokers[r.kind]-1;
     if(r.kind==='invisible')up[T+'skipNext']=true;
     if(r.kind==='fake')up[T+'fakeNext']=true;
@@ -789,6 +845,17 @@ function applyJoker(up,r){
     ev(up,`⚡ SPEEDHUNT! ${tm.name} jagt ${tg.name} (${tnum(r.target)}) – ${s.speedhuntMin} Min., erster Ping gesetzt.`,'all');
     noteRole(up,'hunter',`⚡ Speedhunt auf ${tnum(r.target)} läuft! Der erste Ping ist auf der Karte. Ihr könnt in den nächsten ${s.speedhuntMin} Min. noch ${s.speedhuntPings} Pings auslösen.`,r.team);
     return true;}
+  if(r.kind==='radar'||r.kind==='direction'){
+    const ql=R.questionsLeft??s.autoQuestions;if(ql<1)return false;
+    const p=latestPos(r.target);if(!p||t-p.t>120000){r._err='nosignal';return false;}
+    let ans,extra={};
+    if(r.kind==='radar'){const c=r.circle;if(!c||!(c.r>0))return false;const inside=dist(p,c)<=c.r;ans=`📡 Radar: ${tnum(r.target)} ist ${inside?'INNERHALB':'AUSSERHALB'} des ${fmtDist(c.r)}-Kreises.`;extra={c,inside};}
+    else{const me=latestPos(r.team);if(!me){r._err='nome';return false;}ans=`🧭 ${tnum(r.target)} ist ${DIRS[Math.round(bearing(me,p)/45)%8]} von ${esc(tm.name)} (ca. ${fmtDist(Math.round(dist(me,p)/50)*50)}).`;}
+    up['round/questionsLeft']=ql-1;
+    up['qres/'+store.pushKey()]={kind:r.kind,team:r.team,target:r.target,t,round:R.n,text:ans,...extra};
+    for(const [id,o] of Object.entries(teams()))if(o.role==='hunter')up[`notes/${id}/${store.pushKey()}`]={t,text:ans,keep:true};
+    note(up,r.target,`${r.kind==='radar'?'📡':'🧭'} Die Jäger haben eine ${r.kind==='radar'?'Radar':'Richtungs'}-Frage über euch gestellt.`);
+    ev(up,`${ans} (gefragt von ${tm.name})`,'lead');return true;}
   if(r.kind==='question'||r.kind==='photo'){
     if((tm.used||{})[r.kind])return false;up[T+'used/'+r.kind]=true;
     if(r.kind==='question'){up['questions/'+store.pushKey()]={from:r.team,to:r.target,text:r.text||'',t,round:R.n};ev(up,`❓ ${tm.name} stellt ${tg.name} eine Frage`,'lead');}
@@ -807,18 +874,22 @@ function pickTeamUI(title,list,fn){showUI(`<h3>${title}</h3>${list.map(([id,o])=
 let pendingJoker=null;
 function pickCodeUI(title,fn){const l=hiderListByCode();showUI(`<h3>${title}</h3>${l.map(([id])=>`<button class="wide" style="text-align:left" onclick="${fn}('${id}')">📍 ${tnum(id)}</button>`).join('')||'<p class="mut">Keine Teams verfügbar.</p>'}<button class="wide" onclick="closeUI()">Abbrechen</button>`);}
 function askHunterJoker(k){pendingJoker=k;const j=JF[k];pickCodeUI(`${j.icon} ${j.name} – welche Nummer?`,'hunterJokerTarget');}
+let PHOTO3=[];
 function hunterJokerTarget(id){
-  if(pendingJoker==='photo'){qTarget=id;const pc=S().photoChallenges;showUI(`<h3>📸 Foto-Challenge an ${tnum(id)}</h3><p class="mut">Wähle eine Challenge:</p>${pc.map((c,i)=>`<button class="wide" style="text-align:left" onclick="doHunterJoker('photo',qTarget,S().photoChallenges[${i}])">${esc(c)}</button>`).join('')}<button class="wide" onclick="closeUI()">Abbrechen</button>`);return;}
-  if(pendingJoker==='question'){qTarget=id;const qs=S().questionIdeas;showUI(`<h3>❓ Frage an ${tnum(id)}</h3><p class="mut">Wähle eine Frage:</p>${qs.map((q,i)=>`<button class="wide" style="text-align:left" onclick="doHunterJoker('question',qTarget,S().questionIdeas[${i}])">${esc(q)}</button>`).join('')}
-    <details style="margin-top:10px"><summary class="mut">✏️ Eigene Ja/Nein-Frage schreiben</summary><textarea id="qtext" rows="2" placeholder="Seid ihr …?" style="margin-top:6px"></textarea><button class="pri wide" onclick="sendQuestion()">Senden</button></details>
-    <button class="wide" onclick="closeUI()">Abbrechen</button>`);return;}
+  qTarget=id;
+  if(pendingJoker==='photo'){const pc=S().photoChallenges.slice();for(let i=pc.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pc[i],pc[j]]=[pc[j],pc[i]];}PHOTO3=pc.slice(0,3);
+    showUI(`<h3>📸 Foto-Challenge an ${tnum(id)}</h3><p class="mut">Wählt eine der drei Aufgaben (${Math.round(S().photoSec/60)} Min. Zeit):</p>${PHOTO3.map((c,i)=>`<button class="wide" style="text-align:left" onclick="doHunterJoker('photo',qTarget,PHOTO3[${i}])">${esc(c)}</button>`).join('')}<button class="wide" onclick="closeUI()">Abbrechen</button>`);return;}
+  if(pendingJoker==='radar'){const cl=CIRC.list;
+    showUI(`<h3>📡 Radar: Ist ${tnum(id)} im Kreis?</h3>${cl.length?`<p class="mut">Einen eurer ⭕-Kreise wählen:</p>${cl.map((c,i)=>`<button class="wide" style="text-align:left" onclick="doRadar(${i})">⭕ Kreis ${i+1} · ${fmtDist(c.r)}</button>`).join('')}`:'<p class="mut">Tipp: Mit ⭕ auf der Karte könnt ihr einen Kreis um einen beliebigen Ort setzen (z.B. die Kirche).</p>'}
+      <p class="mut" style="margin-top:10px">Oder Kreis um euren eigenen Standort:</p><div class="chips">${[100,200,300,500].map(r=>`<button onclick="doRadar(-1,${r})">${r} m</button>`).join('')}</div><button class="wide" onclick="closeUI()">Abbrechen</button>`);return;}
   doHunterJoker(pendingJoker,id,null);
 }
+function doRadar(i,r){let c;if(i>=0)c={...CIRC.list[i]};else{const me=myPos();if(!me){toast('Euer Standort fehlt');return;}c={lat:me.lat,lng:me.lng,r};}doHunterJoker('radar',qTarget,null,c);}
 let qTarget=null;
 function sendQuestion(){const txt=($('#qtext')?.value||'').trim();if(!txt){toast('Bitte eine Frage eingeben');return;}doHunterJoker('question',qTarget,txt);}
-function doHunterJoker(k,target,text){
-  closeUI();const tm=myTeam();if(!tm||(tm.used||{})[k]){toast('Schon eingesetzt');return;}
-  const up={};if(applyJoker(up,{team:MY_TEAM,kind:k,target,text})){store.update(up);toast(`${JF[k].icon} ${JF[k].name} gesendet`);}else toast('Joker nicht möglich');}
+function doHunterJoker(k,target,text,circle){
+  closeUI();const tm=myTeam();if(!tm||(k==='photo'&&(tm.used||{})[k])){toast('Schon eingesetzt');return;}
+  const r={team:MY_TEAM,kind:k,target,text,circle},up={};if(applyJoker(up,r)){store.update(up);toast(`${JF[k].icon} ${JF[k].name} gesendet`);}else toast(r._err==='nosignal'?'📵 Das Team hat gerade kein GPS-Signal – Frage nicht verbraucht':r._err==='nome'?'Euer Standort fehlt':'Joker nicht möglich');}
 function _oldDoHunterJoker(k,target,text){
   const tm=myTeam(),tg=teams()[target],t=now(),s=S();closeUI();
   if(!tm||!tg||(tm.credits||0)<1){toast('Kein Joker-Guthaben');return;}
@@ -889,8 +960,8 @@ function pendingModal(){
     return {key:'c'+k,html:`<div class="big">🙌 Gefangen?</div><p>Die Jäger (<b>${esc(teams()[c.hunter]?.members||teams()[c.hunter]?.name)}</b>) melden, dass sie euch – <b>Nr. ${tm.code}</b> – gefangen haben. Stimmt das?</p><div class="row"><button class="red" onclick="rejectCatch('${k}')">Nein</button><button class="grn" onclick="confirmCatch('${k}')">Ja, stimmt</button></div><p class="mut">Ehrlich bleiben – bei Unklarheit entscheidet die Lehrperson.</p>`};
   for(const [k,q] of Object.entries(G.questions||{}))if(q.to===MY_TEAM&&!q.answer&&q.round===R_().n&&t-q.t<s.answerSec*1000)
     return {key:'q'+k,html:`<div class="big">❓ Frage der Jäger</div><p style="font-size:19px;font-weight:700">«${esc(q.text)}»</p><p class="mut">Ehrlich antworten! Zeit: ${cd(q.t+s.answerSec*1000)}</p><div class="row"><button class="grn" onclick="answerQ('${k}','ja')">✅ Ja</button><button class="red" onclick="answerQ('${k}','nein')">❌ Nein</button></div>`};
-  for(const [k,p] of Object.entries(G.photos||{}))if(p.to===MY_TEAM&&!p.img&&p.round===R_().n&&t-p.t<s.answerSec*1000)
-    return {key:'p'+k,html:`<div class="big">📸 Foto-Challenge</div><p style="font-size:19px;font-weight:700">«${esc(p.task||'Fotografiert eure Umgebung')}»</p><p class="mut">Keine Personen fotografieren. Nicht schummeln!</p><p class="mut">Zeit: ${cd(p.t+s.answerSec*1000)}</p><label class="pri" style="display:block;text-align:center;background:var(--acc);color:#1a1200;padding:12px;border-radius:10px;font-weight:700">📷 Foto aufnehmen<input type="file" accept="image/*" capture="environment" style="display:none" onchange="sendPhoto('${k}',this)"></label>`};
+  for(const [k,p] of Object.entries(G.photos||{}))if(p.to===MY_TEAM&&!p.img&&p.round===R_().n&&t-p.t<s.photoSec*1000)
+    return {key:'p'+k,html:`<div class="big">📸 Foto-Challenge</div><p style="font-size:19px;font-weight:700">«${esc(p.task||'Fotografiert eure Umgebung')}»</p><p class="mut">Keine Personen fotografieren. Nicht schummeln!</p><p class="mut">Zeit: ${cd(p.t+s.photoSec*1000)}</p><label class="pri" style="display:block;text-align:center;background:var(--acc);color:#1a1200;padding:12px;border-radius:10px;font-weight:700">📷 Foto aufnehmen<input type="file" accept="image/*" capture="environment" style="display:none" onchange="sendPhoto('${k}',this)"></label>`};
   return null;
 }
 let inlineKey=null,inlineTimer=null;const JOIN_T=Date.now();
@@ -933,13 +1004,13 @@ function showLockInfo(){showUI(`<h3>📱 Wichtig vor dem Start</h3>
 function openLead(){
   document.body.appendChild($('#banners'));
   VIEW='lead';MY_TEAM=null;localStorage.setItem('mh_lead',CODE);showScreen('lead');
-  if(!LM){LM=mkMap('lmap');LM.m.on('click',e=>{if(DRAW){if(DRAW.sel!==null){DRAW.sel=null;}else DRAW.pts.push(rnd(e.latlng));drawSig=null;renderLead(true);}});}
+  if(!LM){LM=mkMap('lmap');LM.m.on('click',e=>{if(MPLACE){MPLACE=false;askMissionName(e.latlng);renderLead(true);return;}if(DRAW){if(DRAW.sel!==null){DRAW.sel=null;}else DRAW.pts.push(rnd(e.latlng));drawSig=null;renderLead(true);}});}
   LM.zsig=null;setTimeout(()=>LM.m.invalidateSize(),150);requestWake();loadTpl();leadTabSet(leadTab||'home');
 }
 function clearPanels(){['#lpanel','#p_req','#p_round','#p_teams','#p_rank','#p_feed','#p_msg','#lhead'].forEach(s=>{const e=$(s);if(e)e._h=null;});}
 function openSetup(t){leadTabSet(t||'zones');}
 function closeSetup(){leadTabSet('home');}
-function leadTabSet(t){if(t!=='zones'&&DRAW){DRAW=null;drawSig=null;if(LM)LM.zsig=null;}
+function leadTabSet(t){if(t!=='zones')MPLACE=false;if(t!=='zones'&&DRAW){DRAW=null;drawSig=null;if(LM)LM.zsig=null;}
   leadTab=t;SETUP=t!=='home';$('#lead').classList.toggle('setup',SETUP);$('#lead').classList.toggle('nomap',t==='teams'||t==='settings');
   document.querySelectorAll('#ltabs button[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
   clearPanels();renderLead(true);setTimeout(()=>LM&&LM.m.invalidateSize(),80);$('#lpanel').scrollTop=0;}
@@ -955,6 +1026,7 @@ function renderLead(force){
     for(const [id,o] of Object.entries(teams())){const p=latestPos(id);if(!p)continue;const old=t-p.t>60000;
       teamDot(p,o,`${running()?(o.role==='hunter'?'🎯':o.role==='out'?'❌':'🏃'):''}${running()&&o.role==='hider'&&!o.caught&&o.code?tnum(id)+' · ':''}${esc(o.members||o.name)}${old?' ⚠️':''}${exposed(id)?' 🔴LIVE':''}`,8).addTo(LM.d);}
     for(const g of Object.values(G.groups||{})){const a=latestPos(g.a),b=latestPos(g.b);if(a&&b)L.polyline([[a.lat,a.lng],[b.lat,b.lng]],{color:g.exposed?'#c00018':'#ff7a00',weight:4,dashArray:'6',interactive:false}).addTo(LM.d);}
+    drawMissions(LM);
     drawDraft();
   }
   // Ton bei neuen Anfragen
@@ -1023,7 +1095,7 @@ function leadRound(){
     <label>Jäger wählen (Zahl = wie oft schon Jäger)</label>
     ${tms.map(([id,o])=>`<div class="trow"><input type="checkbox" ${hunterSel.has(id)?'checked':''} onchange="toggleHunter('${id}',this.checked)" aria-label="${esc(o.name)} als Jäger"><span class="dot" style="background:${o.color}"></span><span class="nm">${esc(o.name)} <span class="mut">· ${o.hunterStarts||0}×</span></span></div>`).join('')}
     <div class="row"><div><label>Dauer (Min.)</label><input type="number" min="5" value="${rDur}" onchange="rDur=+this.value"></div><div><label>2. Ping nach (Min.)</label><input type="number" min="1" value="${rSecond}" onchange="rSecond=+this.value"></div><div><label>Jäger warten (Min.)</label><input type="number" min="0" value="${rHead}" onchange="rHead=+this.value"></div></div>
-    <button class="pri wide" onclick="startRound()">⏱ Countdown starten (${S().countdownSec} Sek.)</button><p class="mut" style="margin:6px 0 0">Alle versammeln sich am Aussetzungsort. Nach dem Countdown startet die Runde.</p></div>`;
+    <button class="pri wide" onclick="startRound()">⏱ Countdown starten (${S().countdownSec} Sek.)</button>${Object.keys(G.tracks||{}).length?`<div class="row" style="flex-wrap:wrap;margin-top:8px">${Object.keys(G.tracks).map(Number).filter(x=>x>0).sort((a,b)=>a-b).map(n=>`<button class="sm" style="flex:none" onclick="openReplay(${n})">🎬 Rückblick Runde ${n}</button>`).join('')}</div>`:''}<p class="mut" style="margin:6px 0 0">Alle versammeln sich am Aussetzungsort. Nach dem Countdown startet die Runde.</p></div>`;
 }
 function toggleHunter(id,on){if(on)hunterSel.add(id);else hunterSel.delete(id);}
 function startRound(){
@@ -1031,13 +1103,14 @@ function startRound(){
   if(!hs.length){toast('Mindestens ein Jäger-Team wählen');return;}
   if(hs.length>=Object.keys(tms).length){toast('Mindestens ein Team muss gejagt werden');return;}
   const sec=Math.max(1,+rSecond||s.secondPingMin),dur=Math.max(1,+rDur||s.roundMin),head=Math.max(0,+rHead||0),n=(R.n||0)+1,t0=t+Math.max(0,+s.countdownSec||0)*1000,hs0=t0+head*60000;
-  const up={round:{n,status:'running',startAt:t0,announcedAt:t,huntStartAt:hs0,endAt:t0+dur*60000,catches:0,speedLeft:s.speedhuntMax,secondPingMin:sec},groups:null,notes:null};
+  const up={round:{n,status:'running',startAt:t0,announcedAt:t,huntStartAt:hs0,endAt:t0+dur*60000,catches:0,speedLeft:s.speedhuntMax,secondPingMin:sec,questionsLeft:s.autoQuestions},groups:null,notes:null};
+  up[`tracks/${n}/info`]={start:t0,roles:Object.fromEntries(Object.keys(tms).map(id=>[id,hs.includes(id)?'hunter':'hider']))};
   const hid=Object.keys(tms).filter(id=>!hs.includes(id)),codes=hid.map((_,i)=>i+1).sort(()=>Math.random()-.5);
   for(const [id,o] of Object.entries(tms)){const T=`teams/${id}/`,isH=hs.includes(id);
     up[T+'code']=isH?null:codes[hid.indexOf(id)];
     up[T+'role']=isH?'hunter':'hider';up[T+'caught']=false;up[T+'caughtAt']=null;
     up[T+'credits']=null;up[T+'nextCreditAt']=null;up[T+'used']=null;up[T+'inactiveAt']=null;
-    up[T+'jokers']=isH?null:{...s.hiderJokers};up[T+'nextPingAt']=isH?null:t0;up[T+'firstPing']=isH?null:true;
+    up[T+'jokers']=isH?null:{...s.hiderJokers};up[T+'missionDone']=null;up[T+'nextPingAt']=isH?null:t0;up[T+'firstPing']=isH?null:true;
     up[T+'skipNext']=null;up[T+'fakeNext']=null;up[T+'shieldUntil']=null;up[T+'freezeUntil']=null;up[T+'lastZonePingAt']=null;up[T+'exposedUntil']=null;up[T+'outSince']=null;up[T+'dq']=null;up[T+'dqLost']=null;up[T+'dqPrevRole']=null;up[T+'reveal']=null;up[T+'scoreStart']=o.score||0;
     if(isH)up[T+'hunterStarts']=(o.hunterStarts||0)+1;}
   ev(up,`🚦 Runde ${n}: Countdown läuft – Start in ${s.countdownSec} Sek. Jäger: ${hs.map(id=>tms[id].name).join(', ')}.`,'all');
@@ -1079,13 +1152,47 @@ function leadZones(){
     <p class="mut" style="margin:6px 0 0">Alles ausserhalb des grünen Spielfelds gilt immer als verboten. Die rote Markierung macht das auf allen Karten sichtbar.</p></div>
     <div class="card"><b>⭐ Standard-Zonen</b><p class="mut" style="margin:6px 0 8px">${TPL===undefined?'Lade…':TPL&&TPL.zones?`Gespeichert: ${TPL.n} Zonen (${new Date(TPL.t).toLocaleDateString('de-CH')}). Neue Spiele übernehmen sie automatisch.`:'Noch keine gespeichert. Zeichne die Zonen einmal und speichere sie hier – jedes neue Spiel übernimmt sie dann automatisch.'}</p>
       <div class="row"><button onclick="saveTpl()" ${zs.length?'':'disabled'}>💾 Als Standard speichern</button><button onclick="askLoadTpl()" ${TPL&&TPL.zones?'':'disabled'}>📥 Standard laden</button></div></div>
-    ${zoneListHTML(zs)}`;
+    ${missionListHTML()}${zoneListHTML(zs)}`;
 }
-let TPL=undefined;
+let RP={n:0,M:null,data:{},info:{},dur:1,tau:0,play:false,speed:30,timer:null,hide:new Set()};
+function openReplay(n){$('#replay').style.display='flex';if(!RP.M)RP.M=mkMap('rpmap');setTimeout(()=>RP.M.m.invalidateSize(),120);
+  const rs=Object.keys(G.tracks||{}).map(Number).filter(x=>x>0).sort((a,b)=>a-b);
+  $('#rpRound').innerHTML=rs.map(r=>`<option value="${r}" ${r===n?'selected':''}>Runde ${r}</option>`).join('');
+  $('#rpSpeeds').innerHTML=[10,30,60].map(v=>`<button class="sm" data-v="${v}" onclick="RP.speed=${v};rpSpeedUI()">×${v}</button>`).join('');rpSpeedUI();rpLoad(n);}
+function rpSpeedUI(){document.querySelectorAll('#rpSpeeds button').forEach(b=>b.classList.toggle('pri',+b.dataset.v===RP.speed));}
+function rpLoad(n){if(RP.play)rpToggle();RP.n=n;const tr=(G.tracks||{})[n]||{};RP.info=tr.info||{};RP.data={};let maxS=0;const all=[];
+  const src={...tr};if(TRK[n])for(const [id,a] of Object.entries(TRK[n]))if(a.length>((typeof src[id]==='string'&&src[id])?src[id].split(';').length:0))src[id]=a.join(';');
+  for(const [id,s] of Object.entries(src)){if(id==='info'||typeof s!=='string'||!s)continue;RP.data[id]=s.split(';').map(x=>x.split(',').map(Number));const l=RP.data[id];if(l.length){maxS=Math.max(maxS,l[l.length-1][0]);l.forEach(p=>all.push([p[1],p[2]]));}}
+  const end=RP.info.end&&RP.info.start?Math.round((RP.info.end-RP.info.start)/1000):0;RP.dur=Math.max(maxS,end,1);RP.tau=0;
+  const sl=$('#rpSlider');sl.max=RP.dur;sl.value=0;RP.M.zsig=null;if(all.length)RP.M.m.fitBounds(all,{padding:[30,30]});
+  $('#rpLegend').innerHTML=Object.keys(RP.data).map(id=>{const o=teams()[id]||{},role=(RP.info.roles||{})[id];return `<button onclick="rpHide('${id}',this)" style="border-left:6px solid ${o.color};opacity:${RP.hide.has(id)?.4:1}">${role==='hunter'?'🎯':'🏃'} ${esc(o.members||o.name||id)}</button>`;}).join('')||'<span class="mut">Für diese Runde wurden keine Laufwege gespeichert.</span>';
+  rpDraw();}
+function rpHide(id,b){if(RP.hide.has(id))RP.hide.delete(id);else RP.hide.add(id);b.style.opacity=RP.hide.has(id)?.4:1;rpDraw();}
+function rpDraw(){const M=RP.M,tau=RP.tau;drawZones(M);M.d.clearLayers();drawMissions(M);const st=RP.info.start||0;
+  const caught={};for(const c of Object.values(G.catches||{}))if(c.round===RP.n&&c.status==='ok')caught[c.target]=Math.round((c.t-st)/1000);
+  for(const [id,l] of Object.entries(RP.data)){if(RP.hide.has(id))continue;const o=teams()[id]||{},role=(RP.info.roles||{})[id],pts=l.filter(p=>p[0]<=tau);if(!pts.length)continue;
+    L.polyline(pts.map(p=>[p[1],p[2]]),{color:o.color||'#fff',weight:3,opacity:.85,dashArray:role==='hunter'?'6':null,interactive:false}).addTo(M.d);
+    const c=pts[pts.length-1],isC=caught[id]!=null&&caught[id]<=tau;
+    L.circleMarker([c[1],c[2]],{radius:role==='hunter'?7:9,color:'#fff',weight:2,fillColor:isC?'#777':o.color,fillOpacity:1,interactive:false}).bindTooltip(`${role==='hunter'?'🎯':isC?'✅':'🏃'} ${esc(o.members||o.name||id)}`,{permanent:true,direction:'top',offset:[0,-8],className:'pinglabel'}).addTo(M.d);}
+  for(const p of Object.values(G.pings||{}))if(p.round===RP.n&&p.lat!=null&&(p.t-st)/1000<=tau&&!RP.hide.has(p.team)&&(p.kind==='mission'))L.circleMarker([p.lat,p.lng],{radius:12,color:'#ffb020',weight:3,fill:false,interactive:false}).addTo(M.d);
+  $('#rpSlider').value=tau;$('#rpTime').textContent=fmt(tau*1000)+' / '+fmt(RP.dur*1000);}
+function rpToggle(){RP.play=!RP.play;$('#rpPlay').textContent=RP.play?'⏸':'▶';clearInterval(RP.timer);
+  if(RP.play){if(RP.tau>=RP.dur)RP.tau=0;RP.timer=setInterval(()=>{RP.tau=Math.min(RP.dur,RP.tau+RP.speed*0.2);rpDraw();if(RP.tau>=RP.dur)rpToggle();},200);}}
+function rpSeek(v){RP.tau=v;rpDraw();}
+function closeReplay(){if(RP.play)rpToggle();$('#replay').style.display='none';}
+let TPL=undefined,MPLACE=false,mPt=null;
+function missionListHTML(){const ms=Object.entries(G.missions||{});const s=S();
+  return `<div class="card" style="border-color:var(--acc)"><b>⭐ Missionsorte (${ms.length})</b><p class="mut" style="margin:4px 0 8px">Öffentliche, gut erkennbare Orte, verteilt im Spielfeld (Brunnen, Bushaltestelle, Spielplatz …). Sichtbar ab Minute ${s.missionFromMin} bis ${s.endPhaseMin} Min. vor Schluss. Erreicht im Umkreis von ${s.missionRadius} m. Empfohlen: 4 Orte.</p>
+    ${MPLACE?'<p><b>👉 Tippe jetzt auf die Karte, wo der Missionsort sein soll.</b> <button class="sm" onclick="MPLACE=false;renderLead(true)">Abbrechen</button></p>':`<button class="pri wide" onclick="MPLACE=true;DRAW=null;renderLead(true);toast('Tippe auf die Karte')">＋ Missionsort setzen</button>`}
+    ${ms.map(([k,m])=>`<div class="trow">⭐<input value="${esc(m.name||'')}" aria-label="Name des Missionsorts" style="flex:1;min-width:0;padding:6px 8px" onchange="store.update({['missions/${k}/name']:this.value.trim()||'Mission'})"><button class="sm" onclick="LM.m.setView([${m.lat},${m.lng}],18)" aria-label="Zeigen">🔍</button><button class="sm" onclick="store.update({['missions/${k}']:null})" aria-label="Löschen">🗑</button></div>`).join('')}</div>`;}
+function askMissionName(pt){mPt=pt;showUI(`<h3>⭐ Missionsort benennen</h3><input id="mname" placeholder="z.B. Brunnen Dorfplatz" maxlength="40"><div class="row" style="margin-top:10px"><button onclick="closeUI()">Abbrechen</button><button class="pri" onclick="addMission()">Speichern</button></div>`);setTimeout(()=>{const e=$('#mname');if(e)e.focus();},50);}
+function addMission(){const n=($('#mname')?.value||'').trim()||'Mission';store.update({['missions/'+store.pushKey()]:{lat:+mPt.lat.toFixed(6),lng:+mPt.lng.toFixed(6),name:n}});closeUI();toast('⭐ Missionsort gespeichert');}
+function drawMissions(M){const r=S().missionRadius;for(const m of Object.values((G&&G.missions)||{})){L.circle([m.lat,m.lng],{radius:r,color:'#ffb020',weight:2,fillColor:'#ffb020',fillOpacity:.15,interactive:false}).addTo(M.d);
+  L.circleMarker([m.lat,m.lng],{radius:6,color:'#1a1200',weight:2,fillColor:'#ffb020',fillOpacity:1,interactive:false}).bindTooltip('⭐ '+esc(m.name||'Mission'),{permanent:true,direction:'top',offset:[0,-6],className:'pinglabel'}).addTo(M.d);}}
 function loadTpl(){if(!store)return;store.getTpl().then(t=>{TPL=t||null;if(leadTab==='zones')renderLead(true);}).catch(()=>{TPL=null;});}
 function saveTpl(){const zs=G.zones||{};if(!Object.keys(zs).length){toast('Keine Zonen zum Speichern');return;}
-  const z={zones:zs,t:Date.now(),n:Object.keys(zs).length};store.putTpl(z).then(()=>{TPL=z;toast('💾 Als Standard gespeichert');renderLead(true);}).catch(e=>toast('Fehler: '+e.message));}
-function askLoadTpl(){if(!TPL||!TPL.zones)return;showUI(`<h3>📥 Standard-Zonen laden?</h3><p>Die aktuellen Zonen dieses Spiels werden ersetzt (${TPL.n} Zonen vom ${new Date(TPL.t).toLocaleDateString('de-CH')}).</p><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="pri" onclick="closeUI();store.update({zones:TPL.zones});LM.fitted=false;toast('Standard-Zonen geladen')">Laden</button></div>`);}
+  const z={zones:zs,missions:G.missions||null,t:Date.now(),n:Object.keys(zs).length};store.putTpl(z).then(()=>{TPL=z;toast('💾 Als Standard gespeichert');renderLead(true);}).catch(e=>toast('Fehler: '+e.message));}
+function askLoadTpl(){if(!TPL||!TPL.zones)return;showUI(`<h3>📥 Standard-Zonen laden?</h3><p>Die aktuellen Zonen dieses Spiels werden ersetzt (${TPL.n} Zonen vom ${new Date(TPL.t).toLocaleDateString('de-CH')}).</p><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="pri" onclick="closeUI();store.update({zones:TPL.zones,missions:TPL.missions||null});LM.fitted=false;toast('Standard-Zonen geladen')">Laden</button></div>`);}
 function toggleMask(){const on=G.settings&&G.settings.maskOutside===false;store.update({'settings/maskOutside':on?true:false});}
 function zoneListHTML(zs){
   const gr=zs.filter(([k,z])=>z.type==='green'),rd=zs.filter(([k,z])=>z.type!=='green');
@@ -1129,7 +1236,10 @@ function zoomZone(k){const z=G.zones[k];if(z&&z.pts)LM.m.fitBounds(z.pts,{paddin
 const SGROUPS=[
   ['🚦','Rundenablauf','Dauer, Start und Pings',[
     ['roundMin','Rundendauer','Min.'],['countdownSec','Countdown vor dem Start','Sek.'],['headStartMin','Jäger warten nach dem Start','Min.'],
-    ['secondPingMin','2. Ping nach dem Start-Ping','Min.'],['pingEveryMin','Ping-Intervall danach','Min.'],['holdSec','Stehen bleiben nach einem Ping','Sek.']]],
+    ['secondPingMin','2. Ping nach dem Start-Ping','Min.'],['pingEveryMin','Ping-Intervall danach','Min.']]],
+  ['⭐','Missionen & Schlussphase','Missionsorte, Finale',[
+    ['missionPts','Bonus für eine erfüllte Mission','Pkt.'],['missionRadius','Mission erfüllt im Umkreis von','m'],['missionFromMin','Missionsorte sichtbar ab Minute','Min.'],
+    ['endPhaseMin','Schlussphase: die letzten','Min.','Missionen schliessen, Unsichtbar & Fake gesperrt'],['endPingSec','Ping-Intervall in der Schlussphase','Sek.']]],
   ['🧊','Regeln & Alarme','Freeze, Gruppen, Zone, Signal',[
     ['freezeRadius','«Jäger in der Nähe» ab','m'],['unfreezeRadius','Freeze endet ab Abstand','m'],
     ['groupRadius','Gruppenbildung: Teams näher als','m','0 = Regel aus'],['groupMin','Gruppenbildung: Zeit zum Trennen','Min.'],['groupPenaltyMin','Live-Standort sichtbar nach Trennung','Min.'],
@@ -1137,7 +1247,7 @@ const SGROUPS=[
   ['🃏','Joker','Was die Teams pro Runde haben',[
     ['hj:reveal','🔭 Jäger erfragen (Gejagte)','×'],['hj:invisible','👻 Unsichtbar (Gejagte)','×'],['hj:fake','🎭 Fake-Ping (Gejagte)','×'],
     ['revealShowMin','Jäger-Standorte sichtbar für','Min.'],['fakeDist','Fake-Ping liegt daneben','m'],
-    ['answerSec','Zeit für Frage / Foto-Challenge','Sek.'],['challengePenalty','Abzug, wenn nicht erfüllt','Pkt.']]],
+    ['autoQuestions','Radar-/Richtungsfragen pro Runde (alle Jäger)','×'],['photoSec','Zeit für Foto-Challenge','Sek.'],['challengePenalty','Abzug, wenn Foto nicht geschickt','Pkt.']]],
   ['⚡','Speedhunt','Spezial-Joker der Jäger',[
     ['speedhuntMax','Speedhunts pro Runde','×'],['speedhuntMin','Dauer','Min.'],['speedhuntPings','Zusätzliche Pings (nach dem ersten)','×'],
     ['speedSurvivePts','Überlebt: Pluspunkte Gejagte','Pkt.'],['speedFailPenalty','Gescheitert: Abzug Jäger','Pkt.']]],
@@ -1150,8 +1260,7 @@ function leadSettings(){
   const val=k=>k.startsWith('hj:')?s.hiderJokers[k.slice(3)]:s[k];
   const grp=([ic,title,sub,fields])=>`<details class="sgroup" ${openGroups.has(title)?'open':''} ontoggle="this.open?openGroups.add('${title}'):openGroups.delete('${title}')"><summary>${ic} ${title} <small>${sub}</small></summary><div class="sbody">
     ${fields.map(([k,l,u,help])=>`<div class="srow"><label for="set_${k.replace(':','_')}">${l}${help?`<small>${help}</small>`:''}</label><span class="num"><input type="number" inputmode="numeric" min="0" id="set_${k.replace(':','_')}" value="${val(k)}" onchange="setSetting('${k}',this.value)"><span class="unit">${u}</span></span></div>`).join('')}
-    ${title==='Joker'?`<div style="padding-top:8px;border-top:1px solid var(--line)"><label for="set_qi" style="color:var(--txt)">❓ Fragen für die Jäger <small style="color:var(--mut)">(eine pro Zeile, nur Ja/Nein-Fragen)</small></label><textarea id="set_qi" rows="6" onchange="setList('questionIdeas',this.value)">${esc(s.questionIdeas.join('\n'))}</textarea></div>
-    <div style="padding-top:8px"><label for="set_pc" style="color:var(--txt)">📸 Foto-Challenges <small style="color:var(--mut)">(eine pro Zeile)</small></label><textarea id="set_pc" rows="5" onchange="setChallenges(this.value)">${esc(s.photoChallenges.join('\n'))}</textarea></div>`:''}
+    ${title==='Joker'?`<div style="padding-top:8px"><label for="set_pc" style="color:var(--txt)">📸 Foto-Challenges <small style="color:var(--mut)">(eine pro Zeile)</small></label><textarea id="set_pc" rows="5" onchange="setChallenges(this.value)">${esc(s.photoChallenges.join('\n'))}</textarea></div>`:''}
   </div></details>`;
   return `<p class="mut" style="margin:0 0 10px">Änderungen werden sofort gespeichert und gelten ab der nächsten Runde.</p>`+SGROUPS.map(grp).join('')+
   `<details class="sgroup" ${openGroups.has('System')?'open':''} ontoggle="this.open?openGroups.add('System'):openGroups.delete('System')"><summary>🔧 System &amp; Daten <small>Aufräumen, config.js, Version</small></summary><div class="sbody">
@@ -1173,7 +1282,7 @@ function saveSettings(){toast('Wird automatisch gespeichert');}
 let confirmFn=null;
 function confirmDo(q,fn){confirmFn=fn;showUI(`<h3>${q}</h3><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="red" onclick="closeUI();window[confirmFn]()">Ja</button></div>`);}
 function resetScores(){const up={};for(const id of Object.keys(teams())){up[`teams/${id}/score`]=0;up[`teams/${id}/hunterStarts`]=0;}store.update(up);toast('Punkte zurückgesetzt');}
-function wipeData(){store.update({pos:null,pings:null,events:null,catches:null,questions:null,photos:null,msg:null,inbox:null,notes:null});if(!DEMO)store.db.ref('mh_img/'+CODE).remove();toast('Gelöscht');}
+function wipeData(){store.update({pos:null,pings:null,events:null,catches:null,questions:null,photos:null,msg:null,inbox:null,notes:null,tracks:null,qres:null});if(!DEMO)store.db.ref('mh_img/'+CODE).remove();toast('Gelöscht');}
 async function deleteGame(){await store.clear();localStorage.removeItem('mh_lead');if(DEMO){location.reload();return;}location.href=location.pathname;}
 function leaveLead(){localStorage.removeItem('mh_lead');location.href=location.pathname;}
 let JOINLINK='';
@@ -1253,7 +1362,7 @@ function askDeleteCode(code){code=(code||'').trim().toUpperCase();if(!code){toas
   showUI(`<h3>🗑 Spiel ${esc(code)} löschen?</h3><p>Alle Daten dieses Spiels (Teams, Punkte, Standorte, Pings, Fotos) werden endgültig gelöscht. Deine Standard-Zonen bleiben erhalten.</p><div class="row"><button onclick="closeUI()">Abbrechen</button><button class="red" onclick="deleteCode('${esc(code)}')">Endgültig löschen</button></div>`);}
 async function deleteCode(code){closeUI();try{if(!store||CODE!==code)await connect(code);await store.clear();if(localStorage.getItem('mh_lead')===code)localStorage.removeItem('mh_lead');const me=JSON.parse(localStorage.getItem('mh_me')||'null');if(me&&me.code===code)localStorage.removeItem('mh_me');toast('Spiel '+code+' gelöscht');renderHome();}catch(e){toast('Löschen fehlgeschlagen: '+e.message,5000);}}
 function saveCfg(){try{const c=parseCfg($('#cfgtxt').value);localStorage.setItem('mh_cfg',JSON.stringify(c));toast('Gespeichert');renderHome();}catch(e){toast('Fehler: '+e.message,5000);}}
-async function createGame(){try{const code=genCode();await connect(code);const g=initialGame(false);let tpl=null;try{tpl=await store.getTpl();}catch(e){}if(tpl&&tpl.zones)g.zones=tpl.zones;await store.update(g);if(tpl&&tpl.zones)toast('Standard-Zonen übernommen ✔');const ok=await waitFor(()=>G&&G.teams,8000);if(!ok){toast('Keine Verbindung zur Datenbank. Regeln/URL prüfen.',6000);return;}openLead();if(!(tpl&&tpl.zones))openSetup('zones');if(!(tpl&&tpl.zones))toast('Spiel erstellt: '+code);}catch(e){toast('Fehler: '+e.message,6000);}}
+async function createGame(){try{const code=genCode();await connect(code);const g=initialGame(false);let tpl=null;try{tpl=await store.getTpl();}catch(e){}if(tpl&&tpl.zones){g.zones=tpl.zones;if(tpl.missions)g.missions=tpl.missions;}await store.update(g);if(tpl&&tpl.zones)toast('Standard-Zonen übernommen ✔');const ok=await waitFor(()=>G&&G.teams,8000);if(!ok){toast('Keine Verbindung zur Datenbank. Regeln/URL prüfen.',6000);return;}openLead();if(!(tpl&&tpl.zones))openSetup('zones');if(!(tpl&&tpl.zones))toast('Spiel erstellt: '+code);}catch(e){toast('Fehler: '+e.message,6000);}}
 async function openLeadCode(code){code=(code||'').trim().toUpperCase();if(!code)return;try{await connect(code);const ok=await waitFor(()=>G&&G.teams,8000);if(!ok){toast('Spiel nicht gefunden');return;}openLead();}catch(e){toast('Fehler: '+e.message,6000);}}
 async function joinStep(){
   const code=$('#jcode').value.trim().toUpperCase();if(!code)return;
